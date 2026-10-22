@@ -1,0 +1,26 @@
+{
+  "operating": {
+    "before_count": 32,
+    "after_count": 32,
+    "equal": true
+  },
+  "queues": {
+    "before_count": 16,
+    "after_count": 16,
+    "equal": true
+  },
+  "ownership": {
+    "samples": 818,
+    "foreign_flag": false,
+    "maximum_observation_gap_s": 2.147568104
+  },
+  "gpu_after": "uuid, name, driver_version, mig.mode.current, utilization.gpu [%], memory.used [MiB]\nGPU-4a42bf67-df51-7582-9e81-b9dddd4bcea2, NVIDIA RTX PRO 6000 Blackwell Server Edition, 590.48.01, Disabled, 0 %, 60 MiB\n",
+  "compute_after": "13025, nvidia-cuda-mps-server, 52 MiB\n",
+  "private_mps_stop": {
+    "returncode": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "completed_epoch_ns": 1792639750196726751,
+  "study_complete": true
+}

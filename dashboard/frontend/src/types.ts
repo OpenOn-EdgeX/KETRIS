@@ -1,0 +1,10 @@
+export type Quality='observed'|'configured'|'derived'|'stale'|'unavailable'|'ambiguous';
+export interface ObservedValue{value:number|string|boolean|null;unit?:string|null;source:string;quality:Quality;observed_at?:string|null;reason?:string|null}
+export interface Device{id:string;kind:'gpu'|'npu';name:string;node:string;metrics:Record<string,ObservedValue>}
+export interface Partition{id:string;device_id:string;kind:'mig'|'gpu'|'pe';name:string;generation?:string;historical:boolean;pe_indices:number[];metrics:Record<string,ObservedValue>}
+export interface Workload{id:string;name:string;partition_id?:string|null;pod_uid?:string|null;container?:string|null;namespace?:string|null;origin:string;state:string;requested:Record<string,ObservedValue>;applied:Record<string,ObservedValue>;observed:Record<string,ObservedValue>}
+export interface Snapshot{schema_version:1;node:string;mode:'live'|'replay';captured_at:string|null;devices:Device[];partitions:Partition[];workloads:Workload[];source_status:Record<string,{status:string;last_success?:string|null;reason?:string|null}>}
+export interface Frame{index:number;interval:{condition?:string;repeat?:number;start?:number;end?:number};axis_kind:string;snapshot:Snapshot;evidence_ids:string[]}
+export interface Experiment{id:string;name:string;kind:string;origin:string}
+export interface Detail{id:string;metadata:Record<string,unknown>;summary:Record<string,any>;source_manifest:{path:string;sha256:string;bytes:number}[];frame_count:number}
+export interface NodeInfo{name:string;connected:boolean;received_at:string}

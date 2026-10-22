@@ -1,0 +1,206 @@
+{
+ "__comment": "이 대시보드는 오케스트로 기관 구현으로 대체됩니다. A-4 검증용 최소 스텁 JSON입니다. Grafana 미설치이므로 스크린샷 없음.",
+ "title": "KRAKEN 노드 대시보드 (규격 v3 정합 — Exp_159)",
+ "schemaVersion": 39,
+ "editable": true,
+ "tags": [
+  "kraken",
+  "keti",
+  "integration-demo"
+ ],
+ "templating": {
+  "list": [
+   {
+    "name": "node",
+    "type": "query",
+    "query": "label_values(kraken_node_allocation_ratio, node)"
+   }
+  ]
+ },
+ "panels": [
+  {
+   "id": 1,
+   "title": "총 할당률 (Σpct)",
+   "type": "gauge",
+   "gridPos": {
+    "h": 8,
+    "w": 8,
+    "x": 0,
+    "y": 0
+   },
+   "targets": [
+    {
+     "expr": "kraken_node_allocation_ratio{node=\"$node\"} * 100",
+     "legendFormat": "{{device}}"
+    }
+   ],
+   "fieldConfig": {
+    "defaults": {
+     "unit": "percent",
+     "min": 0,
+     "max": 200,
+     "thresholds": {
+      "mode": "absolute",
+      "steps": [
+       {
+        "color": "green",
+        "value": 0
+       },
+       {
+        "color": "yellow",
+        "value": 100
+       },
+       {
+        "color": "red",
+        "value": 140
+       }
+      ]
+     }
+    }
+   },
+   "description": "100% 이하=공간분할 격리(무간섭), 140% 이상=실경합(Exp_78~80)"
+  },
+  {
+   "id": 2,
+   "title": "슬라이스 점유 맵 (compute_pct)",
+   "type": "barchart",
+   "gridPos": {
+    "h": 8,
+    "w": 16,
+    "x": 8,
+    "y": 0
+   },
+   "targets": [
+    {
+     "expr": "kraken_slice_compute_pct{node=\"$node\"}",
+     "legendFormat": "{{tenant}} ({{class}})"
+    }
+   ]
+  },
+  {
+   "id": 3,
+   "title": "지연민감 워크로드 유지율 추이",
+   "type": "timeseries",
+   "gridPos": {
+    "h": 8,
+    "w": 12,
+    "x": 0,
+    "y": 8
+   },
+   "targets": [
+    {
+     "expr": "kraken_slice_retention_ratio{class=\"memory\"}",
+     "legendFormat": "{{pod}}"
+    }
+   ],
+   "fieldConfig": {
+    "defaults": {
+     "min": 0,
+     "max": 1.2,
+     "unit": "percentunit",
+     "thresholds": {
+      "mode": "absolute",
+      "steps": [
+       {
+        "color": "red",
+        "value": 0
+       },
+       {
+        "color": "yellow",
+        "value": 0.8
+       },
+       {
+        "color": "green",
+        "value": 0.95
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "id": 4,
+   "title": "제어 적용 상태 (armed / mode)",
+   "type": "table",
+   "gridPos": {
+    "h": 8,
+    "w": 12,
+    "x": 12,
+    "y": 8
+   },
+   "targets": [
+    {
+     "expr": "kraken_slice_armed{node=\"$node\"}",
+     "format": "table",
+     "instant": true
+    },
+    {
+     "expr": "kraken_slice_control_mode{node=\"$node\"}",
+     "format": "table",
+     "instant": true
+    }
+   ]
+  },
+  {
+   "id": 5,
+   "title": "간섭 구역 (interference_zone: 0 무간섭 / 1 전이 / 2 간섭)",
+   "type": "stat",
+   "gridPos": {
+    "h": 6,
+    "w": 12,
+    "x": 0,
+    "y": 16
+   },
+   "description": "공간/메모리/시간/분류/NPU/접근경계 — axis_liveness.sh 결과. exporter가 노출하면 여기 연결.",
+   "targets": [
+    {
+     "expr": "kraken_node_interference_zone{node=\"$node\"}",
+     "refId": "A",
+     "legendFormat": "zone"
+    }
+   ]
+  },
+  {
+   "id": 6,
+   "title": "NPU PE 점유 맵 (8 PE, 이기종)",
+   "type": "state-timeline",
+   "gridPos": {
+    "h": 6,
+    "w": 12,
+    "x": 12,
+    "y": 16
+   },
+   "description": "RNGD 8 PE가 어느 블록(0-3/4-7)에 배정됐는지. GPU 슬라이스 맵과 나란히 = 이기종 통합. furiosa-smi ps 실점유. 커널 강제 격리(블록 밖 미노출).",
+   "targets": [
+    {
+     "expr": "kraken_node_npu_cores_available{node=\"$node\"}",
+     "legendFormat": "available cores"
+    }
+   ]
+  },
+  {
+   "title": "원격 풀 (leased LSU / phase)",
+   "type": "timeseries",
+   "gridPos": {
+    "h": 8,
+    "w": 12,
+    "x": 0,
+    "y": 22
+   },
+   "targets": [
+    {
+     "expr": "kraken_remote_leased_lsu",
+     "refId": "A",
+     "legendFormat": "leased {{device}}"
+    },
+    {
+     "expr": "kraken_remote_pool_phase",
+     "refId": "B",
+     "legendFormat": "phase={{phase}}"
+    }
+   ],
+   "datasource": null,
+   "id": 7
+  }
+ ]
+}

@@ -1,0 +1,101 @@
+# [Exp_94] 원격 자원 풀 CRD v2 — 회수 핸드셰이크를 표준 K8s 패턴으로 구현.
+#   Exp_91 v1 대비 변경: 회수 의도를 spec 에, 관측 상태를 status 에 둔다(spec=desired/status=observed).
+#   v1 은 status.phase enum 만 선언하고 컨트롤러가 쓰지 않아 항상 Allocatable 이었다(선언만·미구현).
+#   ★필드 원칙은 유지: A-1 capability.schema.json 그대로(발명 없음).
+#   회수 분기 둘을 한 코드로 커버 — reclaimGracePeriodSeconds>0=예고형(드레인), =0=즉시형(강제).
+#   그래서 하스퍼의 "예고 가능?" 답을 기다리지 않고 구현을 완비할 수 있다.
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata: {name: remotepools.keti.re.kr}
+spec:
+  group: keti.re.kr
+  scope: Cluster
+  names: {plural: remotepools, singular: remotepool, kind: RemotePool, shortNames: [rpool]}
+  versions:
+    - name: v1alpha1
+      served: true
+      storage: true
+      subresources: {status: {}}
+      additionalPrinterColumns:
+        - {name: Model, type: string, jsonPath: .spec.device.model}
+        - {name: Remote, type: boolean, jsonPath: .spec.device.remote}
+        - {name: LSU, type: integer, jsonPath: .spec.compute.units}
+        - {name: Advertised, type: integer, jsonPath: .status.advertisedLsu}
+        - {name: Leased, type: integer, jsonPath: .status.leasedLsu}
+        - {name: Phase, type: string, jsonPath: .status.phase}
+        - {name: Reclaim, type: boolean, jsonPath: .spec.reclaim}
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            spec:
+              type: object
+              required: [schemaVersion, device, compute, memory, providerHost]
+              properties:
+                schemaVersion: {type: string}
+                providerHost: {type: string, description: "자원 제공 호스트(하스퍼 자리=233)"}
+                gateUrl: {type: string, description: "232 게이트 엔드포인트(요청 유입점)"}
+                device:
+                  type: object
+                  required: [uuid, kind, model, remote]
+                  properties:
+                    uuid: {type: string}
+                    kind: {type: string, enum: [gpu, npu]}
+                    model: {type: string}
+                    vendor: {type: string}
+                    remote: {type: boolean}     # ★A-1에 이미 있는 원격 플래그
+                compute:
+                  type: object
+                  required: [units, unitKind]
+                  properties:
+                    units: {type: integer}       # GPU=LSU(=SM 환산), NPU=PE
+                    unitKind: {type: string, enum: [sm, pe, lsu]}
+                    concurrency:
+                      type: object
+                      properties: {mps: {type: boolean}, mig: {type: boolean}}
+                memory:
+                  type: object
+                  required: [capacityMb]
+                  properties: {capacityMb: {type: integer}, bandwidthGbps: {type: number}}
+                measured: {type: boolean}
+                measuredNote: {type: string}
+                # ── [Exp_94] 회수 의도 = provider(하스퍼 자리)가 쓰는 필드 ──
+                reclaim:
+                  type: boolean
+                  description: "true = 이 풀을 회수하겠다는 provider 의도. KETI 컨트롤러가 관측해 드레인 시작."
+                reclaimGracePeriodSeconds:
+                  type: integer
+                  minimum: 0
+                  description: "드레인 유예(초). >0=예고형(기존 lease 자연 종료 대기 후 강제), 0=즉시형(대기 없이 강제 종료)."
+                  default: 60
+            status:
+              type: object
+              properties:
+                phase: {type: string, enum: [Allocatable, ReclaimPending, Reclaimed]}  # A-1 status 전이
+                observedGeneration: {type: integer}      # [Exp_94] 표준: 컨트롤러가 반영한 spec 세대
+                advertisedLsu: {type: integer}
+                leasedLsu: {type: integer}
+                reclaimStartedAt: {type: string}         # [Exp_94] 회수 지연 측정(시작)
+                reclaimCompletedAt: {type: string}       # [Exp_94] 회수 지연 측정(완료)
+                conditions:                              # [Exp_94] 표준 K8s conditions
+                  type: array
+                  items:
+                    type: object
+                    required: [type, status]
+                    properties:
+                      type: {type: string}               # Advertising | Draining | Reclaimed
+                      status: {type: string, enum: ["True", "False", "Unknown"]}
+                      reason: {type: string}
+                      message: {type: string}
+                      lastTransitionTime: {type: string}
+                leases:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      leaseId: {type: string}
+                      tenant: {type: string}
+                      lsu: {type: integer}
+                      podUid: {type: string}
+                      podNamespace: {type: string}       # [Exp_94] 강제 드레인에 필요
+                      issuedAt: {type: string}

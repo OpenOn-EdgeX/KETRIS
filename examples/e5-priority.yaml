@@ -1,0 +1,64 @@
+# E5 — 우선순위: high 는 크레딧이 떨어져도 1충전주기(6ms) 한도 안에서 대기 없이
+# 먼저 쓴다(선차용). 몫(LSU 비례) 자체는 바뀌지 않는다 — 꼬리 지연 보호용.
+# ★priority 는 workload-class 와 함께 달아야 한다.
+apiVersion: v1
+kind: Pod
+metadata:
+  name: e5-high
+  namespace: prism-guide
+  annotations:
+    kraken.keti.re.kr/workload-class: "compute"
+    kraken.keti.re.kr/priority: "high"
+spec:
+  restartPolicy: Never
+  containers:
+    - name: work
+      image: prism-infer:opt
+      imagePullPolicy: IfNotPresent
+      command: ["python", "-u", "-c"]
+      args:
+        - |
+          import torch, time
+          a = torch.randn(4096, 4096, device="cuda")
+          torch.cuda.synchronize()
+          t0 = time.time(); n = 0
+          while time.time() - t0 < 60:
+              (a @ a).sum().item(); n += 1
+          dt = time.time() - t0
+          print(f"iters={n} dur={dt:.1f}s rate={n/dt:.2f} it/s")
+      resources:
+        limits:
+          cpu: "4"
+          memory: 8Gi
+          keti.re.kr/lsu: "100"
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: e5-low
+  namespace: prism-guide
+  annotations:
+    kraken.keti.re.kr/workload-class: "compute"
+    kraken.keti.re.kr/priority: "low"
+spec:
+  restartPolicy: Never
+  containers:
+    - name: work
+      image: prism-infer:opt
+      imagePullPolicy: IfNotPresent
+      command: ["python", "-u", "-c"]
+      args:
+        - |
+          import torch, time
+          a = torch.randn(4096, 4096, device="cuda")
+          torch.cuda.synchronize()
+          t0 = time.time(); n = 0
+          while time.time() - t0 < 60:
+              (a @ a).sum().item(); n += 1
+          dt = time.time() - t0
+          print(f"iters={n} dur={dt:.1f}s rate={n/dt:.2f} it/s")
+      resources:
+        limits:
+          cpu: "4"
+          memory: 8Gi
+          keti.re.kr/lsu: "100"

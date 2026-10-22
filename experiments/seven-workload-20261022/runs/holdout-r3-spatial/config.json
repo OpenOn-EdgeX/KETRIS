@@ -1,0 +1,61 @@
+{
+  "workers": [
+    {
+      "id": "W0",
+      "input_tokens": 1024,
+      "output_tokens": 16,
+      "requests": 8
+    },
+    {
+      "id": "W1",
+      "input_tokens": 1024,
+      "output_tokens": 16,
+      "requests": 8
+    },
+    {
+      "id": "W2",
+      "input_tokens": 1024,
+      "output_tokens": 16,
+      "requests": 8
+    },
+    {
+      "id": "W3",
+      "input_tokens": 128,
+      "output_tokens": 128,
+      "requests": 8
+    },
+    {
+      "id": "W4",
+      "input_tokens": 128,
+      "output_tokens": 128,
+      "requests": 8
+    },
+    {
+      "id": "W5",
+      "input_tokens": 128,
+      "output_tokens": 128,
+      "requests": 8
+    },
+    {
+      "id": "W6",
+      "input_tokens": 128,
+      "output_tokens": 128,
+      "requests": 8
+    }
+  ],
+  "caps": [
+    50,
+    50,
+    50,
+    50,
+    50,
+    50,
+    50
+  ],
+  "policy": "native",
+  "arm": "spatial",
+  "category": "holdout",
+  "repeat": 3,
+  "gpu_uuid": "GPU-4a42bf67-df51-7582-9e81-b9dddd4bcea2",
+  "credit_bank_us": 500000
+}

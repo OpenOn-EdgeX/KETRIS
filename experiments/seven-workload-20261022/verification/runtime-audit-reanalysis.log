@@ -1,0 +1,8 @@
+{
+  "valid": true,
+  "holdouts": 15,
+  "pilots": 6,
+  "errors": [],
+  "invalid_runs": [],
+  "output": "/root/workspace/KETRIS/experiments/seven-workload-20261022/verification/.reanalysis-copy/runtime-audit.json"
+}

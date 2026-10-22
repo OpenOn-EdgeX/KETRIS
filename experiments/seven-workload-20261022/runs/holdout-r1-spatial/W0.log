@@ -1,0 +1,2 @@
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 14235.95it/s]
+{"id": "W0", "requests": 8, "completion_ns": 1472167043812}

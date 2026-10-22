@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata: {name: ketris-mig-runtime, namespace: kube-system}
+spec:
+  selector: {matchLabels: {app: ketris-mig-runtime}}
+  template:
+    metadata: {labels: {app: ketris-mig-runtime}}
+    spec:
+      serviceAccountName: ketris-mig-runtime
+      hostPID: true
+      nodeSelector: {ketris.re.kr/mig-runtime: "true"}
+      tolerations: [{operator: Exists}]
+      initContainers:
+        - name: runtime-library
+          image: ketris-device-plugin:mig-20261013-v9
+          imagePullPolicy: IfNotPresent
+          command: [python3, -m, ketris_mig.install_runtime, /opt/ketris/libbless.so, /var/lib/ketris-mig/lib/libbless.so]
+          volumeMounts: [{name: state, mountPath: /var/lib/ketris-mig}]
+      containers:
+        - name: runtime
+          image: ketris-device-plugin:mig-20261013-v9
+          imagePullPolicy: IfNotPresent
+          command: [ketris-mig-runtime]
+          securityContext: {privileged: true, runAsUser: 0}
+          env:
+            - {name: SYSTEMD_IGNORE_CHROOT, value: "1"}
+            - name: NODE_NAME
+              valueFrom: {fieldRef: {fieldPath: spec.nodeName}}
+            - name: KETRIS_MIG_ALLOWLIST
+              valueFrom: {configMapKeyRef: {name: ketris-mig-config, key: allowlist}}
+          resources:
+            requests: {cpu: 200m, memory: 128Mi}
+            limits: {memory: 512Mi}
+          volumeMounts:
+            - {name: state, mountPath: /var/lib/ketris-mig}
+            - {name: sockets, mountPath: /var/lib/kubelet/device-plugins}
+            - {name: devices, mountPath: /dev}
+            - {name: systemd, mountPath: /run/systemd}
+            - {name: nvml, mountPath: /usr/lib/x86_64-linux-gnu/libnvidia-ml.so.1, readOnly: true}
+            - {name: mps-control, mountPath: /usr/bin/nvidia-cuda-mps-control, readOnly: true}
+      volumes:
+        - name: state
+          hostPath: {path: /var/lib/ketris-mig, type: DirectoryOrCreate}
+        - name: sockets
+          hostPath: {path: /var/lib/kubelet/device-plugins, type: Directory}
+        - name: devices
+          hostPath: {path: /dev, type: Directory}
+        - name: systemd
+          hostPath: {path: /run/systemd, type: Directory}
+        - name: nvml
+          hostPath: {path: /usr/lib/x86_64-linux-gnu/libnvidia-ml.so.1, type: File}
+        - name: mps-control
+          hostPath: {path: /usr/bin/nvidia-cuda-mps-control, type: File}

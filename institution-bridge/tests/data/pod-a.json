@@ -1,0 +1,313 @@
+{
+  "apiVersion": "v1",
+  "kind": "Pod",
+  "metadata": {
+    "annotations": {
+      "keti.re.kr/plan-node": "devmaster",
+      "ketris.re.kr/mig-uuid": "MIG-bb051536-d0bd-581a-940d-3ec3054836c8",
+      "ketris.re.kr/time-weight": "3",
+      "kueue.x-k8s.io/workload": "job-mig-a-04eef"
+    },
+    "creationTimestamp": "2026-10-15T05:41:46Z",
+    "finalizers": [
+      "batch.kubernetes.io/job-tracking"
+    ],
+    "generateName": "mig-a-",
+    "generation": 1,
+    "labels": {
+      "batch.kubernetes.io/controller-uid": "4055ef47-0e3a-4f05-8802-7dcd07f62748",
+      "batch.kubernetes.io/job-name": "mig-a",
+      "controller-uid": "4055ef47-0e3a-4f05-8802-7dcd07f62748",
+      "job-name": "mig-a",
+      "keti.re.kr/accel-class": "cpu",
+      "keti.re.kr/decision-id": "d-19048ee2dae1",
+      "keti.re.kr/exec-type": "job",
+      "keti.re.kr/workload-id": "wl-mig-e2e-20261015-01-a",
+      "keti.re.kr/workload-kind": "unknown",
+      "kueue.x-k8s.io/cluster-queue-name": "ketris-mig-e2e-20261015",
+      "kueue.x-k8s.io/local-queue-name": "ketris-mig-e2e",
+      "kueue.x-k8s.io/podset": "main"
+    },
+    "name": "mig-a-jl9rs",
+    "namespace": "ketris-mig-e2e-20261015",
+    "ownerReferences": [
+      {
+        "apiVersion": "batch/v1",
+        "blockOwnerDeletion": true,
+        "controller": true,
+        "kind": "Job",
+        "name": "mig-a",
+        "uid": "4055ef47-0e3a-4f05-8802-7dcd07f62748"
+      }
+    ],
+    "resourceVersion": "274993",
+    "uid": "1bcb1daf-7b1a-43e5-9dc7-eb0a5530e273"
+  },
+  "spec": {
+    "containers": [
+      {
+        "command": [
+          "python3",
+          "-u",
+          "/lab/worker.py"
+        ],
+        "env": [
+          {
+            "name": "MEASURE_NAME",
+            "value": "A"
+          },
+          {
+            "name": "EXPECTED_MIG",
+            "value": "MIG-bb051536-d0bd-581a-940d-3ec3054836c8"
+          },
+          {
+            "name": "POD_UID",
+            "valueFrom": {
+              "fieldRef": {
+                "apiVersion": "v1",
+                "fieldPath": "metadata.uid"
+              }
+            }
+          },
+          {
+            "name": "WORKLOAD_ID",
+            "valueFrom": {
+              "fieldRef": {
+                "apiVersion": "v1",
+                "fieldPath": "metadata.labels['keti.re.kr/workload-id']"
+              }
+            }
+          },
+          {
+            "name": "BLESS_TIME_START_GATED",
+            "value": "1"
+          },
+          {
+            "name": "BLESS_TIME_WC",
+            "value": "0"
+          },
+          {
+            "name": "BLESS_GATE_METRICS",
+            "value": "1"
+          },
+          {
+            "name": "KETRIS_TIME_WEIGHT",
+            "value": "3"
+          }
+        ],
+        "image": "ketris-device-plugin:mig-20261013-v9",
+        "imagePullPolicy": "Never",
+        "name": "workload",
+        "resources": {
+          "limits": {
+            "keti.re.kr/mig-e2493d0ebc3c0f31-share": "50",
+            "memory": "512Mi"
+          },
+          "requests": {
+            "cpu": "200m",
+            "keti.re.kr/mig-e2493d0ebc3c0f31-share": "50",
+            "memory": "128Mi"
+          }
+        },
+        "terminationMessagePath": "/dev/termination-log",
+        "terminationMessagePolicy": "File",
+        "volumeMounts": [
+          {
+            "mountPath": "/lab",
+            "name": "lab"
+          },
+          {
+            "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+            "name": "kube-api-access-b9ngx",
+            "readOnly": true
+          }
+        ]
+      }
+    ],
+    "dnsPolicy": "ClusterFirst",
+    "enableServiceLinks": true,
+    "nodeName": "devmaster",
+    "nodeSelector": {
+      "keti.re.kr/node-role": "edge",
+      "kubernetes.io/hostname": "devmaster"
+    },
+    "preemptionPolicy": "PreemptLowerPriority",
+    "priority": 0,
+    "restartPolicy": "Never",
+    "schedulerName": "default-scheduler",
+    "securityContext": {},
+    "serviceAccount": "default",
+    "serviceAccountName": "default",
+    "terminationGracePeriodSeconds": 5,
+    "tolerations": [
+      {
+        "effect": "NoExecute",
+        "key": "node.kubernetes.io/not-ready",
+        "operator": "Exists",
+        "tolerationSeconds": 300
+      },
+      {
+        "effect": "NoExecute",
+        "key": "node.kubernetes.io/unreachable",
+        "operator": "Exists",
+        "tolerationSeconds": 300
+      }
+    ],
+    "volumes": [
+      {
+        "hostPath": {
+          "path": "/home/devadmin/ketris-migration/mig-e2e-20261015-01",
+          "type": "Directory"
+        },
+        "name": "lab"
+      },
+      {
+        "name": "kube-api-access-b9ngx",
+        "projected": {
+          "defaultMode": 420,
+          "sources": [
+            {
+              "serviceAccountToken": {
+                "expirationSeconds": 3607,
+                "path": "token"
+              }
+            },
+            {
+              "configMap": {
+                "items": [
+                  {
+                    "key": "ca.crt",
+                    "path": "ca.crt"
+                  }
+                ],
+                "name": "kube-root-ca.crt"
+              }
+            },
+            {
+              "downwardAPI": {
+                "items": [
+                  {
+                    "fieldRef": {
+                      "apiVersion": "v1",
+                      "fieldPath": "metadata.namespace"
+                    },
+                    "path": "namespace"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "status": {
+    "conditions": [
+      {
+        "lastProbeTime": null,
+        "lastTransitionTime": "2026-10-15T05:41:48Z",
+        "observedGeneration": 1,
+        "status": "True",
+        "type": "PodReadyToStartContainers"
+      },
+      {
+        "lastProbeTime": null,
+        "lastTransitionTime": "2026-10-15T05:41:47Z",
+        "observedGeneration": 1,
+        "status": "True",
+        "type": "Initialized"
+      },
+      {
+        "lastProbeTime": null,
+        "lastTransitionTime": "2026-10-15T05:41:48Z",
+        "observedGeneration": 1,
+        "status": "True",
+        "type": "Ready"
+      },
+      {
+        "lastProbeTime": null,
+        "lastTransitionTime": "2026-10-15T05:41:48Z",
+        "observedGeneration": 1,
+        "status": "True",
+        "type": "ContainersReady"
+      },
+      {
+        "lastProbeTime": null,
+        "lastTransitionTime": "2026-10-15T05:41:46Z",
+        "observedGeneration": 1,
+        "status": "True",
+        "type": "PodScheduled"
+      }
+    ],
+    "containerStatuses": [
+      {
+        "allocatedResources": {
+          "cpu": "200m",
+          "keti.re.kr/mig-e2493d0ebc3c0f31-share": "50",
+          "memory": "128Mi"
+        },
+        "containerID": "containerd://403473a62a7118de54ea0229599468a7c532e35a9a04a83494b5c377924e9bd9",
+        "image": "docker.io/library/ketris-device-plugin:mig-20261013-v9",
+        "imageID": "sha256:e411afb77af64fa5308c917c44ad5f81a8877c30661e647cbdd8f63c87bb3e41",
+        "lastState": {},
+        "name": "workload",
+        "ready": true,
+        "resources": {
+          "limits": {
+            "keti.re.kr/mig-e2493d0ebc3c0f31-share": "50",
+            "memory": "512Mi"
+          },
+          "requests": {
+            "cpu": "200m",
+            "keti.re.kr/mig-e2493d0ebc3c0f31-share": "50",
+            "memory": "128Mi"
+          }
+        },
+        "restartCount": 0,
+        "started": true,
+        "state": {
+          "running": {
+            "startedAt": "2026-10-15T05:41:48Z"
+          }
+        },
+        "user": {
+          "linux": {
+            "gid": 0,
+            "supplementalGroups": [
+              0
+            ],
+            "uid": 0
+          }
+        },
+        "volumeMounts": [
+          {
+            "mountPath": "/lab",
+            "name": "lab"
+          },
+          {
+            "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+            "name": "kube-api-access-b9ngx",
+            "readOnly": true,
+            "recursiveReadOnly": "Disabled"
+          }
+        ]
+      }
+    ],
+    "hostIP": "10.0.1.211",
+    "hostIPs": [
+      {
+        "ip": "10.0.1.211"
+      }
+    ],
+    "observedGeneration": 1,
+    "phase": "Running",
+    "podIP": "10.245.0.169",
+    "podIPs": [
+      {
+        "ip": "10.245.0.169"
+      }
+    ],
+    "qosClass": "Burstable",
+    "startTime": "2026-10-15T05:41:47Z"
+  }
+}

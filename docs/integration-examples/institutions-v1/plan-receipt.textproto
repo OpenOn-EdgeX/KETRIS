@@ -1,0 +1,7 @@
+# Proposed response example, not policy approval, Kueue admission or application.
+request_id: "req-skku-plan-a"
+workload_id: "wl-llm-a"
+plan_id: "plan-llm-a"
+revision: 1
+state: PLAN_ONLY
+reason: "Synthetic fixture target; execution prohibited."

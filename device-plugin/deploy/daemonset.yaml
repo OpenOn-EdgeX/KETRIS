@@ -1,0 +1,101 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: kraken-device-plugin
+  namespace: kube-system
+  labels:
+    app: kraken-device-plugin
+spec:
+  selector:
+    matchLabels:
+      app: kraken-device-plugin
+  updateStrategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: kraken-device-plugin
+    spec:
+      # Device Plugin은 반드시 host network과 kubelet 소켓에 접근해야 한다.
+      hostNetwork: true
+      priorityClassName: system-node-critical
+      tolerations:
+        - operator: Exists
+          effect: NoSchedule
+      # GPU가 있는 노드에만 배포.
+      nodeSelector:
+        accelerator: nvidia-gpu
+
+      containers:
+        - name: kraken-device-plugin
+          image: ketidevit2/ketris-device-plugin:latest
+          imagePullPolicy: IfNotPresent
+          args:
+            - --controller-url=http://localhost:8090
+            - --slices-per-gpu=4
+            - --resource-name=keti.re.kr/gpu-slice
+          env:
+            - name: NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+          securityContext:
+            # kubelet socket에 쓰기 위해 필요.
+            privileged: true
+          volumeMounts:
+            # kubelet Device Plugin 소켓 디렉토리.
+            - name: device-plugin
+              mountPath: /var/lib/kubelet/device-plugins
+            # kubelet internal checkpoint (watcher가 읽음).
+            - name: checkpoint
+              mountPath: /var/lib/kubelet/device-plugins/kubelet_internal_checkpoint
+              readOnly: true
+            # KRAKEN SHM 파일 (kraken_controller가 생성).
+            - name: dev-shm
+              mountPath: /dev/shm
+
+      volumes:
+        - name: device-plugin
+          hostPath:
+            path: /var/lib/kubelet/device-plugins
+        - name: checkpoint
+          hostPath:
+            path: /var/lib/kubelet/device-plugins/kubelet_internal_checkpoint
+        - name: dev-shm
+          hostPath:
+            path: /dev/shm
+
+---
+# ServiceAccount + ClusterRole for pod watching (watcher.go)
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: kraken-device-plugin
+  namespace: kube-system
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: kraken-device-plugin
+rules:
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: [""]
+    resources: ["nodes"]
+    verbs: ["get", "list", "patch"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: kraken-device-plugin
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: kraken-device-plugin
+subjects:
+  - kind: ServiceAccount
+    name: kraken-device-plugin
+    namespace: kube-system

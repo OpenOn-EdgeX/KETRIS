@@ -1,0 +1,21 @@
+test_actual_makespan_denominators_and_pilot_exclusion (__main__.self_test.<locals>.AnalyzerTests.test_actual_makespan_denominators_and_pilot_exclusion) ... ok
+test_changed_manifest_and_wrong_work_fail (__main__.self_test.<locals>.AnalyzerTests.test_changed_manifest_and_wrong_work_fail) ... ok
+test_changed_token_ids_fail_equivalence (__main__.self_test.<locals>.AnalyzerTests.test_changed_token_ids_fail_equivalence) ... ok
+test_cleanup_requires_explicit_no_live_workers_and_zero_worker_exits (__main__.self_test.<locals>.AnalyzerTests.test_cleanup_requires_explicit_no_live_workers_and_zero_worker_exits) ... ok
+test_device_busy_uses_covered_time_and_reports_sensitivity (__main__.self_test.<locals>.AnalyzerTests.test_device_busy_uses_covered_time_and_reports_sensitivity) ... ok
+test_duplicate_repeat_cannot_replace_missing_trial (__main__.self_test.<locals>.AnalyzerTests.test_duplicate_repeat_cannot_replace_missing_trial) ... ok
+test_environment_string_caps_are_validated_numerically (__main__.self_test.<locals>.AnalyzerTests.test_environment_string_caps_are_validated_numerically) ... ok
+test_error_marker_rejects_an_otherwise_complete_run (__main__.self_test.<locals>.AnalyzerTests.test_error_marker_rejects_an_otherwise_complete_run) ... ok
+test_headerless_nvidia_capture_is_supported (__main__.self_test.<locals>.AnalyzerTests.test_headerless_nvidia_capture_is_supported) ... ok
+test_holdout_selection_and_plan_are_required (__main__.self_test.<locals>.AnalyzerTests.test_holdout_selection_and_plan_are_required) ... ok
+test_input_hash_mismatch_rejects_same_length_prompt (__main__.self_test.<locals>.AnalyzerTests.test_input_hash_mismatch_rejects_same_length_prompt) ... ok
+test_invalid_request_timestamps_fail (__main__.self_test.<locals>.AnalyzerTests.test_invalid_request_timestamps_fail) ... ok
+test_missing_worker_remains_visible_and_blocks_comparison (__main__.self_test.<locals>.AnalyzerTests.test_missing_worker_remains_visible_and_blocks_comparison) ... ok
+test_orchestrator_summary_is_required_and_matches_raw_work (__main__.self_test.<locals>.AnalyzerTests.test_orchestrator_summary_is_required_and_matches_raw_work) ... ok
+test_source_model_and_library_hashes_cannot_change (__main__.self_test.<locals>.AnalyzerTests.test_source_model_and_library_hashes_cannot_change) ... ok
+test_spatial_comparison_requires_matching_caps (__main__.self_test.<locals>.AnalyzerTests.test_spatial_comparison_requires_matching_caps) ... ok
+
+----------------------------------------------------------------------
+Ran 16 tests in 0.562s
+
+OK

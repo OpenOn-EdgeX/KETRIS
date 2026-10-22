@@ -1,0 +1,8 @@
+{
+  "epoch_ns": 1792639469252350050,
+  "cpu_count": 8,
+  "kernel": "6.8.0-147-generic",
+  "machine": "x86_64",
+  "cpu_model": "INTEL(R) XEON(R) SILVER 4510",
+  "mem_total": "MemTotal:       32865056 kB"
+}

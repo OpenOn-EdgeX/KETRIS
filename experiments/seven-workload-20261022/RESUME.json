@@ -1,0 +1,29 @@
+{
+  "status": "complete",
+  "objective": "Compare full completion of exactly7LLM workloads against measuredMPS",
+  "phase": "reported_results_ready",
+  "remote": "/home/devadmin/ketris-migration/seven-workload-20261022",
+  "ssh_socket": "/tmp/ketris-211-reconnect-20261022.sock",
+  "study_session": 48722,
+  "ownership_session": 4668,
+  "pod": "ketris-seven-20261022/seven-lab",
+  "deadline_utc": "2026-10-22T03:55:00Z",
+  "execution_stop_new_trials_utc": "2026-10-22T03:45:00Z",
+  "pending": [],
+  "selected_cap": 50,
+  "selected_policy": "phase75",
+  "completed_utc": "2026-10-22T03:31:13.160069+00:00",
+  "validation": {
+    "valid_runs": 21,
+    "holdouts": 15,
+    "repeats_per_arm": 5,
+    "all_workers": 7,
+    "input_output_match": true,
+    "postflight_pass": true
+  },
+  "result": {
+    "native_mean_s": 13.2787898584,
+    "ketris_mean_s": 13.576469189,
+    "throughput_index": 97.8073877202094
+  }
+}

@@ -1,0 +1,160 @@
+// DESIGN EXAMPLE. No server is implemented or deployed by this file.
+// Proposed package/types/field numbers; not an official institutional wire contract.
+syntax = "proto3";
+package ketris.integration.example.v1;
+
+import "google/protobuf/timestamp.proto";
+
+enum OriginKind {
+  ORIGIN_UNSPECIFIED = 0;
+  SYNTHETIC = 1;
+  HISTORICAL_OBSERVATION = 2;
+  LIVE_OBSERVATION = 3;
+}
+
+enum ExecutionMode {
+  MODE_UNSPECIFIED = 0;
+  CONTRACT_ONLY = 1;
+  LIVE_EXECUTION = 2;
+}
+
+message MessageMeta {
+  string schema_version = 1;
+  string request_id = 2;
+  string trace_id = 3;
+  string workload_id = 4;
+  string provider = 5;
+  OriginKind origin = 6;
+  ExecutionMode execution_mode = 7;
+  google.protobuf.Timestamp created_at = 8;
+  google.protobuf.Timestamp expires_at = 9;
+}
+
+enum ComputeUnit {
+  COMPUTE_UNIT_UNSPECIFIED = 0;
+  SM_COUNT = 1;
+  CUDA_CORE_COUNT = 2;
+  PERCENT = 3;
+  LOGICAL_UNIT = 4;
+}
+
+enum MemoryUnit {
+  MEMORY_UNIT_UNSPECIFIED = 0;
+  BYTE = 1;
+  MB = 2;
+  MIB = 3;
+}
+
+message GpuRequirement {
+  optional double cores = 1;
+  ComputeUnit cores_unit = 2;
+  optional uint64 mem = 3;
+  MemoryUnit mem_unit = 4;
+}
+
+message NormalizedRequirements {
+  optional uint64 estimated_peak_memory_bytes = 1;
+  optional double predicted_latency_ms = 2;
+  optional double predicted_requests_per_second = 3;
+}
+
+// Yonsei -> KETI: PushProfile. Original slide fields remain recognizable.
+// Added IDs, versions, units and provenance are proposal extensions.
+message PushProfileRequest {
+  MessageMeta meta = 1;
+  string profile_id = 2;
+  uint64 profile_version = 3;
+  string model = 4;
+  string model_revision = 5;
+  string type = 6;
+  repeated int64 input_shape = 7;
+  optional string dtype = 8; // Model/compute precision, not the token-ID tensor type.
+  optional uint32 batch_size = 9;
+  GpuRequirement gpu_req = 10;
+  optional uint32 input_tokens = 11;
+  optional uint32 output_tokens = 12;
+  NormalizedRequirements normalized = 13;
+  optional string input_dtype = 14;
+}
+
+message FixtureTarget {
+  string fixture_ref = 1;
+}
+
+// Future live shape only. Example fixtures MUST NOT invent these identities.
+message LiveMigTarget {
+  string node_name = 1;
+  string gpu_uuid = 2;
+  string mig_uuid = 3;
+  string resource_name = 4;
+  string inventory_generation = 5;
+}
+
+// Reference supplied externally; no KETI catalog/monitoring RPC is defined.
+message ExternalSnapshotRef {
+  string provider = 1;
+  string snapshot_id = 2;
+  string generation = 3;
+  OriginKind origin = 4;
+  google.protobuf.Timestamp observed_at = 5;
+  google.protobuf.Timestamp expires_at = 6;
+}
+
+message SharingPolicy {
+  optional uint32 space_percent = 1; // MIG-local MPS cap, integer 1..100.
+  optional uint32 time_weight = 2;   // Relative weight, integer 1..1000.
+  string policy_source = 3;         // Policy ownership is separate from MIG selection.
+}
+
+message Assignment {
+  string assignment_id = 1;
+  oneof target {
+    FixtureTarget fixture_target = 2;
+    LiveMigTarget live_mig_target = 3;
+  }
+  SharingPolicy sharing_policy = 4;
+}
+
+// SKKU -> KETI: one decided assignment, not alternatives for KETI to rescore.
+message SubmitPartitionPlanRequest {
+  MessageMeta meta = 1;
+  string plan_id = 2;
+  uint64 revision = 3;
+  string profile_id = 4;
+  uint64 profile_version = 5;
+  Assignment assignment = 6;
+  ExternalSnapshotRef external_snapshot = 7;
+}
+
+enum ReceiptState {
+  RECEIPT_UNSPECIFIED = 0;
+  RECEIVED = 1;  // Stored/received only. Not policy approval or actual application.
+  PLAN_ONLY = 2; // Synthetic contract example; must not start a workload.
+}
+
+message ProfileReceipt {
+  string request_id = 1;
+  string workload_id = 2;
+  string profile_id = 3;
+  uint64 profile_version = 4;
+  ReceiptState state = 5;
+  bool requirements_normalized = 6;
+  string reason = 7;
+}
+
+message PlanReceipt {
+  string request_id = 1;
+  string workload_id = 2;
+  string plan_id = 3;
+  uint64 revision = 4;
+  ReceiptState state = 5;
+  string reason = 6;
+}
+
+service ProfileIngestService {
+  rpc PushProfile(PushProfileRequest) returns (ProfileReceipt);
+}
+
+service PlanAdmissionService {
+  rpc SubmitPartitionPlan(SubmitPartitionPlanRequest) returns (PlanReceipt);
+}

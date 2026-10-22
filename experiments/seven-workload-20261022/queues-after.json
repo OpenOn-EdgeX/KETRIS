@@ -1,0 +1,1331 @@
+{
+    "apiVersion": "v1",
+    "items": [
+        {
+            "apiVersion": "kueue.x-k8s.io/v1beta2",
+            "kind": "ClusterQueue",
+            "metadata": {
+                "annotations": {
+                    "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"kueue.x-k8s.io/v1beta2\",\"kind\":\"ClusterQueue\",\"metadata\":{\"annotations\":{},\"name\":\"edge-cq\"},\"spec\":{\"cohortName\":\"keti-c1\",\"namespaceSelector\":{},\"resourceGroups\":[{\"coveredResources\":[\"cpu\",\"memory\"],\"flavors\":[{\"name\":\"pro6000-211\",\"resources\":[{\"name\":\"cpu\",\"nominalQuota\":\"4\"},{\"name\":\"memory\",\"nominalQuota\":\"12Gi\"}]}]}]}}\n"
+                },
+                "creationTimestamp": "2026-10-14T08:53:11Z",
+                "finalizers": [
+                    "kueue.x-k8s.io/resource-in-use"
+                ],
+                "generation": 1,
+                "name": "edge-cq",
+                "resourceVersion": "288045",
+                "uid": "a84147bd-879a-4236-8393-23467dd71032"
+            },
+            "spec": {
+                "cohortName": "keti-c1",
+                "flavorFungibility": {
+                    "whenCanBorrow": "MayStopSearch",
+                    "whenCanPreempt": "TryNextFlavor"
+                },
+                "namespaceSelector": {},
+                "preemption": {
+                    "borrowWithinCohort": {
+                        "policy": "Never"
+                    },
+                    "reclaimWithinCohort": "Never",
+                    "withinClusterQueue": "Never"
+                },
+                "queueingStrategy": "BestEffortFIFO",
+                "resourceGroups": [
+                    {
+                        "coveredResources": [
+                            "cpu",
+                            "memory"
+                        ],
+                        "flavors": [
+                            {
+                                "name": "pro6000-211",
+                                "resources": [
+                                    {
+                                        "name": "cpu",
+                                        "nominalQuota": "4"
+                                    },
+                                    {
+                                        "name": "memory",
+                                        "nominalQuota": "12Gi"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "stopPolicy": "None"
+            },
+            "status": {
+                "admittedWorkloads": 0,
+                "conditions": [
+                    {
+                        "lastTransitionTime": "2026-10-14T08:53:11Z",
+                        "message": "Can admit new workloads",
+                        "observedGeneration": 1,
+                        "reason": "Ready",
+                        "status": "True",
+                        "type": "Active"
+                    }
+                ],
+                "flavorsReservation": [
+                    {
+                        "name": "pro6000-211",
+                        "resources": [
+                            {
+                                "borrowed": "0",
+                                "name": "cpu",
+                                "total": "0"
+                            },
+                            {
+                                "borrowed": "0",
+                                "name": "memory",
+                                "total": "0"
+                            }
+                        ]
+                    }
+                ],
+                "flavorsUsage": [
+                    {
+                        "name": "pro6000-211",
+                        "resources": [
+                            {
+                                "borrowed": "0",
+                                "name": "cpu",
+                                "total": "0"
+                            },
+                            {
+                                "borrowed": "0",
+                                "name": "memory",
+                                "total": "0"
+                            }
+                        ]
+                    }
+                ],
+                "pendingWorkloads": 0,
+                "reservingWorkloads": 0
+            }
+        },
+        {
+            "apiVersion": "kueue.x-k8s.io/v1beta2",
+            "kind": "ClusterQueue",
+            "metadata": {
+                "annotations": {
+                    "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"kueue.x-k8s.io/v1beta2\",\"kind\":\"ClusterQueue\",\"metadata\":{\"annotations\":{},\"name\":\"gpu-cq\"},\"spec\":{\"admissionChecksStrategy\":{\"admissionChecks\":[{\"name\":\"keti-scheduler\"}]},\"cohortName\":\"keti-c1\",\"namespaceSelector\":{},\"resourceGroups\":[{\"coveredResources\":[\"cpu\",\"memory\",\"keti.re.kr/lsu\",\"nvidia.com/gpu\"],\"flavors\":[{\"name\":\"pro6000-211\",\"resources\":[{\"name\":\"cpu\",\"nominalQuota\":\"2\"},{\"name\":\"memory\",\"nominalQuota\":\"8Gi\"},{\"name\":\"keti.re.kr/lsu\",\"nominalQuota\":\"240\"},{\"name\":\"nvidia.com/gpu\",\"nominalQuota\":\"1\"}]}]}]}}\n"
+                },
+                "creationTimestamp": "2026-10-14T08:53:11Z",
+                "finalizers": [
+                    "kueue.x-k8s.io/resource-in-use"
+                ],
+                "generation": 1,
+                "name": "gpu-cq",
+                "resourceVersion": "318732",
+                "uid": "fdd04666-9a88-4b2b-8d59-c03f99dcec1d"
+            },
+            "spec": {
+                "admissionChecksStrategy": {
+                    "admissionChecks": [
+                        {
+                            "name": "keti-scheduler"
+                        }
+                    ]
+                },
+                "cohortName": "keti-c1",
+                "flavorFungibility": {
+                    "whenCanBorrow": "MayStopSearch",
+                    "whenCanPreempt": "TryNextFlavor"
+                },
+                "namespaceSelector": {},
+                "preemption": {
+                    "borrowWithinCohort": {
+                        "policy": "Never"
+                    },
+                    "reclaimWithinCohort": "Never",
+                    "withinClusterQueue": "Never"
+                },
+                "queueingStrategy": "BestEffortFIFO",
+                "resourceGroups": [
+                    {
+                        "coveredResources": [
+                            "cpu",
+                            "memory",
+                            "keti.re.kr/lsu",
+                            "nvidia.com/gpu"
+                        ],
+                        "flavors": [
+                            {
+                                "name": "pro6000-211",
+                                "resources": [
+                                    {
+                                        "name": "cpu",
+                                        "nominalQuota": "2"
+                                    },
+                                    {
+                                        "name": "memory",
+                                        "nominalQuota": "8Gi"
+                                    },
+                                    {
+                                        "name": "keti.re.kr/lsu",
+                                        "nominalQuota": "240"
+                                    },
+                                    {
+                                        "name": "nvidia.com/gpu",
+                                        "nominalQuota": "1"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "stopPolicy": "None"
+            },
+            "status": {
+                "admittedWorkloads": 0,
+                "conditions": [
+                    {
+                        "lastTransitionTime": "2026-10-14T08:53:11Z",
+                        "message": "Can admit new workloads",
+                        "observedGeneration": 1,
+                        "reason": "Ready",
+                        "status": "True",
+                        "type": "Active"
+                    }
+                ],
+                "flavorsReservation": [
+                    {
+                        "name": "pro6000-211",
+                        "resources": [
+                            {
+                                "borrowed": "0",
+                                "name": "cpu",
+                                "total": "0"
+                            },
+                            {
+                                "borrowed": "0",
+                                "name": "keti.re.kr/lsu",
+                                "total": "0"
+                            },
+                            {
+                                "borrowed": "0",
+                                "name": "memory",
+                                "total": "0"
+                            },
+                            {
+                                "borrowed": "0",
+                                "name": "nvidia.com/gpu",
+                                "total": "0"
+                            }
+                        ]
+                    }
+                ],
+                "flavorsUsage": [
+                    {
+                        "name": "pro6000-211",
+                        "resources": [
+                            {
+                                "borrowed": "0",
+                                "name": "cpu",
+                                "total": "0"
+                            },
+                            {
+                                "borrowed": "0",
+                                "name": "keti.re.kr/lsu",
+                                "total": "0"
+                            },
+                            {
+                                "borrowed": "0",
+                                "name": "memory",
+                                "total": "0"
+                            },
+                            {
+                                "borrowed": "0",
+                                "name": "nvidia.com/gpu",
+                                "total": "0"
+                            }
+                        ]
+                    }
+                ],
+                "pendingWorkloads": 1,
+                "reservingWorkloads": 0
+            }
+        },
+        {
+            "apiVersion": "kueue.x-k8s.io/v1beta2",
+            "kind": "ClusterQueue",
+            "metadata": {
+                "creationTimestamp": "2026-10-15T08:13:29Z",
+                "finalizers": [
+                    "kueue.x-k8s.io/resource-in-use"
+                ],
+                "generation": 20,
+                "labels": {
+                    "app.kubernetes.io/managed-by": "ketris-institution-bridge"
+                },
+                "name": "ketris-integration-mig",
+                "resourceVersion": "336270",
+                "uid": "dbbeef86-2377-47ef-ab9f-1544e65fad8a"
+            },
+            "spec": {
+                "admissionChecksStrategy": {
+                    "admissionChecks": [
+                        {
+                            "name": "keti-scheduler"
+                        },
+                        {
+                            "name": "ketris-plan-validation"
+                        }
+                    ]
+                },
+                "flavorFungibility": {
+                    "whenCanBorrow": "MayStopSearch",
+                    "whenCanPreempt": "TryNextFlavor"
+                },
+                "namespaceSelector": {
+                    "matchLabels": {
+                        "ketris.integration/queue-scope": "ketris-integration-mig"
+                    }
+                },
+                "preemption": {
+                    "borrowWithinCohort": {
+                        "policy": "Never"
+                    },
+                    "reclaimWithinCohort": "Never",
+                    "withinClusterQueue": "Never"
+                },
+                "queueingStrategy": "BestEffortFIFO",
+                "resourceGroups": [
+                    {
+                        "coveredResources": [
+                            "cpu",
+                            "memory",
+                            "keti.re.kr/mig-2df9a7f6c8dae50c-share"
+                        ],
+                        "flavors": [
+                            {
+                                "name": "ketris-integration-devmaster",
+                                "resources": [
+                                    {
+                                        "name": "cpu",
+                                        "nominalQuota": "1"
+                                    },
+                                    {
+                                        "name": "memory",
+                                        "nominalQuota": "1Gi"
+                                    },
+                                    {
+                                        "name": "keti.re.kr/mig-2df9a7f6c8dae50c-share",
+                                        "nominalQuota": "100"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "stopPolicy": "None"
+            },
+            "status": {
+                "admittedWorkloads": 0,
+                "conditions": [
+                    {
+                        "lastTransitionTime": "2026-10-15T08:20:33Z",
+                        "message": "Can admit new workloads",
+                        "observedGeneration": 20,
+                        "reason": "Ready",
+                        "status": "True",
+                        "type": "Active"
+                    }
+                ],
+                "flavorsReservation": [
+                    {
+                        "name": "ketris-integration-devmaster",
+                        "resources": [
+                            {
+                                "borrowed": "0",
+                                "name": "cpu",
+                                "total": "0"
+                            },
+                            {
+                                "borrowed": "0",
+                                "name": "keti.re.kr/mig-2df9a7f6c8dae50c-share",
+                                "total": "0"
+                            },
+                            {
+                                "borrowed": "0",
+                                "name": "memory",
+                                "total": "0"
+                            }
+                        ]
+                    }
+                ],
+                "flavorsUsage": [
+                    {
+                        "name": "ketris-integration-devmaster",
+                        "resources": [
+                            {
+                                "borrowed": "0",
+                                "name": "cpu",
+                                "total": "0"
+                            },
+                            {
+                                "borrowed": "0",
+                                "name": "keti.re.kr/mig-2df9a7f6c8dae50c-share",
+                                "total": "0"
+                            },
+                            {
+                                "borrowed": "0",
+                                "name": "memory",
+                                "total": "0"
+                            }
+                        ]
+                    }
+                ],
+                "pendingWorkloads": 0,
+                "reservingWorkloads": 0
+            }
+        },
+        {
+            "apiVersion": "kueue.x-k8s.io/v1beta2",
+            "kind": "ClusterQueue",
+            "metadata": {
+                "creationTimestamp": "2026-10-15T05:41:44Z",
+                "finalizers": [
+                    "kueue.x-k8s.io/resource-in-use"
+                ],
+                "generation": 2,
+                "labels": {
+                    "ketris.re.kr/verification-run": "mig-e2e-20261015-01"
+                },
+                "name": "ketris-mig-e2e-20261015",
+                "resourceVersion": "275328",
+                "uid": "db35cf2f-3c73-47f1-82f4-4c5af2e7e17d"
+            },
+            "spec": {
+                "admissionChecksStrategy": {
+                    "admissionChecks": [
+                        {
+                            "name": "keti-scheduler"
+                        }
+                    ]
+                },
+                "flavorFungibility": {
+                    "whenCanBorrow": "MayStopSearch",
+                    "whenCanPreempt": "TryNextFlavor"
+                },
+                "namespaceSelector": {
+                    "matchLabels": {
+                        "ketris.re.kr/verification-run": "mig-e2e-20261015-01"
+                    }
+                },
+                "preemption": {
+                    "borrowWithinCohort": {
+                        "policy": "Never"
+                    },
+                    "reclaimWithinCohort": "Never",
+                    "withinClusterQueue": "Never"
+                },
+                "queueingStrategy": "BestEffortFIFO",
+                "resourceGroups": [
+                    {
+                        "coveredResources": [
+                            "cpu",
+                            "memory",
+                            "keti.re.kr/mig-e2493d0ebc3c0f31-share"
+                        ],
+                        "flavors": [
+                            {
+                                "name": "pro6000-211",
+                                "resources": [
+                                    {
+                                        "name": "cpu",
+                                        "nominalQuota": "1"
+                                    },
+                                    {
+                                        "name": "memory",
+                                        "nominalQuota": "1Gi"
+                                    },
+                                    {
+                                        "name": "keti.re.kr/mig-e2493d0ebc3c0f31-share",
+                                        "nominalQuota": "100"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "stopPolicy": "None"
+            },
+            "status": {
+                "admittedWorkloads": 0,
+                "conditions": [
+                    {
+                        "lastTransitionTime": "2026-10-15T05:41:44Z",
+                        "message": "Can admit new workloads",
+                        "observedGeneration": 2,
+                        "reason": "Ready",
+                        "status": "True",
+                        "type": "Active"
+                    }
+                ],
+                "flavorsReservation": [
+                    {
+                        "name": "pro6000-211",
+                        "resources": [
+                            {
+                                "borrowed": "0",
+                                "name": "cpu",
+                                "total": "0"
+                            },
+                            {
+                                "borrowed": "0",
+                                "name": "keti.re.kr/mig-e2493d0ebc3c0f31-share",
+                                "total": "0"
+                            },
+                            {
+                                "borrowed": "0",
+                                "name": "memory",
+                                "total": "0"
+                            }
+                        ]
+                    }
+                ],
+                "flavorsUsage": [
+                    {
+                        "name": "pro6000-211",
+                        "resources": [
+                            {
+                                "borrowed": "0",
+                                "name": "cpu",
+                                "total": "0"
+                            },
+                            {
+                                "borrowed": "0",
+                                "name": "keti.re.kr/mig-e2493d0ebc3c0f31-share",
+                                "total": "0"
+                            },
+                            {
+                                "borrowed": "0",
+                                "name": "memory",
+                                "total": "0"
+                            }
+                        ]
+                    }
+                ],
+                "pendingWorkloads": 0,
+                "reservingWorkloads": 0
+            }
+        },
+        {
+            "apiVersion": "kueue.x-k8s.io/v1beta2",
+            "kind": "ClusterQueue",
+            "metadata": {
+                "annotations": {
+                    "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"kueue.x-k8s.io/v1beta2\",\"kind\":\"ClusterQueue\",\"metadata\":{\"annotations\":{},\"name\":\"npu-cq\"},\"spec\":{\"admissionChecksStrategy\":{\"admissionChecks\":[{\"name\":\"keti-scheduler\"}]},\"cohortName\":\"keti-c1\",\"namespaceSelector\":{},\"resourceGroups\":[{\"coveredResources\":[\"cpu\",\"memory\"],\"flavors\":[{\"name\":\"pro6000-211\",\"resources\":[{\"name\":\"cpu\",\"nominalQuota\":\"2\"},{\"name\":\"memory\",\"nominalQuota\":\"8Gi\"}]}]},{\"coveredResources\":[\"keti.re.kr/npu-pe\"],\"flavors\":[{\"name\":\"rngd-211\",\"resources\":[{\"name\":\"keti.re.kr/npu-pe\",\"nominalQuota\":\"8\"}]}]}]}}\n"
+                },
+                "creationTimestamp": "2026-10-14T08:53:11Z",
+                "finalizers": [
+                    "kueue.x-k8s.io/resource-in-use"
+                ],
+                "generation": 1,
+                "name": "npu-cq",
+                "resourceVersion": "289972",
+                "uid": "fd8f1ae4-330d-4628-8549-a15be08c2709"
+            },
+            "spec": {
+                "admissionChecksStrategy": {
+                    "admissionChecks": [
+                        {
+                            "name": "keti-scheduler"
+                        }
+                    ]
+                },
+                "cohortName": "keti-c1",
+                "flavorFungibility": {
+                    "whenCanBorrow": "MayStopSearch",
+                    "whenCanPreempt": "TryNextFlavor"
+                },
+                "namespaceSelector": {},
+                "preemption": {
+                    "borrowWithinCohort": {
+                        "policy": "Never"
+                    },
+                    "reclaimWithinCohort": "Never",
+                    "withinClusterQueue": "Never"
+                },
+                "queueingStrategy": "BestEffortFIFO",
+                "resourceGroups": [
+                    {
+                        "coveredResources": [
+                            "cpu",
+                            "memory"
+                        ],
+                        "flavors": [
+                            {
+                                "name": "pro6000-211",
+                                "resources": [
+                                    {
+                                        "name": "cpu",
+                                        "nominalQuota": "2"
+                                    },
+                                    {
+                                        "name": "memory",
+                                        "nominalQuota": "8Gi"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "coveredResources": [
+                            "keti.re.kr/npu-pe"
+                        ],
+                        "flavors": [
+                            {
+                                "name": "rngd-211",
+                                "resources": [
+                                    {
+                                        "name": "keti.re.kr/npu-pe",
+                                        "nominalQuota": "8"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "stopPolicy": "None"
+            },
+            "status": {
+                "admittedWorkloads": 0,
+                "conditions": [
+                    {
+                        "lastTransitionTime": "2026-10-14T08:53:11Z",
+                        "message": "Can admit new workloads",
+                        "observedGeneration": 1,
+                        "reason": "Ready",
+                        "status": "True",
+                        "type": "Active"
+                    }
+                ],
+                "flavorsReservation": [
+                    {
+                        "name": "pro6000-211",
+                        "resources": [
+                            {
+                                "borrowed": "0",
+                                "name": "cpu",
+                                "total": "0"
+                            },
+                            {
+                                "borrowed": "0",
+                                "name": "memory",
+                                "total": "0"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "rngd-211",
+                        "resources": [
+                            {
+                                "borrowed": "0",
+                                "name": "keti.re.kr/npu-pe",
+                                "total": "0"
+                            }
+                        ]
+                    }
+                ],
+                "flavorsUsage": [
+                    {
+                        "name": "pro6000-211",
+                        "resources": [
+                            {
+                                "borrowed": "0",
+                                "name": "cpu",
+                                "total": "0"
+                            },
+                            {
+                                "borrowed": "0",
+                                "name": "memory",
+                                "total": "0"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "rngd-211",
+                        "resources": [
+                            {
+                                "borrowed": "0",
+                                "name": "keti.re.kr/npu-pe",
+                                "total": "0"
+                            }
+                        ]
+                    }
+                ],
+                "pendingWorkloads": 0,
+                "reservingWorkloads": 0
+            }
+        },
+        {
+            "apiVersion": "kueue.x-k8s.io/v1beta2",
+            "kind": "LocalQueue",
+            "metadata": {
+                "annotations": {
+                    "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"kueue.x-k8s.io/v1beta2\",\"kind\":\"LocalQueue\",\"metadata\":{\"annotations\":{},\"name\":\"edge-lq\",\"namespace\":\"edge-dev\"},\"spec\":{\"clusterQueue\":\"edge-cq\"}}\n"
+                },
+                "creationTimestamp": "2026-10-14T08:53:11Z",
+                "generation": 1,
+                "name": "edge-lq",
+                "namespace": "edge-dev",
+                "resourceVersion": "281612",
+                "uid": "71abfb43-1310-42f4-b820-15b854af539b"
+            },
+            "spec": {
+                "clusterQueue": "edge-cq",
+                "stopPolicy": "None"
+            },
+            "status": {
+                "admittedWorkloads": 0,
+                "conditions": [
+                    {
+                        "lastTransitionTime": "2026-10-14T08:53:12Z",
+                        "message": "Can submit new workloads to localQueue",
+                        "observedGeneration": 1,
+                        "reason": "Ready",
+                        "status": "True",
+                        "type": "Active"
+                    }
+                ],
+                "flavorsReservation": [
+                    {
+                        "name": "pro6000-211",
+                        "resources": [
+                            {
+                                "name": "cpu",
+                                "total": "0"
+                            },
+                            {
+                                "name": "memory",
+                                "total": "0"
+                            }
+                        ]
+                    }
+                ],
+                "flavorsUsage": [
+                    {
+                        "name": "pro6000-211",
+                        "resources": [
+                            {
+                                "name": "cpu",
+                                "total": "0"
+                            },
+                            {
+                                "name": "memory",
+                                "total": "0"
+                            }
+                        ]
+                    }
+                ],
+                "pendingWorkloads": 0,
+                "reservingWorkloads": 0
+            }
+        },
+        {
+            "apiVersion": "kueue.x-k8s.io/v1beta2",
+            "kind": "LocalQueue",
+            "metadata": {
+                "annotations": {
+                    "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"kueue.x-k8s.io/v1beta2\",\"kind\":\"LocalQueue\",\"metadata\":{\"annotations\":{},\"name\":\"gpu-lq\",\"namespace\":\"edge-dev\"},\"spec\":{\"clusterQueue\":\"gpu-cq\"}}\n"
+                },
+                "creationTimestamp": "2026-10-14T08:53:12Z",
+                "generation": 1,
+                "name": "gpu-lq",
+                "namespace": "edge-dev",
+                "resourceVersion": "289969",
+                "uid": "25ea14a0-ba40-4b5b-8a6f-5c89e4c46a62"
+            },
+            "spec": {
+                "clusterQueue": "gpu-cq",
+                "stopPolicy": "None"
+            },
+            "status": {
+                "admittedWorkloads": 0,
+                "conditions": [
+                    {
+                        "lastTransitionTime": "2026-10-14T08:53:12Z",
+                        "message": "Can submit new workloads to localQueue",
+                        "observedGeneration": 1,
+                        "reason": "Ready",
+                        "status": "True",
+                        "type": "Active"
+                    }
+                ],
+                "flavorsReservation": [
+                    {
+                        "name": "pro6000-211",
+                        "resources": [
+                            {
+                                "name": "cpu",
+                                "total": "0"
+                            },
+                            {
+                                "name": "keti.re.kr/lsu",
+                                "total": "0"
+                            },
+                            {
+                                "name": "memory",
+                                "total": "0"
+                            },
+                            {
+                                "name": "nvidia.com/gpu",
+                                "total": "0"
+                            }
+                        ]
+                    }
+                ],
+                "flavorsUsage": [
+                    {
+                        "name": "pro6000-211",
+                        "resources": [
+                            {
+                                "name": "cpu",
+                                "total": "0"
+                            },
+                            {
+                                "name": "keti.re.kr/lsu",
+                                "total": "0"
+                            },
+                            {
+                                "name": "memory",
+                                "total": "0"
+                            },
+                            {
+                                "name": "nvidia.com/gpu",
+                                "total": "0"
+                            }
+                        ]
+                    }
+                ],
+                "pendingWorkloads": 0,
+                "reservingWorkloads": 0
+            }
+        },
+        {
+            "apiVersion": "kueue.x-k8s.io/v1beta2",
+            "kind": "LocalQueue",
+            "metadata": {
+                "annotations": {
+                    "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"kueue.x-k8s.io/v1beta2\",\"kind\":\"LocalQueue\",\"metadata\":{\"annotations\":{},\"name\":\"npu-lq\",\"namespace\":\"edge-dev\"},\"spec\":{\"clusterQueue\":\"npu-cq\"}}\n"
+                },
+                "creationTimestamp": "2026-10-14T08:53:12Z",
+                "generation": 1,
+                "name": "npu-lq",
+                "namespace": "edge-dev",
+                "resourceVersion": "289971",
+                "uid": "367c7293-fdf8-4737-9c94-6127fbb2f97e"
+            },
+            "spec": {
+                "clusterQueue": "npu-cq",
+                "stopPolicy": "None"
+            },
+            "status": {
+                "admittedWorkloads": 0,
+                "conditions": [
+                    {
+                        "lastTransitionTime": "2026-10-14T08:53:12Z",
+                        "message": "Can submit new workloads to localQueue",
+                        "observedGeneration": 1,
+                        "reason": "Ready",
+                        "status": "True",
+                        "type": "Active"
+                    }
+                ],
+                "flavorsReservation": [
+                    {
+                        "name": "pro6000-211",
+                        "resources": [
+                            {
+                                "name": "cpu",
+                                "total": "0"
+                            },
+                            {
+                                "name": "memory",
+                                "total": "0"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "rngd-211",
+                        "resources": [
+                            {
+                                "name": "keti.re.kr/npu-pe",
+                                "total": "0"
+                            }
+                        ]
+                    }
+                ],
+                "flavorsUsage": [
+                    {
+                        "name": "pro6000-211",
+                        "resources": [
+                            {
+                                "name": "cpu",
+                                "total": "0"
+                            },
+                            {
+                                "name": "memory",
+                                "total": "0"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "rngd-211",
+                        "resources": [
+                            {
+                                "name": "keti.re.kr/npu-pe",
+                                "total": "0"
+                            }
+                        ]
+                    }
+                ],
+                "pendingWorkloads": 0,
+                "reservingWorkloads": 0
+            }
+        },
+        {
+            "apiVersion": "kueue.x-k8s.io/v1beta2",
+            "kind": "LocalQueue",
+            "metadata": {
+                "creationTimestamp": "2026-10-15T08:13:29Z",
+                "generation": 1,
+                "labels": {
+                    "app.kubernetes.io/managed-by": "ketris-institution-bridge"
+                },
+                "name": "ketris-integration-mig",
+                "namespace": "ketris-integration-workloads",
+                "resourceVersion": "336269",
+                "uid": "9b9aec6a-faa2-411b-8b16-9ffe21a445c8"
+            },
+            "spec": {
+                "clusterQueue": "ketris-integration-mig",
+                "stopPolicy": "None"
+            },
+            "status": {
+                "admittedWorkloads": 0,
+                "conditions": [
+                    {
+                        "lastTransitionTime": "2026-10-15T08:20:33Z",
+                        "message": "Can submit new workloads to localQueue",
+                        "observedGeneration": 1,
+                        "reason": "Ready",
+                        "status": "True",
+                        "type": "Active"
+                    }
+                ],
+                "flavorsReservation": [
+                    {
+                        "name": "ketris-integration-devmaster",
+                        "resources": [
+                            {
+                                "name": "cpu",
+                                "total": "0"
+                            },
+                            {
+                                "name": "keti.re.kr/mig-2df9a7f6c8dae50c-share",
+                                "total": "0"
+                            },
+                            {
+                                "name": "memory",
+                                "total": "0"
+                            }
+                        ]
+                    }
+                ],
+                "flavorsUsage": [
+                    {
+                        "name": "ketris-integration-devmaster",
+                        "resources": [
+                            {
+                                "name": "cpu",
+                                "total": "0"
+                            },
+                            {
+                                "name": "keti.re.kr/mig-2df9a7f6c8dae50c-share",
+                                "total": "0"
+                            },
+                            {
+                                "name": "memory",
+                                "total": "0"
+                            }
+                        ]
+                    }
+                ],
+                "pendingWorkloads": 0,
+                "reservingWorkloads": 0
+            }
+        },
+        {
+            "apiVersion": "kueue.x-k8s.io/v1beta2",
+            "kind": "LocalQueue",
+            "metadata": {
+                "creationTimestamp": "2026-10-15T05:41:45Z",
+                "generation": 1,
+                "name": "ketris-mig-e2e",
+                "namespace": "ketris-mig-e2e-20261015",
+                "resourceVersion": "275327",
+                "uid": "adbaedca-4853-488d-ae03-09635be569c1"
+            },
+            "spec": {
+                "clusterQueue": "ketris-mig-e2e-20261015",
+                "stopPolicy": "None"
+            },
+            "status": {
+                "admittedWorkloads": 0,
+                "conditions": [
+                    {
+                        "lastTransitionTime": "2026-10-15T05:41:45Z",
+                        "message": "Can submit new workloads to localQueue",
+                        "observedGeneration": 1,
+                        "reason": "Ready",
+                        "status": "True",
+                        "type": "Active"
+                    }
+                ],
+                "flavorsReservation": [
+                    {
+                        "name": "pro6000-211",
+                        "resources": [
+                            {
+                                "name": "cpu",
+                                "total": "0"
+                            },
+                            {
+                                "name": "keti.re.kr/mig-e2493d0ebc3c0f31-share",
+                                "total": "0"
+                            },
+                            {
+                                "name": "memory",
+                                "total": "0"
+                            }
+                        ]
+                    }
+                ],
+                "flavorsUsage": [
+                    {
+                        "name": "pro6000-211",
+                        "resources": [
+                            {
+                                "name": "cpu",
+                                "total": "0"
+                            },
+                            {
+                                "name": "keti.re.kr/mig-e2493d0ebc3c0f31-share",
+                                "total": "0"
+                            },
+                            {
+                                "name": "memory",
+                                "total": "0"
+                            }
+                        ]
+                    }
+                ],
+                "pendingWorkloads": 0,
+                "reservingWorkloads": 0
+            }
+        },
+        {
+            "apiVersion": "kueue.x-k8s.io/v1beta2",
+            "kind": "LocalQueue",
+            "metadata": {
+                "annotations": {
+                    "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"kueue.x-k8s.io/v1beta2\",\"kind\":\"LocalQueue\",\"metadata\":{\"annotations\":{},\"name\":\"edge-lq\",\"namespace\":\"kubeflow\"},\"spec\":{\"clusterQueue\":\"edge-cq\"}}\n"
+                },
+                "creationTimestamp": "2026-10-15T04:49:52Z",
+                "generation": 1,
+                "name": "edge-lq",
+                "namespace": "kubeflow",
+                "resourceVersion": "288044",
+                "uid": "f0d80444-64c5-4a4f-9955-7ee17575c522"
+            },
+            "spec": {
+                "clusterQueue": "edge-cq",
+                "stopPolicy": "None"
+            },
+            "status": {
+                "admittedWorkloads": 0,
+                "conditions": [
+                    {
+                        "lastTransitionTime": "2026-10-15T04:49:52Z",
+                        "message": "Can submit new workloads to localQueue",
+                        "observedGeneration": 1,
+                        "reason": "Ready",
+                        "status": "True",
+                        "type": "Active"
+                    }
+                ],
+                "flavorsReservation": [
+                    {
+                        "name": "pro6000-211",
+                        "resources": [
+                            {
+                                "name": "cpu",
+                                "total": "0"
+                            },
+                            {
+                                "name": "memory",
+                                "total": "0"
+                            }
+                        ]
+                    }
+                ],
+                "flavorsUsage": [
+                    {
+                        "name": "pro6000-211",
+                        "resources": [
+                            {
+                                "name": "cpu",
+                                "total": "0"
+                            },
+                            {
+                                "name": "memory",
+                                "total": "0"
+                            }
+                        ]
+                    }
+                ],
+                "pendingWorkloads": 0,
+                "reservingWorkloads": 0
+            }
+        },
+        {
+            "apiVersion": "kueue.x-k8s.io/v1beta2",
+            "kind": "LocalQueue",
+            "metadata": {
+                "annotations": {
+                    "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"kueue.x-k8s.io/v1beta2\",\"kind\":\"LocalQueue\",\"metadata\":{\"annotations\":{},\"name\":\"gpu-lq\",\"namespace\":\"kubeflow\"},\"spec\":{\"clusterQueue\":\"gpu-cq\"}}\n"
+                },
+                "creationTimestamp": "2026-10-14T08:53:12Z",
+                "generation": 1,
+                "name": "gpu-lq",
+                "namespace": "kubeflow",
+                "resourceVersion": "318731",
+                "uid": "71a593ec-0fdd-4f85-af6c-5b2e59194f7d"
+            },
+            "spec": {
+                "clusterQueue": "gpu-cq",
+                "stopPolicy": "None"
+            },
+            "status": {
+                "admittedWorkloads": 0,
+                "conditions": [
+                    {
+                        "lastTransitionTime": "2026-10-14T08:53:12Z",
+                        "message": "Can submit new workloads to localQueue",
+                        "observedGeneration": 1,
+                        "reason": "Ready",
+                        "status": "True",
+                        "type": "Active"
+                    }
+                ],
+                "flavorsReservation": [
+                    {
+                        "name": "pro6000-211",
+                        "resources": [
+                            {
+                                "name": "cpu",
+                                "total": "0"
+                            },
+                            {
+                                "name": "keti.re.kr/lsu",
+                                "total": "0"
+                            },
+                            {
+                                "name": "memory",
+                                "total": "0"
+                            },
+                            {
+                                "name": "nvidia.com/gpu",
+                                "total": "0"
+                            }
+                        ]
+                    }
+                ],
+                "flavorsUsage": [
+                    {
+                        "name": "pro6000-211",
+                        "resources": [
+                            {
+                                "name": "cpu",
+                                "total": "0"
+                            },
+                            {
+                                "name": "keti.re.kr/lsu",
+                                "total": "0"
+                            },
+                            {
+                                "name": "memory",
+                                "total": "0"
+                            },
+                            {
+                                "name": "nvidia.com/gpu",
+                                "total": "0"
+                            }
+                        ]
+                    }
+                ],
+                "pendingWorkloads": 1,
+                "reservingWorkloads": 0
+            }
+        },
+        {
+            "apiVersion": "kueue.x-k8s.io/v1beta2",
+            "kind": "LocalQueue",
+            "metadata": {
+                "annotations": {
+                    "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"kueue.x-k8s.io/v1beta2\",\"kind\":\"LocalQueue\",\"metadata\":{\"annotations\":{},\"name\":\"npu-lq\",\"namespace\":\"kubeflow\"},\"spec\":{\"clusterQueue\":\"npu-cq\"}}\n"
+                },
+                "creationTimestamp": "2026-10-14T08:53:12Z",
+                "generation": 1,
+                "name": "npu-lq",
+                "namespace": "kubeflow",
+                "resourceVersion": "7208",
+                "uid": "72f0dd7b-3aa5-4187-be1e-9f05a8a6e55b"
+            },
+            "spec": {
+                "clusterQueue": "npu-cq",
+                "stopPolicy": "None"
+            },
+            "status": {
+                "admittedWorkloads": 0,
+                "conditions": [
+                    {
+                        "lastTransitionTime": "2026-10-14T08:53:12Z",
+                        "message": "Can submit new workloads to localQueue",
+                        "observedGeneration": 1,
+                        "reason": "Ready",
+                        "status": "True",
+                        "type": "Active"
+                    }
+                ],
+                "flavorsReservation": [
+                    {
+                        "name": "pro6000-211",
+                        "resources": [
+                            {
+                                "name": "cpu",
+                                "total": "0"
+                            },
+                            {
+                                "name": "memory",
+                                "total": "0"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "rngd-211",
+                        "resources": [
+                            {
+                                "name": "keti.re.kr/npu-pe",
+                                "total": "0"
+                            }
+                        ]
+                    }
+                ],
+                "flavorsUsage": [
+                    {
+                        "name": "pro6000-211",
+                        "resources": [
+                            {
+                                "name": "cpu",
+                                "total": "0"
+                            },
+                            {
+                                "name": "memory",
+                                "total": "0"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "rngd-211",
+                        "resources": [
+                            {
+                                "name": "keti.re.kr/npu-pe",
+                                "total": "0"
+                            }
+                        ]
+                    }
+                ],
+                "pendingWorkloads": 0,
+                "reservingWorkloads": 0
+            }
+        },
+        {
+            "apiVersion": "kueue.x-k8s.io/v1beta2",
+            "kind": "ResourceFlavor",
+            "metadata": {
+                "creationTimestamp": "2026-10-15T08:13:29Z",
+                "finalizers": [
+                    "kueue.x-k8s.io/resource-in-use"
+                ],
+                "generation": 1,
+                "labels": {
+                    "app.kubernetes.io/managed-by": "ketris-institution-bridge"
+                },
+                "name": "ketris-integration-devmaster",
+                "resourceVersion": "317102",
+                "uid": "cc9e1f67-2ab9-4975-9508-83611f90fe8d"
+            },
+            "spec": {
+                "nodeLabels": {
+                    "kubernetes.io/hostname": "devmaster"
+                }
+            }
+        },
+        {
+            "apiVersion": "kueue.x-k8s.io/v1beta2",
+            "kind": "ResourceFlavor",
+            "metadata": {
+                "annotations": {
+                    "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"kueue.x-k8s.io/v1beta2\",\"kind\":\"ResourceFlavor\",\"metadata\":{\"annotations\":{},\"name\":\"pro6000-211\"},\"spec\":{\"nodeLabels\":{\"keti.re.kr/node-role\":\"edge\"}}}\n"
+                },
+                "creationTimestamp": "2026-10-14T08:53:11Z",
+                "finalizers": [
+                    "kueue.x-k8s.io/resource-in-use"
+                ],
+                "generation": 1,
+                "name": "pro6000-211",
+                "resourceVersion": "7179",
+                "uid": "d930694a-b24d-4a13-8fa9-a8177c3d182d"
+            },
+            "spec": {
+                "nodeLabels": {
+                    "keti.re.kr/node-role": "edge"
+                }
+            }
+        },
+        {
+            "apiVersion": "kueue.x-k8s.io/v1beta2",
+            "kind": "ResourceFlavor",
+            "metadata": {
+                "annotations": {
+                    "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"kueue.x-k8s.io/v1beta2\",\"kind\":\"ResourceFlavor\",\"metadata\":{\"annotations\":{},\"name\":\"rngd-211\"},\"spec\":{\"nodeLabels\":{\"keti.re.kr/node-role\":\"edge\"}}}\n"
+                },
+                "creationTimestamp": "2026-10-14T08:53:11Z",
+                "finalizers": [
+                    "kueue.x-k8s.io/resource-in-use"
+                ],
+                "generation": 1,
+                "name": "rngd-211",
+                "resourceVersion": "7180",
+                "uid": "c9ff74fc-eb3c-44a8-82c5-2c4e77b132c7"
+            },
+            "spec": {
+                "nodeLabels": {
+                    "keti.re.kr/node-role": "edge"
+                }
+            }
+        }
+    ],
+    "kind": "List",
+    "metadata": {
+        "resourceVersion": ""
+    }
+}

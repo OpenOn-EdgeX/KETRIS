@@ -1,0 +1,941 @@
+openapi: "3.0.3"
+# ─────────────────────────────────────────────────────────────────────────────
+# KRAKEN Controller REST API — 정본 명세 (Exp_30 작업 1)
+#
+# 정본 지위: 이 파일이 controller HTTP 표면의 유일한 정본이다.
+#   - PROJECT_CONTEXT.md:178 의 구명세 4종(/resource-status, /adjust-ratio,
+#     /profiling-data, /migration-recommend)을 대체한다 (처리 결정문:
+#     reports/Exp_30_api_docs/report.md §2, 아래 x-legacy-spec 요약 참조).
+#   - 경로·메서드 목록은 tests/test_13_api_spec.py 가 코드 라우팅 표면과
+#     자동 대조한다 (명세·코드 어느 한쪽에만 있으면 FAIL).
+#
+# 코드 출처 (역산 기준):
+#   controller/kraken_controller.py  — 기존 12종 라우트 + 디스패치 prefix
+#   controller/loop_api.py          — /feeder/* /lifecycle/* /subscribe (Exp_26)
+#                                     /priority* /urgent* (Exp_27)
+#                                     /booster/* (Exp_28)
+# 시맨틱 정본: docs/semantics/time_sharing.md (시간 분할 의미론)
+# ─────────────────────────────────────────────────────────────────────────────
+info:
+  title: KRAKEN Controller API
+  version: "1.0.0-exp30"
+  description: |
+    KRAKEN 컨트롤러 (기본 포트 8090, `kraken_controller.py --group default --port 8090`).
+
+    라우팅 구조: `kraken_controller.py`가 직접 처리하는 12종 +
+    `loop_api.py`로 위임되는 디스패치 prefix
+    (GET: `/feeder/`, `/lifecycle/`, `/priority/`, `/booster/` —
+    POST: `/feeder/`, `/lifecycle/`, `/subscribe`, `/priority`, `/urgent`, `/booster/`).
+
+    시간 분할(time_credit/charged_us/게이트) 관련 필드의 의미는
+    `docs/semantics/time_sharing.md` 를 정본으로 한다.
+
+servers:
+  - url: http://localhost:8090
+    description: 노드-로컬 controller (Device Plugin 은 hostNetwork 로 접근)
+
+tags:
+  - name: core
+    description: 테넌트 등록/해제, 상태 조회 (kraken_controller.py 직접 처리)
+  - name: policy
+    description: 스케줄링 정책 (가중치/라운드/우선순위 — SHM write 경로)
+  - name: profiling
+    description: PROFILING 모드 (overcommit.py)
+  - name: feeder
+    description: "[Exp_26] time_credit 피더 — tick 마다 in-envelope 분배"
+  - name: lifecycle
+    description: "[Exp_26] 상태머신 + make-before-break swap + residual 장부"
+  - name: priority
+    description: "[Exp_27] libbless 3-레벨 우선순위·urgent 선점 발신 경로"
+  - name: booster
+    description: "[Exp_28] Turnaround Booster — 종료 예측 이벤트 기반 재할당"
+  - name: subscribe
+    description: "[Exp_26] phase_online 이벤트 구독 → 비율 재설정 규칙"
+
+# ── 상태 사전: lifecycle 상태머신 (machine.py LEGAL 전이표 기준) ──────────────
+x-state-machine:
+  source: controller/lifecycle/machine.py (LEGAL, Exp_22 실측 경로에서 유도)
+  states:
+    NORMAL:
+      meaning: 정상 운전. swap 사이클 밖.
+      entry: 초기 상태, 또는 FALLBACK_GATED 에서 수동 복구.
+    GATED:
+      meaning: 시간 게이트 on + standby 스폰 진행 중 (make-before-break 1단계).
+      entry: NORMAL/NORMAL'/FALLBACK_GATED 에서 swap 트리거(POST /lifecycle/swap).
+    HANDOFF:
+      meaning: standby ready 확인 후 구 테넌트 드레인 + 게이트 해제 중.
+      entry: GATED 에서 standby_ready 신호(ready_file 생성).
+    "NORMAL'":
+      meaning: 새 구성으로 정상 (NORMAL_PRIME). 다음 사이클 재트리거 가능.
+      entry: HANDOFF 완료. 장부는 old 제거 + standby 배치(gated=false)로 갱신.
+    FALLBACK_GATED:
+      meaning: standby 조기 종료/ready 타임아웃 폴백 — 게이트 유지 + 구 테넌트 유지.
+      entry: GATED 에서 standby_dead 또는 ready_timeout_s(기본 60s) 초과.
+  legal_transitions:
+    NORMAL: ["GATED"]
+    GATED: ["HANDOFF", "FALLBACK_GATED"]
+    HANDOFF: ["NORMAL'"]
+    "NORMAL'": ["GATED"]
+    FALLBACK_GATED: ["GATED", "NORMAL"]
+  note: 전이표 밖 요청은 IllegalTransition → HTTP 409.
+
+# ── 구명세 처리 요약 (전체 결정문: reports/Exp_30_api_docs/report.md §2) ─────
+x-legacy-spec:
+  policy: 구명세 4종은 코드 구현 0건 — 본 명세로 폐기(supersede)를 기본으로 한다.
+  routes:
+    /resource-status: "폐기. 현행 대응: GET /status + GET /lifecycle/ledger"
+    /adjust-ratio: "폐기. 현행 대응: POST /feeder/ratios (+ /lifecycle/swap 의 ratio 엔진 결정)"
+    /profiling-data: "폐기. 현행 대응: POST /profiling/enter·exit + GET /feeder/occupancy"
+    /migration-recommend: "미구현 기능. 현행 인접 기능: adaptive_map 회피 권고(warnings, Exp_29 안건)"
+
+paths:
+  # ═══════════════ core (kraken_controller.py) ═══════════════
+  /status:
+    get:
+      tags: [core]
+      summary: 컨트롤러·SHM 전역 상태
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  group_id: {type: string}
+                  mode: {type: string, description: scheduler 모드 (예 NORMAL/PROFILING)}
+                  policy_version: {type: integer}
+                  physical_sm: {type: integer}
+                  physical_mem_mb: {type: integer}
+                  virtual_sm_total: {type: integer}
+                  virtual_mem_total_mb: {type: integer}
+                  round_duration_us: {type: integer}
+                  tenant_count: {type: integer}
+  /tenants:
+    get:
+      tags: [core]
+      summary: 등록 테넌트 목록 (SHM alloc 슬롯 기준)
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  tenants:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        idx: {type: integer}
+                        tenant_id: {type: string}
+                        virtual_sm: {type: integer}
+                        virtual_mem_mb: {type: integer}
+                        mps_pct: {type: integer}
+                        weight: {type: number}
+                        active: {type: boolean}
+  /stats:
+    get:
+      tags: [core]
+      summary: 스케줄러 통계
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  stats: {type: object, description: scheduler.get_stats() 원본}
+  /register:
+    post:
+      tags: [core]
+      summary: 테넌트 등록 → 슬롯 배정 + 실행 env 반환
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [tenant_id]
+              properties:
+                tenant_id: {type: string}
+                virtual_sm: {type: integer, default: 40}
+                virtual_mem_mb: {type: integer, default: 4096}
+                weight: {type: number, default: 1.0}
+      responses:
+        "200":
+          description: 등록 완료
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  tenant_idx: {type: integer}
+                  env:
+                    type: object
+                    additionalProperties: {type: string}
+                    description: 워크로드 프로세스에 주입할 환경변수 (BLESS_LIMIT_PCT 포함 — 명시 설정 원칙은 semantics §6)
+        "400": {$ref: "#/components/responses/BadRequest"}
+  /deregister:
+    post:
+      tags: [core]
+      summary: 슬롯 번호로 테넌트 해제
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [tenant_idx]
+              properties:
+                tenant_idx: {type: integer}
+      responses:
+        "200": {$ref: "#/components/responses/Ok"}
+        "400": {$ref: "#/components/responses/BadRequest"}
+  /deregister_by_id:
+    post:
+      tags: [core]
+      summary: tenant_id(=device ID)로 해제 — Device Plugin pod watcher 전용
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [tenant_id]
+              properties:
+                tenant_id: {type: string}
+      responses:
+        "200":
+          description: 해제 완료
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok: {type: boolean}
+                  tenant_idx: {type: integer}
+        "404": {$ref: "#/components/responses/NotFound"}
+        "400": {$ref: "#/components/responses/BadRequest"}
+
+  # ═══════════════ policy (kraken_controller.py) ═══════════════
+  /policy/weights:
+    post:
+      tags: [policy]
+      summary: 테넌트 가중치 일괄 설정
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                weights:
+                  type: array
+                  items: {type: number}
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok: {type: boolean}
+                  version: {type: integer}
+  /policy/round:
+    post:
+      tags: [policy]
+      summary: 라운드 길이 설정
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                duration_us: {type: integer, default: 100000}
+      responses:
+        "200": {$ref: "#/components/responses/Ok"}
+  /policy/equal:
+    post:
+      tags: [policy]
+      summary: 전 테넌트 동일 가중치
+      responses:
+        "200": {$ref: "#/components/responses/Ok"}
+  /policy/priority:
+    post:
+      tags: [policy]
+      summary: "[deprecated 경로 아님·주의] SHM write 우선순위 — /priority(소켓 발신)와 별개"
+      description: |
+        scheduler.set_priority(SHM) 경로. Exp_27 의 POST /priority
+        (libbless `priority_set` 소켓 발신)와 이름이 유사하나 다른 계층이다.
+        신규 사용은 /priority 를 권장 (근거: Exp_27 §7 결정문).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [tenant_idx, priority]
+              properties:
+                tenant_idx: {type: integer}
+                priority: {type: integer}
+      responses:
+        "200": {$ref: "#/components/responses/Ok"}
+
+  # ═══════════════ profiling (kraken_controller.py) ═══════════════
+  /profiling/enter:
+    post:
+      tags: [profiling]
+      summary: PROFILING 모드 진입
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                tenant_idx: {type: integer, default: 0}
+                iter_count: {type: integer, default: 5}
+      responses:
+        "200": {$ref: "#/components/responses/Ok"}
+  /profiling/exit:
+    post:
+      tags: [profiling]
+      summary: PROFILING 모드 종료
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok: {type: boolean}
+                  mode: {type: string}
+
+  # ═══════════════ feeder (loop_api.py, Exp_26) ═══════════════
+  /feeder/status:
+    get:
+      tags: [feeder]
+      summary: 피더 상태 (목표 비율/armed/재설정 이력)
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  tick_ms: {type: number}
+                  env_scale:
+                    type: number
+                    description: envelope 배율 (기본 1.0, 완화 1.6 — semantics §4)
+                  tenants:
+                    type: object
+                    additionalProperties:
+                      type: object
+                      properties:
+                        ratio: {type: number}
+                        armed: {type: boolean}
+                        sock: {type: string}
+                        target_share:
+                          type: number
+                          nullable: true
+                          description: armed 시 정규화 목표 점유 (미armed 는 null)
+                  recent_resets: {type: array, items: {type: object}}
+  /feeder/occupancy:
+    get:
+      tags: [feeder]
+      summary: 직전 샘플 대비 실측 점유 (charged_us 델타 기준)
+      description: |
+        점유는 charged_us(배치 벽시계 창 점유) 기준이며 GPU busy 가 아니다 —
+        두 지표의 구분과 이종 페어 수치 사례는 semantics §1 정본 참조.
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  charged_delta_us:
+                    type: object
+                    additionalProperties: {type: integer}
+                  observed_share:
+                    type: object
+                    additionalProperties: {type: number}
+  /feeder/register:
+    post:
+      tags: [feeder]
+      summary: 피더에 테넌트 등록 (소켓·로그·목표 비율)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [tenant, sock, log]
+              properties:
+                tenant: {type: string}
+                sock: {type: string, description: 제어 소켓 경로 (gpu=libbless bless-*.sock, npu=npu-proxy <tenant>.sock — 명령 계열 동일)}
+                log: {type: string, description: time_stats 를 읽을 로그 경로}
+                time_ratio: {type: number, default: 0.5}
+                resource:
+                  type: string
+                  enum: [gpu, npu]
+                  default: gpu
+                  description: 자원 타입 (Exp_45). npu 는 npu-proxy 대행 —
+                    PE 는 배타 단위이므로 시간 축 단독(공간 s 미적용, Exp_36/44)
+      responses:
+        "200": {$ref: "#/components/responses/Ok"}
+        "400": {$ref: "#/components/responses/BadRequest"}
+  /feeder/arm:
+    post:
+      tags: [feeder]
+      summary: 테넌트 게이트 arm (tick 분배 대상 포함)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: "#/components/schemas/TenantBody"}
+      responses:
+        "200": {$ref: "#/components/responses/Ok"}
+        "400": {$ref: "#/components/responses/BadRequest"}
+  /feeder/deregister:
+    post:
+      tags: [feeder]
+      summary: 피더에서 테넌트 제거 (Exp_53 — NPU 모델 슬롯 자동 정리가 사용)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: "#/components/schemas/TenantBody"}
+      responses:
+        "200": {$ref: "#/components/responses/Ok"}
+        "400": {$ref: "#/components/responses/BadRequest"}
+  /feeder/release:
+    post:
+      tags: [feeder]
+      summary: 테넌트 게이트 해제
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: "#/components/schemas/TenantBody"}
+      responses:
+        "200": {$ref: "#/components/responses/Ok"}
+        "400": {$ref: "#/components/responses/BadRequest"}
+  /feeder/ratios:
+    post:
+      tags: [feeder]
+      summary: 적용 비율 일괄 재설정 (임대 — 갱신이 끊기면 계약값 복귀)
+      description: |
+        Σratio≤1 이면 절대 duty 로 해석, Σ>1 이면 비례 정규화 —
+        in-envelope 분배 불변식은 semantics §4 정본 참조.
+        [Exp_138 3-D·Exp_141] 재설정은 **적용값**을 바꾸고 임대가 붙는다.
+        lease_s 미지정 = 기본 임대(KRAKEN_RATIO_LEASE_S, 기본 3s) — 갱신이
+        끊기면 feeder 가 계약값(등록 시점 몫)으로 자동 복귀. >0 = 그 값,
+        <=0 = 무기한 opt-out(재설정 자체가 새 계약인 경우만, 이력에 남음).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [ratios]
+              properties:
+                ratios:
+                  type: object
+                  additionalProperties: {type: number}
+                reason: {type: string}
+                lease_s: {type: number, nullable: true}
+      responses:
+        "200": {$ref: "#/components/responses/Ok"}
+        "400": {$ref: "#/components/responses/BadRequest"}
+
+  /feeder/ratios_release:
+    post:
+      tags: [feeder]
+      summary: 몫 임대 즉시 해제 — 계약값으로 복귀 (Exp_138 3-D)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                tenants:
+                  description: true=전체, 배열=지정 테넌트만
+                  oneOf: [{type: boolean}, {type: array, items: {type: string}}]
+      responses:
+        "200": {$ref: "#/components/responses/Ok"}
+
+  /feeder/retention:
+    get:
+      tags: [feeder]
+      summary: ④ 유지율 저장소 조회 (Exp_151 4-G)
+      responses:
+        "200":
+          description: tenant → {retention, p95_ms, base_ms, name, ts}
+    post:
+      tags: [feeder]
+      summary: ④ victim 유지율 보고 — /metrics kraken_slice_retention_ratio 소스
+      description: |
+        closed_loop(--report-retention)가 base/p95 를 보낸다. 신호 있는
+        테넌트만 온다(0 채움 금지). /metrics 는 10s stale 을 버린다.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [tenant]
+              properties:
+                tenant: {type: string}
+                name: {type: string}
+                retention: {type: number}
+                p95_ms: {type: number}
+                base_ms: {type: number}
+      responses:
+        "200": {$ref: "#/components/responses/Ok"}
+
+  /feeder/mode_event:
+    post:
+      tags: [feeder]
+      summary: ③·④ 전환·Slice K8s Event 발행 (Exp_138 2-B 5 · Exp_140 3부 · Exp_151 1부)
+      description: |
+        reason_kind 화이트리스트 = ControlModeSwitched(기본) | SliceCreated |
+        SliceDestroyed | InterferenceDetected | SpaceControlApplied.
+        Slice 계열은 pod/pod_ns/pod_uid 로 Pod 대상 이벤트를
+        결정적 이름(멱등)으로 만든다. 발행 실패는 제어를 막지 않는다.
+        [Exp_151] ④(closed_loop)의 발행도 이 경로로 모은다 — 경로 일원화.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                reason_kind: {type: string}
+                tenant: {type: string}
+                mode: {type: string}
+                reason: {type: string}
+                class: {type: string}
+                pod: {type: string}
+                pod_ns: {type: string}
+                pod_uid: {type: string}
+                detail: {type: string}
+      responses:
+        "200": {$ref: "#/components/responses/Ok"}
+        "400": {$ref: "#/components/responses/BadRequest"}
+
+  /feeder/env_policy:
+    post:
+      tags: [feeder]
+      summary: 봉투 정책 opt-in 전환 (Exp_40)
+      description: |
+        strict(기본, 현행 의미론) | relaxed_hetero(이종 페어 피해자 시간
+        게이트 해제 — Σt>1 허용) | capped_hetero(+ 피해자 공간 상한, MPS 필요).
+        기본값 strict — opt-in 아니면 기존 동작 무변경. 근거 Exp_39b
+        (C−U=+0.367, P−C=−0.030). 전환 이력은 recent_resets 에 감사 기록.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [policy]
+              properties:
+                policy:
+                  type: string
+                  enum: [strict, relaxed_hetero, capped_hetero]
+                reason: {type: string}
+      responses:
+        "200": {$ref: "#/components/responses/Ok"}
+        "400": {$ref: "#/components/responses/BadRequest"}
+
+  # ═══════════════ lifecycle (loop_api.py, Exp_26) ═══════════════
+  /lifecycle/state:
+    get:
+      tags: [lifecycle]
+      summary: 상태머신 현재 상태 + 감사 로그 (최근 50)
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  state:
+                    type: string
+                    enum: [NORMAL, GATED, HANDOFF, "NORMAL'", FALLBACK_GATED]
+                  audit: {type: array, items: {type: object}}
+  /lifecycle/ledger:
+    get:
+      tags: [lifecycle]
+      summary: residual 장부 view + 감사 로그 (최근 50)
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  view:
+                    type: object
+                    properties:
+                      free_time_ratio: {type: number}
+                      free_sm_ratio:
+                        type: number
+                        description: 비게이트 테넌트 최대 s 기준 잔여 (Exp_26 §3 ledger 의미론)
+                      instant_sm_report: {type: number}
+                      tenants:
+                        type: object
+                        additionalProperties:
+                          type: object
+                          properties:
+                            s: {type: number}
+                            t: {type: number}
+                            gated: {type: boolean}
+                  audit: {type: array, items: {type: object}}
+  /lifecycle/swap:
+    post:
+      tags: [lifecycle]
+      summary: make-before-break swap 사이클 시작 (비동기)
+      description: |
+        NORMAL→GATED→(ready)→HANDOFF→NORMAL' 경로. standby 조기 종료/타임아웃 시
+        FALLBACK_GATED 폴백. standby 의 (s,t)는 ratio 엔진 decide() 가 결정하고
+        BLESS_LIMIT_PCT 를 controller 가 env 에 명시 주입한다 (semantics §5·§6).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [old, standby]
+              properties:
+                old:
+                  type: object
+                  required: [tenant, drain_file]
+                  properties:
+                    tenant: {type: string}
+                    drain_file: {type: string}
+                gate:
+                  type: object
+                  properties:
+                    ratios:
+                      type: object
+                      additionalProperties: {type: number}
+                    reason: {type: string}
+                standby:
+                  type: object
+                  required: [name, cmd, log, ready_file, r, workload_class]
+                  properties:
+                    name: {type: string}
+                    cmd: {type: array, items: {type: string}}
+                    env:
+                      type: object
+                      additionalProperties: {type: string}
+                    log: {type: string}
+                    ready_file: {type: string}
+                    r: {type: number, description: 요구 자원 비율 (ratio 엔진 입력)}
+                    workload_class: {type: string}
+                    confidence: {type: string, default: HIGH}
+                    min_free_time: {type: number, default: 0.0}
+                ready_timeout_s: {type: number, default: 60.0}
+      responses:
+        "200":
+          description: swap 시작됨 (백그라운드 스레드)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok: {type: boolean}
+                  decision:
+                    type: object
+                    properties:
+                      space_ratio: {type: number}
+                      time_ratio: {type: number}
+                      limit_pct: {type: integer}
+                      rule_applied: {type: string}
+        "409":
+          description: swap 진행 중 / ratio 엔진 INFEASIBLE / 불법 전이
+          content:
+            application/json:
+              schema: {$ref: "#/components/schemas/Error"}
+        "400": {$ref: "#/components/responses/BadRequest"}
+
+  # ═══════════════ priority / urgent (loop_api.py, Exp_27) ═══════════════
+  /priority/status:
+    get:
+      tags: [priority]
+      summary: 등급·urgent 홀더·발신 이력
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  classes:
+                    type: object
+                    additionalProperties:
+                      type: string
+                      enum: [URGENT, NORMAL, BACKGROUND]
+                  urgent_holder: {type: string, nullable: true}
+                  pending_sent: {type: array, items: {type: string}}
+                  audit: {type: array, items: {type: object}}
+  /priority:
+    post:
+      tags: [priority]
+      summary: 등급 설정 — libbless `priority_set` 발신
+      description: |
+        urgent 는 priority 게이트의 특권일 뿐 time 게이트 특권이 아니다
+        (직렬 AND — semantics §2 정본, Exp_27 §5). 운영 규칙 R-1:
+        urgent 시 time_credit 비율 동반 전환.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [tenant, class]
+              properties:
+                tenant: {type: string, description: feeder 등록 필요 (소켓 조회 경유)}
+                class: {type: string, enum: [URGENT, NORMAL, BACKGROUND]}
+      responses:
+        "200": {$ref: "#/components/responses/Ok"}
+        "400": {$ref: "#/components/responses/BadRequest"}
+  /urgent:
+    post:
+      tags: [priority]
+      summary: 교차 테넌트 선점 — 팬아웃 (상태성, clear 까지 유지)
+      description: |
+        urgent(X) = X 에 priority_set 0 + 나머지 전 테넌트에 urgent_request.
+        플래그는 프로세스-로컬이므로 팬아웃으로 교차 테넌트 선점이 성립한다 (Exp_27 §5).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: "#/components/schemas/TenantBody"}
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok: {type: boolean}
+                  pending_sent: {type: array, items: {type: string}}
+        "400": {$ref: "#/components/responses/BadRequest"}
+  /urgent_clear:
+    post:
+      tags: [priority]
+      summary: 선점 해제 (urgent_request 를 보낸 전 테넌트에 urgent_clear)
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok: {type: boolean}
+                  cleared: {type: array, items: {type: string}}
+        "400": {$ref: "#/components/responses/BadRequest"}
+
+  # ═══════════════ booster (loop_api.py, Exp_28) ═══════════════
+  /booster/status:
+    get:
+      tags: [booster]
+      summary: Booster 상태 (등록 테넌트/대기열/액션·감사 이력)
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  enabled: {type: boolean}
+                  mode: {type: string}
+                  tenants: {type: object, additionalProperties: {type: object}}
+                  pending: {type: array, items: {type: object}}
+                  actions: {type: array, items: {type: object}}
+                  audit: {type: array, items: {type: object}}
+  /booster/enable:
+    post:
+      tags: [booster]
+      summary: Booster 활성화 (TERM_PREDICTED 이벤트 구독)
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                mode: {type: string, default: event}
+                events_path: {type: string}
+                base_url: {type: string}
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok: {type: boolean}
+                  mode: {type: string}
+        "400": {$ref: "#/components/responses/BadRequest"}
+  /booster/disable:
+    post:
+      tags: [booster]
+      summary: Booster 비활성화
+      responses:
+        "200": {$ref: "#/components/responses/Ok"}
+  /booster/register:
+    post:
+      tags: [booster]
+      summary: 감시 대상 테넌트 등록
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [tenant, pid, gpu]
+              properties:
+                tenant: {type: string}
+                pid: {type: integer}
+                gpu: {type: integer}
+                alive_path: {type: string, description: "[Exp_134] 생존 신호 glob. pid 를 모르는 자동 등록(Allocate)에서 쓴다"}
+      responses:
+        "200": {$ref: "#/components/responses/Ok"}
+        "400": {$ref: "#/components/responses/BadRequest"}
+  /booster/deregister:
+    post:
+      tags: [booster]
+      summary: "[Exp_134] 감시 대상 테넌트 해제 (파드 종료 시 — devID 재사용 오염 방지)"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [tenant]
+              properties:
+                tenant: {type: string}
+      responses:
+        "200": {$ref: "#/components/responses/Ok"}
+        "400": {$ref: "#/components/responses/BadRequest"}
+  /scanner/stderr:
+    get:
+      tags: [scanner]
+      summary: "[Exp_126] libbless stderr 신호 수집 (mem/ctx/queue/syscall/sm — feed.log 에 없는 것)"
+      responses:
+        "200": {$ref: "#/components/responses/Ok"}
+  /events/relocation:
+    get:
+      tags: [events]
+      summary: 재배치 이벤트 조회
+      responses:
+        "200": {$ref: "#/components/responses/Ok"}
+    post:
+      tags: [events]
+      summary: 재배치 이벤트 기록
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {type: object}
+      responses:
+        "200": {$ref: "#/components/responses/Ok"}
+  /booster/pending:
+    post:
+      tags: [booster]
+      summary: 대기 워크로드 등록 (자원 해지 시 재할당 후보)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [r, workload_class]
+              properties:
+                r: {type: number}
+                workload_class: {type: string}
+      responses:
+        "200": {$ref: "#/components/responses/Ok"}
+        "400": {$ref: "#/components/responses/BadRequest"}
+
+  # ═══════════════ subscribe (loop_api.py, Exp_26) ═══════════════
+  /subscribe:
+    post:
+      tags: [subscribe]
+      summary: phase_online 이벤트 구독 → transition→ratios 규칙 배선
+      description: |
+        정책 '판단'은 controller 에 없다 — 규칙은 호출자가 선언하고
+        adaptive_map lookup 은 감사 기록용으로만 첨부된다 (Exp_26 설계 원칙).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [events_path]
+              properties:
+                events_path: {type: string}
+                rules:
+                  type: array
+                  items:
+                    type: object
+                    required: [to, ratios]
+                    properties:
+                      to: {type: string, description: phase transition 목적 상태}
+                      min_epoch: {type: number, default: 0}
+                      ratios:
+                        type: object
+                        additionalProperties: {type: number}
+                      reason: {type: string}
+                      lookup_labels: {type: object}
+      responses:
+        "200": {$ref: "#/components/responses/Ok"}
+        "400": {$ref: "#/components/responses/BadRequest"}
+
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        error: {type: string}
+    TenantBody:
+      type: object
+      required: [tenant]
+      properties:
+        tenant: {type: string}
+  responses:
+    Ok:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              ok: {type: boolean}
+    BadRequest:
+      description: 잘못된 요청 (누락 필드/미등록 테넌트/등급 오류)
+      content:
+        application/json:
+          schema: {$ref: "#/components/schemas/Error"}
+    NotFound:
+      description: 대상 없음
+      content:
+        application/json:
+          schema: {$ref: "#/components/schemas/Error"}

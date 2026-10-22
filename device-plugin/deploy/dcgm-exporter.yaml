@@ -1,0 +1,31 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# ⚠️ [Exp_159] 라이브에서 **걷어냄** (2026-09-24) — 이 파일은 기록·재설치용으로 보존.
+#   사유: ① 의존 전수 0 — tools(cert_run/axis/deploy_verify)·하네스·controller 어디도
+#     dcgm 미사용(GPU util 실측은 nvidia-smi 경로 — Exp_157/158) ② 도입 목적(per-slice
+#     점유 관측)이 PROF 필드 0 으로 불성립 확정(Exp_90 — device-level 라벨뿐, MPS
+#     per-process 불가) ③ 이 호스트에서 기동 즉시 exit 1(driver 590 조합, 상세 로그
+#     없음)로 24일간 6,816회 재시작 — 소음만 남음.
+#   다시 세우려면: kubectl apply -f 이 파일 (단 기동 실패 원인 규명이 선행).
+# ─────────────────────────────────────────────────────────────────────────────
+# KRAKEN DCGM 메트릭 (Exp_90 — standalone dcgm-exporter). 표준 gpu-operator 전체 대신
+#   dcgm-exporter만 상주: 이중계상·CDI 충돌 위험 없이 device-level DCGM 메트릭(오케스트로 A-4).
+#   GPU 접근 = keti.re.kr/lsu:1(CDI 주입, 신뢰) — monitoring이 슬라이스 1 소비.
+#   ⚠️ MPS 하 device-level만(프로세스 귀속 불가, Exp_75/90) — 슬라이스 점유는 kraken 회계로.
+#   ※ lsu:1 소비 → axis relaxed 테스트를 2×89=178→2×80 으로 완화(인프라 오버헤드 대비).
+apiVersion: apps/v1
+kind: DaemonSet
+metadata: {name: dcgm-exporter, namespace: kube-system, labels: {app: dcgm-exporter}}
+spec:
+  selector: {matchLabels: {app: dcgm-exporter}}
+  template:
+    metadata: {labels: {app: dcgm-exporter}}
+    spec:
+      nodeSelector: {keti.re.kr/node-role: edge}
+      tolerations: [{operator: Exists}]
+      containers:
+        - name: dcgm
+          image: nvcr.io/nvidia/k8s/dcgm-exporter:4.5.3-4.8.2-distroless
+          imagePullPolicy: IfNotPresent
+          ports: [{containerPort: 9400, name: metrics}]
+          securityContext: {capabilities: {add: ["SYS_ADMIN"]}}
+          resources: {limits: {keti.re.kr/lsu: "1"}}

@@ -1,0 +1,43 @@
+# Local environments and generated artifacts
+.venv/
+node_modules/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.build/
+dist/
+build/
+*.o
+*.a
+*.so
+*.so.*
+*.sqlite*
+*.db
+*.log
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+.DS_Store
+.worktrees/
+dashboard/frontend/test-results/
+dashboard/frontend/playwright-report/
+device-plugin/kraken-device-plugin
+mig-sharing/device_plugin/ketris-mig-plugin
+profiler/kernel_class_v2/occ_calc
+
+# Model weights belong in an explicitly configured external model store.
+*.onnx
+*.pt
+*.pth
+*.enf
+*.fxb
+*.safetensors
+
+# Archived execution evidence is intentionally versioned, including the
+# exact small runtime binary identified by the original measurement hashes.
+!experiments/seven-workload-20261022/libbless.so
+!experiments/seven-workload-20261022/**/*.log
+!experiments/seven-workload-20261022/*.log

@@ -1,0 +1,20 @@
+syntax = "proto3";
+package ketris.integration.v1;
+message MessageMeta { string schema_version=1; string request_id=2; string trace_id=3; string workload_id=4; string provider=5; string origin=6; string execution_mode=7; int64 created_at_unix_s=8; int64 expires_at_unix_s=9; }
+message PushProfileRequest { MessageMeta meta=1; string profile_id=2; uint32 version=3; string model=4; string workload_type=5; repeated int64 input_shape=6; string compute_dtype=7; string input_dtype=8; uint32 batch=9; double gpu_memory_value=10; string gpu_memory_unit=11; string gpu_memory_source=12; optional double predicted_latency_ms=13; }
+message LiveMigTarget { string node=1; string gpu_uuid=2; string mig_uuid=3; string resource_name=4; string inventory_generation=5; }
+message SubmitPartitionPlanRequest { MessageMeta meta=1; string plan_id=2; uint32 revision=3; string profile_id=4; uint32 profile_version=5; string assignment_id=6; LiveMigTarget target=7; uint32 space_percent=8; uint32 time_weight=9; string policy_source=10; string snapshot_ref=11; string execution_template=12; }
+enum ReceiptState { RECEIPT_UNSPECIFIED=0; RECEIVED=1; PLAN_ONLY=2; }
+message ProfileReceipt { string request_id=1; string receipt_id=2; string workload_id=3; ReceiptState state=4; string reason=5; string profile_id=6; uint32 version=7; string payload_sha256=8; }
+message PlanReceipt { string request_id=1; string receipt_id=2; string workload_id=3; ReceiptState state=4; string reason=5; string plan_id=6; uint32 revision=7; string payload_sha256=8; }
+message GetProfileRequest { string profile_id=1; uint32 version=2; }
+message ProfileResult { PushProfileRequest profile=1; string payload_sha256=2; }
+message GetWorkloadStateRequest { string workload_id=1; }
+message AppliedEvidence { string approved_config_digest=1; string config_version=2; string job_uid=3; string workload_uid=4; string pod_uid=5; string container_id=6; string allocation_id=7; string runtime_generation=8; string actual_cuda_uuid=9; string evidence_json=10; }
+message WorkloadState { string workload_id=1; string state=2; string reason=3; string job_name=4; string job_uid=5; string profile_id=6; uint32 profile_version=7; string plan_id=8; uint32 plan_revision=9; string config_digest=10; string keti_decision_id=11; string guard_decision_id=12; string admission_epoch=13; AppliedEvidence applied=14; string detail_json=15; }
+message ListEventsRequest { string trace_id=1; string workload_id=2; int64 after_seq=3; uint32 limit=4; }
+message EventRecord { int64 seq=1; string trace_id=2; string workload_id=3; string state=4; string reason=5; string at=6; string detail_json=7; }
+message EventPage { repeated EventRecord events=1; int64 next_seq=2; }
+service ProfileIngestService { rpc PushProfile(PushProfileRequest) returns (ProfileReceipt); rpc GetProfile(GetProfileRequest) returns (ProfileResult); }
+service PlanAdmissionService { rpc SubmitPartitionPlan(SubmitPartitionPlanRequest) returns (PlanReceipt); }
+service IntegrationStatusService { rpc GetWorkloadState(GetWorkloadStateRequest) returns (WorkloadState); rpc ListEvents(ListEventsRequest) returns (EventPage); }

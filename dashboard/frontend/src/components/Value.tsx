@@ -1,0 +1,2 @@
+import type {ObservedValue} from '../types';import {formatValue,valueLabel} from '../presentation';
+export function Value({value,quality=false}:{value?:ObservedValue;quality?:boolean}){return <span className={'value '+(value?.quality||'unavailable')} title={[value?.source,value?.observed_at,value?.reason].filter(Boolean).join(' · ')}>{formatValue(value)}{quality&&<small className="quality">{valueLabel(value?.quality||'unavailable')}</small>}</span>}

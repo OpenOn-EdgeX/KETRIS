@@ -1,0 +1,29 @@
+# KRAKEN MPS 데몬 (Exp_72 A-1) — 232 호스트 영속화.
+# 파이프 경로는 DS 인자 --mps-pipe-dir=/tmp/nvidia-mps 와 반드시 일치해야 한다
+# (어긋나면 데몬은 살아 있으나 클라이언트가 못 붙어 조용히 FALLBACK-unlimited 이 된다).
+#
+# 설치:  cp deploy/nvidia-mps.service /etc/systemd/system/
+#        systemctl daemon-reload && systemctl enable --now nvidia-mps
+# 상태:  systemctl status nvidia-mps
+#        echo get_server_list | CUDA_MPS_PIPE_DIRECTORY=/tmp/nvidia-mps nvidia-cuda-mps-control
+#        (control 파이프 응답으로 판정 — pgrep 금지)
+[Unit]
+Description=KRAKEN NVIDIA CUDA MPS control daemon (Exp_72)
+After=nvidia-persistenced.service
+Wants=nvidia-persistenced.service
+
+[Service]
+Type=forking
+Environment=CUDA_MPS_PIPE_DIRECTORY=/tmp/nvidia-mps
+Environment=CUDA_MPS_LOG_DIRECTORY=/var/log/nvidia-mps
+# -d 는 데몬화 후 즉시 반환(Type=forking). 파이프/로그 디렉토리 선생성.
+ExecStartPre=/bin/mkdir -p /tmp/nvidia-mps /var/log/nvidia-mps
+ExecStart=/usr/bin/nvidia-cuda-mps-control -d
+# control 파이프로 정상 기동 확인(살아있음을 pgrep 아닌 프로토콜 응답으로 판정).
+ExecStartPost=/bin/bash -c 'for i in $(seq 1 10); do echo get_server_list | /usr/bin/nvidia-cuda-mps-control >/dev/null 2>&1 && exit 0; sleep 0.5; done; echo "MPS control 파이프 무응답" >&2; exit 1'
+ExecStop=/bin/bash -c 'echo quit | /usr/bin/nvidia-cuda-mps-control'
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

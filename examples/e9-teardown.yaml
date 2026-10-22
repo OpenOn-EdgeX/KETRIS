@@ -1,0 +1,37 @@
+# E9 — 빠른 해제(기본 켜짐)와 종료 정리: PRISM 은 종료를 빠르게 하되,
+# 파이썬이 열어 둔 파일 버퍼는 종료 때 flush 해 준다(atexit). close 를 안 했어도 보존된다.
+# C 확장·자체 버퍼 등 atexit 밖 정리가 있는 작업만 env BLESS_FAST_TEARDOWN=0 으로 끈다.
+apiVersion: v1
+kind: Pod
+metadata:
+  name: e9-teardown
+  namespace: prism-guide
+spec:
+  restartPolicy: Never
+  containers:
+    - name: work
+      image: prism-infer:opt
+      imagePullPolicy: IfNotPresent
+      command: ["python", "-u", "-c"]
+      args:
+        - |
+          import torch
+          a = torch.randn(1024, 1024, device="cuda")
+          (a @ a).sum().item()
+          f = open("/out/result.txt", "w")     # 일부러 close/flush 하지 않는다
+          f.write("line1: 측정 결과 123\n")
+          f.write("line2: 끝\n")
+          print("쓰기 완료 — close 없이 종료")
+      volumeMounts:
+        - name: out
+          mountPath: /out
+      resources:
+        limits:
+          cpu: "2"
+          memory: 4Gi
+          keti.re.kr/lsu: "10"
+  volumes:
+    - name: out
+      hostPath:
+        path: /root/kraken-sync
+        type: DirectoryOrCreate

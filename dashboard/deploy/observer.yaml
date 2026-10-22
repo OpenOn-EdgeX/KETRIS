@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata: {name: ketris-observer, namespace: ketris}
+spec:
+  selector: {matchLabels: {app: ketris-observer}}
+  template:
+    metadata: {labels: {app: ketris-observer}}
+    spec:
+      serviceAccountName: ketris-observer
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      nodeSelector: {kubernetes.io/hostname: gpu-npu-server-02}
+      tolerations: [{operator: Exists}]
+      containers:
+        - name: observer
+          image: ketris-dashboard:20261014-gpu-state-v3
+          imagePullPolicy: IfNotPresent
+          command: [ketris-observer]
+          # Required for host driver ioctls. No writable node mounts or systemd access.
+          securityContext: {privileged: true, runAsUser: 0}
+          env:
+            - name: NODE_NAME
+              valueFrom: {fieldRef: {fieldPath: spec.nodeName}}
+            - {name: KETRIS_INGEST_URL, value: 'http://ketris-dashboard-ingest.ketris.svc:8081/internal/v1/snapshots'}
+            - name: KETRIS_NPU_GATE_ENDPOINTS
+              valueFrom: {configMapKeyRef: {name: ketris-observer-config, key: npu-gate-endpoints}}
+          resources:
+            requests: {cpu: 100m, memory: 128Mi}
+            limits: {cpu: 500m, memory: 512Mi}
+          volumeMounts:
+            - {name: auth, mountPath: /var/run/ketris-auth, readOnly: true}
+            - {name: mig-state, mountPath: /var/lib/ketris-mig, readOnly: true}
+            - {name: checkpoint, mountPath: /var/lib/kubelet/device-plugins, readOnly: true}
+            - {name: proc, mountPath: /host-proc, readOnly: true}
+            - {name: dev, mountPath: /dev, readOnly: true}
+            - {name: nvidia-smi, mountPath: /usr/bin/nvidia-smi, readOnly: true}
+            - {name: nvml, mountPath: /usr/lib/x86_64-linux-gnu/libnvidia-ml.so.1, readOnly: true}
+            - {name: furiosa-smi, mountPath: /usr/bin/furiosa-smi, readOnly: true}
+            - {name: furiosa-lib, mountPath: /usr/lib/x86_64-linux-gnu/libfuriosa_smi.so, readOnly: true}
+      volumes:
+        - name: auth
+          secret: {secretName: ketris-observer-ingest, defaultMode: 256}
+        - name: mig-state
+          hostPath: {path: /var/lib/ketris-mig, type: Directory}
+        - name: checkpoint
+          hostPath: {path: /var/lib/kubelet/device-plugins, type: Directory}
+        - name: proc
+          hostPath: {path: /proc, type: Directory}
+        - name: dev
+          hostPath: {path: /dev, type: Directory}
+        - name: nvidia-smi
+          hostPath: {path: /usr/bin/nvidia-smi, type: File}
+        - name: nvml
+          hostPath: {path: /usr/lib/x86_64-linux-gnu/libnvidia-ml.so.1, type: File}
+        - name: furiosa-smi
+          hostPath: {path: /usr/bin/furiosa-smi, type: File}
+        - name: furiosa-lib
+          hostPath: {path: /usr/lib/x86_64-linux-gnu/libfuriosa_smi.so, type: File}

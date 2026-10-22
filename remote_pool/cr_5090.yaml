@@ -1,0 +1,12 @@
+apiVersion: keti.re.kr/v1alpha1
+kind: RemotePool
+metadata: {name: rtx5090-233}
+spec:
+  schemaVersion: "1.0"
+  providerHost: "10.0.4.233"
+  gateUrl: "http://10.0.4.232:8096/infer"
+  device: {uuid: "remote-5090-233", kind: gpu, model: "NVIDIA GeForce RTX 5090", vendor: nvidia, remote: true}
+  compute: {units: 29, unitKind: lsu, concurrency: {mps: false, mig: false}}
+  memory: {capacityMb: 32607}
+  measured: true
+  measuredNote: "resnet50 fp16 1215 img/s ÷ 42.16 = 28.8 LSU (원격지연·서버직렬 포함, 1GbE)"

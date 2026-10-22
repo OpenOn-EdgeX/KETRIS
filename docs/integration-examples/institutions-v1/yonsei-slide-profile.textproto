@@ -1,0 +1,26 @@
+# DESIGN EXAMPLE: slide values; units remain unknown. Not measured data.
+meta {
+  schema_version: "ketris.integration.example.v1"
+  request_id: "req-yonsei-slide-a"
+  trace_id: "trace-institution-example-01"
+  workload_id: "wl-slide-a"
+  provider: "yonsei-mock"
+  origin: SYNTHETIC
+  execution_mode: CONTRACT_ONLY
+  created_at { seconds: 1792022400 }
+  expires_at { seconds: 1792022460 }
+}
+profile_id: "profile-slide-a-v1"
+profile_version: 1
+model: "yolov8n"
+type: "inference"
+input_shape: 1
+input_shape: 3
+input_shape: 64
+input_shape: 64
+gpu_req {
+  cores: 80
+  cores_unit: COMPUTE_UNIT_UNSPECIFIED
+  mem: 4000
+  mem_unit: MEMORY_UNIT_UNSPECIFIED
+}

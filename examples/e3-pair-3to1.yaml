@@ -1,0 +1,57 @@
+# E3 — 두 작업이 같이 돌 때: LSU 비율대로 GPU 시간이 나뉜다 (180:60 = 3:1).
+# 각자 자기 몫의 SM 상한·메모리 할당량도 받는다. 합이 240(노출량)이면 전량 사용.
+apiVersion: v1
+kind: Pod
+metadata:
+  name: e3-big
+  namespace: prism-guide
+spec:
+  restartPolicy: Never
+  containers:
+    - name: work
+      image: prism-infer:opt
+      imagePullPolicy: IfNotPresent
+      command: ["python", "-u", "-c"]
+      args:
+        - |
+          import torch, time
+          a = torch.randn(4096, 4096, device="cuda")
+          torch.cuda.synchronize()
+          t0 = time.time(); n = 0
+          while time.time() - t0 < 90:
+              (a @ a).sum().item(); n += 1
+          dt = time.time() - t0
+          print(f"iters={n} dur={dt:.1f}s rate={n/dt:.2f} it/s")
+      resources:
+        limits:
+          cpu: "4"
+          memory: 8Gi
+          keti.re.kr/lsu: "180"
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: e3-small
+  namespace: prism-guide
+spec:
+  restartPolicy: Never
+  containers:
+    - name: work
+      image: prism-infer:opt
+      imagePullPolicy: IfNotPresent
+      command: ["python", "-u", "-c"]
+      args:
+        - |
+          import torch, time
+          a = torch.randn(4096, 4096, device="cuda")
+          torch.cuda.synchronize()
+          t0 = time.time(); n = 0
+          while time.time() - t0 < 90:
+              (a @ a).sum().item(); n += 1
+          dt = time.time() - t0
+          print(f"iters={n} dur={dt:.1f}s rate={n/dt:.2f} it/s")
+      resources:
+        limits:
+          cpu: "4"
+          memory: 8Gi
+          keti.re.kr/lsu: "60"

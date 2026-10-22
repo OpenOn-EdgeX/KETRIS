@@ -1,0 +1,2 @@
+uuid, name, driver_version, mig.mode.current, utilization.gpu [%], memory.used [MiB]
+GPU-4a42bf67-df51-7582-9e81-b9dddd4bcea2, NVIDIA RTX PRO 6000 Blackwell Server Edition, 590.48.01, Disabled, 0 %, 60 MiB

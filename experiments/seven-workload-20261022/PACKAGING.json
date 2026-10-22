@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "purpose": "Preserve the exact measured archive while separating synthetic examples and documenting added provenance/verification.",
+  "measurement_date_utc": "2026-10-22",
+  "source_bundle": "/root/workspace/edge-ai-migration-audit/20261022/seven-workload-makespan",
+  "source_file_count": 941,
+  "original_manifest": {
+    "path": "SHA256SUMS.txt",
+    "sha256": "39453f052934a2bcf779113d6df929d10a5cad630364d399e54006c3c1e92bbf",
+    "entries": 922,
+    "preserved_byte_for_byte": true,
+    "includes_manifest_itself": false
+  },
+  "archived_original_file_count": 923,
+  "archived_original_size_bytes": 14396175,
+  "omitted_unlisted_cache_files": [
+    "__pycache__/analyze.cpython-313.pyc",
+    "__pycache__/audit_runtime.cpython-313.pyc",
+    "__pycache__/host_watch.cpython-313.pyc",
+    "__pycache__/policy.cpython-313.pyc",
+    "__pycache__/public_threshold_report.cpython-310.pyc",
+    "__pycache__/run_study.cpython-313.pyc",
+    "__pycache__/test_policy.cpython-313.pyc",
+    "__pycache__/worker.cpython-313.pyc"
+  ],
+  "omitted_unlisted_console_report_files": [
+    "console_report.py",
+    "console_report.txt",
+    "console_summary.txt",
+    "public_threshold_report.py",
+    "public_threshold_report.txt"
+  ],
+  "synthetic_copies": {
+    "destination": "../../examples/synthetic-console",
+    "source_files": [
+      "print_synthetic_example.py",
+      "print_display_example.py",
+      "synthetic_example.txt",
+      "display_example.txt",
+      "display_example_summary.txt"
+    ],
+    "source_manifest_membership": false,
+    "files_preserved_byte_for_byte": true
+  },
+  "added_runtime_evidence": {
+    "source_directory": "/root/workspace/edge-ai-migration-audit/20261021/client-credit/runtime",
+    "destination_directory": "runtime-source",
+    "source_sha256": {
+      "libbless.cpp": "704a5dcb0685b6f280a3a4c0038f32e0aab5366dfed9fdc62dfdc5ebac11a075",
+      "context_manager.hpp": "73ad8a38fafd3747da1e5f2df2f59e60a694c769b663550634c68bd5f36861b9",
+      "time_bootstrap.hpp": "3a44c18270add05356958d670c40f846d834fac89e69b0edd4f6f46b38b6ecee",
+      "time_refill.hpp": "11a49478e6663d81a767107508712e7ece7e822b060d0a252d158744673ae54e",
+      "routing.hpp": "933f21fc7c8c1440b491085d8cfdd2f14fde7a64e2f2620a83579cbdc4fab6a7",
+      "qmd_layout.hpp": "17a62d5f347a6591988aa42a2e0b7934e7a0e497962517e4bd37611aaf6de3bf"
+    },
+    "provenance_original_file": "/root/workspace/edge-ai-migration-audit/20261021/client-credit/source-provenance.json",
+    "provenance_destination_file": "runtime-source-provenance.json",
+    "provenance_sha256": "99e07b63bb6d67a9c290196fbc4f476485e437868367c191e462d1af5a08bb9e",
+    "binary_file": "libbless.so",
+    "binary_sha256": "65a69816dd4e1fb98140c414b508365ac8c1ef137484e2ccafb2f304b55f289d",
+    "binary_size_bytes": 87424,
+    "binary_already_in_original_manifest": true,
+    "current_repository_runtime": "../../runtime/libbless",
+    "different_current_source_files": [
+      "libbless.cpp",
+      "time_refill.hpp"
+    ],
+    "historical_remote_executed_sources_apply_to": "2026-10-21 client-credit experiment; see run-start.json and environment.json for 2026-10-22 execution provenance"
+  },
+  "verification": {
+    "original_integrity": "verification/original-integrity.json",
+    "tests": "verification/self-tests.json",
+    "offline_reanalysis": "verification/reanalysis.json",
+    "credential_scan": "verification/credential-scan.json"
+  },
+  "added_files_manifest": "ADDED-SHA256SUMS.txt",
+  "notes": [
+    "Original files and measurements were not modified.",
+    "The historical SHA256SUMS.txt covers 922 original files only; ADDED-SHA256SUMS.txt covers packaging additions except itself.",
+    "No host scripts, GPU workloads, runtime binary, deployment commands, or network operations were executed during this packaging task.",
+    "Existing fixed-host execution scripts require adaptation before any separately authorized live rerun."
+  ]
+}

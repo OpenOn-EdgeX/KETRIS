@@ -1,0 +1,74 @@
+{
+  "label": "pilot-space100",
+  "config": {
+    "workers": [
+      {
+        "id": "W0",
+        "input_tokens": 1024,
+        "output_tokens": 16,
+        "requests": 8
+      },
+      {
+        "id": "W1",
+        "input_tokens": 1024,
+        "output_tokens": 16,
+        "requests": 8
+      },
+      {
+        "id": "W2",
+        "input_tokens": 1024,
+        "output_tokens": 16,
+        "requests": 8
+      },
+      {
+        "id": "W3",
+        "input_tokens": 128,
+        "output_tokens": 128,
+        "requests": 8
+      },
+      {
+        "id": "W4",
+        "input_tokens": 128,
+        "output_tokens": 128,
+        "requests": 8
+      },
+      {
+        "id": "W5",
+        "input_tokens": 128,
+        "output_tokens": 128,
+        "requests": 8
+      },
+      {
+        "id": "W6",
+        "input_tokens": 128,
+        "output_tokens": 128,
+        "requests": 8
+      }
+    ],
+    "caps": [
+      100,
+      100,
+      100,
+      100,
+      100,
+      100,
+      100
+    ],
+    "policy": "native",
+    "arm": "native",
+    "category": "pilot",
+    "repeat": 0,
+    "gpu_uuid": "GPU-4a42bf67-df51-7582-9e81-b9dddd4bcea2",
+    "credit_bank_us": 500000
+  },
+  "makespan_s": 13.465543831,
+  "completed_requests": 56,
+  "input_tokens": 28672,
+  "generated_tokens": 4480,
+  "requests_s": 4.158762594577009,
+  "generated_tokens_s": 332.70100756616074,
+  "runtime_before": {},
+  "runtime_after": {},
+  "feeder_ticks": 0,
+  "end_epoch_ns": 1792638322905670006
+}

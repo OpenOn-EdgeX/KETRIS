@@ -1,0 +1,43 @@
+{
+  "_comment": "Exp_54 멀티스트림/스레드 게이트 실측 — A=변형(2/3몫), B=기준 단일/단일(1/3몫), strict 2:1. 목표 charged A=0.667",
+  "defaults": {
+    "duration": 15,
+    "reps": 2
+  },
+  "runs": [
+    {
+      "tag": "mt_c_t2",
+      "policy": "strict",
+      "members": [
+        {
+          "name": "A",
+          "role": "synth",
+          "batch": 1,
+          "r": 0.667,
+          "cls": "C",
+          "env": {
+            "SYNTH_STREAMS": 1,
+            "SYNTH_THREADS": 2,
+            "SYNTH_SHARED": 0,
+            "BLESS_NO_CTX_AFFINITY": 1,
+            "CUDA_MPS_ACTIVE_THREAD_PERCENTAGE": 67
+          }
+        },
+        {
+          "name": "B",
+          "role": "synth",
+          "batch": 1,
+          "r": 0.333,
+          "cls": "C",
+          "env": {
+            "SYNTH_STREAMS": 1,
+            "SYNTH_THREADS": 1,
+            "SYNTH_SHARED": 1,
+            "BLESS_NO_CTX_AFFINITY": 1,
+            "CUDA_MPS_ACTIVE_THREAD_PERCENTAGE": 33
+          }
+        }
+      ]
+    }
+  ]
+}

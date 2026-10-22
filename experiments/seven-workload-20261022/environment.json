@@ -1,0 +1,253 @@
+{
+  "epoch_ns": 1792638814423848789,
+  "gpu": "uuid, name, driver_version, mig.mode.current, memory.total [MiB]\nGPU-4a42bf67-df51-7582-9e81-b9dddd4bcea2, NVIDIA RTX PRO 6000 Blackwell Server Edition, 590.48.01, Disabled, 97887 MiB\n",
+  "kernel": "6.8.0-147-generic\n",
+  "pod": {
+    "apiVersion": "v1",
+    "kind": "Pod",
+    "metadata": {
+      "annotations": {
+        "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"v1\",\"kind\":\"Pod\",\"metadata\":{\"annotations\":{},\"labels\":{\"app\":\"ketris-seven-experiment\"},\"name\":\"seven-lab\",\"namespace\":\"ketris-seven-20261022\"},\"spec\":{\"activeDeadlineSeconds\":3600,\"automountServiceAccountToken\":false,\"containers\":[{\"command\":[\"python3\",\"-c\",\"import time;time.sleep(3500)\"],\"env\":[{\"name\":\"NVIDIA_VISIBLE_DEVICES\",\"value\":\"GPU-4a42bf67-df51-7582-9e81-b9dddd4bcea2\"},{\"name\":\"NVIDIA_DRIVER_CAPABILITIES\",\"value\":\"compute,utility\"},{\"name\":\"PYTHONPATH\",\"value\":\"/shared/pythonlibs:/lab\"},{\"name\":\"HF_HUB_OFFLINE\",\"value\":\"1\"}],\"image\":\"keti-exec/infer:0.2\",\"imagePullPolicy\":\"Never\",\"name\":\"lab\",\"resources\":{\"limits\":{\"memory\":\"24Gi\"},\"requests\":{\"cpu\":\"500m\",\"memory\":\"1Gi\"}},\"terminationMessagePath\":\"/dev/termination-log\",\"terminationMessagePolicy\":\"File\",\"volumeMounts\":[{\"mountPath\":\"/lab\",\"name\":\"lab\"},{\"mountPath\":\"/shared\",\"name\":\"shared\",\"readOnly\":true},{\"mountPath\":\"/dev/shm\",\"name\":\"shm\"}]}],\"dnsPolicy\":\"ClusterFirst\",\"enableServiceLinks\":true,\"nodeName\":\"devmaster\",\"nodeSelector\":{\"kubernetes.io/hostname\":\"devmaster\"},\"restartPolicy\":\"Never\",\"runtimeClassName\":\"nvidia\",\"schedulerName\":\"default-scheduler\",\"securityContext\":{},\"serviceAccountName\":\"default\",\"terminationGracePeriodSeconds\":10,\"volumes\":[{\"hostPath\":{\"path\":\"/home/devadmin/ketris-migration/seven-workload-20261022\",\"type\":\"Directory\"},\"name\":\"lab\"},{\"hostPath\":{\"path\":\"/home/devadmin/ketris-migration/mps-llm-pilot-20261015\",\"type\":\"Directory\"},\"name\":\"shared\"},{\"emptyDir\":{\"medium\":\"Memory\",\"sizeLimit\":\"1Gi\"},\"name\":\"shm\"}]}}\n"
+      },
+      "creationTimestamp": "2026-10-22T03:01:16Z",
+      "generation": 1,
+      "labels": {
+        "app": "ketris-seven-experiment"
+      },
+      "name": "seven-lab",
+      "namespace": "ketris-seven-20261022",
+      "resourceVersion": "2183293",
+      "uid": "3c80f89a-9692-402e-b778-c16acd853238"
+    },
+    "spec": {
+      "activeDeadlineSeconds": 3600,
+      "automountServiceAccountToken": false,
+      "containers": [
+        {
+          "command": [
+            "python3",
+            "-c",
+            "import time;time.sleep(3500)"
+          ],
+          "env": [
+            {
+              "name": "NVIDIA_VISIBLE_DEVICES",
+              "value": "GPU-4a42bf67-df51-7582-9e81-b9dddd4bcea2"
+            },
+            {
+              "name": "NVIDIA_DRIVER_CAPABILITIES",
+              "value": "compute,utility"
+            },
+            {
+              "name": "PYTHONPATH",
+              "value": "/shared/pythonlibs:/lab"
+            },
+            {
+              "name": "HF_HUB_OFFLINE",
+              "value": "1"
+            }
+          ],
+          "image": "keti-exec/infer:0.2",
+          "imagePullPolicy": "Never",
+          "name": "lab",
+          "resources": {
+            "limits": {
+              "memory": "24Gi"
+            },
+            "requests": {
+              "cpu": "500m",
+              "memory": "1Gi"
+            }
+          },
+          "terminationMessagePath": "/dev/termination-log",
+          "terminationMessagePolicy": "File",
+          "volumeMounts": [
+            {
+              "mountPath": "/lab",
+              "name": "lab"
+            },
+            {
+              "mountPath": "/shared",
+              "name": "shared",
+              "readOnly": true
+            },
+            {
+              "mountPath": "/dev/shm",
+              "name": "shm"
+            }
+          ]
+        }
+      ],
+      "dnsPolicy": "ClusterFirst",
+      "enableServiceLinks": true,
+      "nodeName": "devmaster",
+      "nodeSelector": {
+        "kubernetes.io/hostname": "devmaster"
+      },
+      "preemptionPolicy": "PreemptLowerPriority",
+      "priority": 0,
+      "restartPolicy": "Never",
+      "runtimeClassName": "nvidia",
+      "schedulerName": "default-scheduler",
+      "securityContext": {},
+      "serviceAccount": "default",
+      "serviceAccountName": "default",
+      "terminationGracePeriodSeconds": 10,
+      "tolerations": [
+        {
+          "effect": "NoExecute",
+          "key": "node.kubernetes.io/not-ready",
+          "operator": "Exists",
+          "tolerationSeconds": 300
+        },
+        {
+          "effect": "NoExecute",
+          "key": "node.kubernetes.io/unreachable",
+          "operator": "Exists",
+          "tolerationSeconds": 300
+        }
+      ],
+      "volumes": [
+        {
+          "hostPath": {
+            "path": "/home/devadmin/ketris-migration/seven-workload-20261022",
+            "type": "Directory"
+          },
+          "name": "lab"
+        },
+        {
+          "hostPath": {
+            "path": "/home/devadmin/ketris-migration/mps-llm-pilot-20261015",
+            "type": "Directory"
+          },
+          "name": "shared"
+        },
+        {
+          "emptyDir": {
+            "medium": "Memory",
+            "sizeLimit": "1Gi"
+          },
+          "name": "shm"
+        }
+      ]
+    },
+    "status": {
+      "conditions": [
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": "2026-10-22T03:01:18Z",
+          "observedGeneration": 1,
+          "status": "True",
+          "type": "PodReadyToStartContainers"
+        },
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": "2026-10-22T03:01:16Z",
+          "observedGeneration": 1,
+          "status": "True",
+          "type": "Initialized"
+        },
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": "2026-10-22T03:01:18Z",
+          "observedGeneration": 1,
+          "status": "True",
+          "type": "Ready"
+        },
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": "2026-10-22T03:01:18Z",
+          "observedGeneration": 1,
+          "status": "True",
+          "type": "ContainersReady"
+        },
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": "2026-10-22T03:01:16Z",
+          "observedGeneration": 1,
+          "status": "True",
+          "type": "PodScheduled"
+        }
+      ],
+      "containerStatuses": [
+        {
+          "allocatedResources": {
+            "cpu": "500m",
+            "memory": "1Gi"
+          },
+          "containerID": "containerd://d96bb97852826a7bb5bc8ef24cb4a1c3695317cdb1cf039b9fdd1274114874a5",
+          "image": "docker.io/keti-exec/infer:0.2",
+          "imageID": "sha256:b8a5df1ac0787c51128ffe63871dbada59ce2a8fabab3ac0829bdfde852121a7",
+          "lastState": {},
+          "name": "lab",
+          "ready": true,
+          "resources": {
+            "limits": {
+              "memory": "24Gi"
+            },
+            "requests": {
+              "cpu": "500m",
+              "memory": "1Gi"
+            }
+          },
+          "restartCount": 0,
+          "started": true,
+          "state": {
+            "running": {
+              "startedAt": "2026-10-22T03:01:18Z"
+            }
+          },
+          "user": {
+            "linux": {
+              "gid": 0,
+              "supplementalGroups": [
+                0
+              ],
+              "uid": 0
+            }
+          },
+          "volumeMounts": [
+            {
+              "mountPath": "/lab",
+              "name": "lab"
+            },
+            {
+              "mountPath": "/shared",
+              "name": "shared",
+              "readOnly": true,
+              "recursiveReadOnly": "Disabled"
+            },
+            {
+              "mountPath": "/dev/shm",
+              "name": "shm"
+            }
+          ]
+        }
+      ],
+      "hostIP": "10.0.1.211",
+      "hostIPs": [
+        {
+          "ip": "10.0.1.211"
+        }
+      ],
+      "observedGeneration": 1,
+      "phase": "Running",
+      "podIP": "10.245.0.41",
+      "podIPs": [
+        {
+          "ip": "10.245.0.41"
+        }
+      ],
+      "qosClass": "Burstable",
+      "startTime": "2026-10-22T03:01:16Z"
+    }
+  },
+  "executed_files_sha256": {
+    "run_study.py": "146c348bba4cd57f57ec43f9d3f19c0e02a74ec53f381f1f554468aaaddc48c8",
+    "host_watch.py": "2a1bac3633cbbebf2474e3c77cef610442804045810335dc270054599b5ffc5c",
+    "worker.py": "b0f7c5e98574090b8073798dd3c8327a905436e14bb3786b0009120a985695fa",
+    "PROTOCOL.json": "13ff15420c9dff3cecf967fce550aec5b0c9e517b52e2b40456ee4fe1fa4a488",
+    "libbless.so": "65a69816dd4e1fb98140c414b508365ac8c1ef137484e2ccafb2f304b55f289d",
+    "policy.py": "9970b54901672bee5a9281f1dcb952c61095ec1ba8eef96d6654a923932684fd"
+  }
+}

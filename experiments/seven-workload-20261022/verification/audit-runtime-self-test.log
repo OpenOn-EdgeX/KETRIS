@@ -1,0 +1,19 @@
+test_balanced_ledger_cannot_trim_more_credit_than_was_granted (__main__.self_test.<locals>.RuntimeAuditTests.test_balanced_ledger_cannot_trim_more_credit_than_was_granted) ... ok
+test_changed_frozen_work_and_execution_order_are_rejected (__main__.self_test.<locals>.RuntimeAuditTests.test_changed_frozen_work_and_execution_order_are_rejected) ... ok
+test_completed_cap_zero_cannot_leave_positive_final_credit (__main__.self_test.<locals>.RuntimeAuditTests.test_completed_cap_zero_cannot_leave_positive_final_credit) ... ok
+test_completed_results_do_not_override_a_recorded_trial_error (__main__.self_test.<locals>.RuntimeAuditTests.test_completed_results_do_not_override_a_recorded_trial_error) ... ok
+test_conservation_violation_is_rejected (__main__.self_test.<locals>.RuntimeAuditTests.test_conservation_violation_is_rejected) ... ok
+test_debt_is_valid_and_no_gate_is_only_diagnostic (__main__.self_test.<locals>.RuntimeAuditTests.test_debt_is_valid_and_no_gate_is_only_diagnostic) ... ok
+test_first_token_interval_exceeding_bank_does_not_invalidate (__main__.self_test.<locals>.RuntimeAuditTests.test_first_token_interval_exceeding_bank_does_not_invalidate) ... ok
+test_holdout_cannot_match_a_constant_but_unselected_policy (__main__.self_test.<locals>.RuntimeAuditTests.test_holdout_cannot_match_a_constant_but_unselected_policy) ... ok
+test_idle_system_allowance_reports_attestation_limit (__main__.self_test.<locals>.RuntimeAuditTests.test_idle_system_allowance_reports_attestation_limit) ... ok
+test_nonzero_refill_rejections_cannot_hide_in_before_snapshot (__main__.self_test.<locals>.RuntimeAuditTests.test_nonzero_refill_rejections_cannot_hide_in_before_snapshot) ... ok
+test_ownership_gap_is_not_filled_with_invented_observations (__main__.self_test.<locals>.RuntimeAuditTests.test_ownership_gap_is_not_filled_with_invented_observations) ... ok
+test_seven_worker_lifetime_overlap_is_not_sequential_work (__main__.self_test.<locals>.RuntimeAuditTests.test_seven_worker_lifetime_overlap_is_not_sequential_work) ... ok
+test_warmup_overlap_is_excluded_and_terminal_done_is_synthesized (__main__.self_test.<locals>.RuntimeAuditTests.test_warmup_overlap_is_excluded_and_terminal_done_is_synthesized) ... ok
+test_wrong_phase_grant_is_rejected_even_when_ledger_balances (__main__.self_test.<locals>.RuntimeAuditTests.test_wrong_phase_grant_is_rejected_even_when_ledger_balances) ... ok
+
+----------------------------------------------------------------------
+Ran 14 tests in 0.002s
+
+OK

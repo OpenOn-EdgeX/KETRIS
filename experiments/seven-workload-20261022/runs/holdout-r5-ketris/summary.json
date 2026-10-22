@@ -1,0 +1,272 @@
+{
+  "label": "holdout-r5-ketris",
+  "config": {
+    "workers": [
+      {
+        "id": "W0",
+        "input_tokens": 1024,
+        "output_tokens": 16,
+        "requests": 8
+      },
+      {
+        "id": "W1",
+        "input_tokens": 1024,
+        "output_tokens": 16,
+        "requests": 8
+      },
+      {
+        "id": "W2",
+        "input_tokens": 1024,
+        "output_tokens": 16,
+        "requests": 8
+      },
+      {
+        "id": "W3",
+        "input_tokens": 128,
+        "output_tokens": 128,
+        "requests": 8
+      },
+      {
+        "id": "W4",
+        "input_tokens": 128,
+        "output_tokens": 128,
+        "requests": 8
+      },
+      {
+        "id": "W5",
+        "input_tokens": 128,
+        "output_tokens": 128,
+        "requests": 8
+      },
+      {
+        "id": "W6",
+        "input_tokens": 128,
+        "output_tokens": 128,
+        "requests": 8
+      }
+    ],
+    "caps": [
+      50,
+      50,
+      50,
+      50,
+      50,
+      50,
+      50
+    ],
+    "policy": "phase75",
+    "arm": "ketris",
+    "category": "holdout",
+    "repeat": 5,
+    "gpu_uuid": "GPU-4a42bf67-df51-7582-9e81-b9dddd4bcea2",
+    "credit_bank_us": 500000
+  },
+  "makespan_s": 13.671603835,
+  "completed_requests": 56,
+  "input_tokens": 28672,
+  "generated_tokens": 4480,
+  "requests_s": 4.096081240785895,
+  "generated_tokens_s": 327.68649926287156,
+  "runtime_before": {
+    "W0": {
+      "charged_us": 955901,
+      "kernels": 30928,
+      "credit_us": 0,
+      "gate_count": 0,
+      "gate_total_us": 0,
+      "gate_max_us": 0,
+      "refill_sequence": 0,
+      "refill_accepted": 0,
+      "refill_rejected": 0,
+      "cap_hits": 0,
+      "granted_us": 0,
+      "trimmed_us": 0
+    },
+    "W1": {
+      "charged_us": 946115,
+      "kernels": 30928,
+      "credit_us": 0,
+      "gate_count": 0,
+      "gate_total_us": 0,
+      "gate_max_us": 0,
+      "refill_sequence": 0,
+      "refill_accepted": 0,
+      "refill_rejected": 0,
+      "cap_hits": 0,
+      "granted_us": 0,
+      "trimmed_us": 0
+    },
+    "W2": {
+      "charged_us": 812479,
+      "kernels": 30928,
+      "credit_us": 0,
+      "gate_count": 0,
+      "gate_total_us": 0,
+      "gate_max_us": 0,
+      "refill_sequence": 0,
+      "refill_accepted": 0,
+      "refill_rejected": 0,
+      "cap_hits": 0,
+      "granted_us": 0,
+      "trimmed_us": 0
+    },
+    "W3": {
+      "charged_us": 3494509,
+      "kernels": 247088,
+      "credit_us": 0,
+      "gate_count": 0,
+      "gate_total_us": 0,
+      "gate_max_us": 0,
+      "refill_sequence": 0,
+      "refill_accepted": 0,
+      "refill_rejected": 0,
+      "cap_hits": 0,
+      "granted_us": 0,
+      "trimmed_us": 0
+    },
+    "W4": {
+      "charged_us": 3845378,
+      "kernels": 247088,
+      "credit_us": 0,
+      "gate_count": 0,
+      "gate_total_us": 0,
+      "gate_max_us": 0,
+      "refill_sequence": 0,
+      "refill_accepted": 0,
+      "refill_rejected": 0,
+      "cap_hits": 0,
+      "granted_us": 0,
+      "trimmed_us": 0
+    },
+    "W5": {
+      "charged_us": 3588020,
+      "kernels": 247088,
+      "credit_us": 0,
+      "gate_count": 0,
+      "gate_total_us": 0,
+      "gate_max_us": 0,
+      "refill_sequence": 0,
+      "refill_accepted": 0,
+      "refill_rejected": 0,
+      "cap_hits": 0,
+      "granted_us": 0,
+      "trimmed_us": 0
+    },
+    "W6": {
+      "charged_us": 3807287,
+      "kernels": 247088,
+      "credit_us": 0,
+      "gate_count": 0,
+      "gate_total_us": 0,
+      "gate_max_us": 0,
+      "refill_sequence": 0,
+      "refill_accepted": 0,
+      "refill_rejected": 0,
+      "cap_hits": 0,
+      "granted_us": 0,
+      "trimmed_us": 0
+    }
+  },
+  "runtime_after": {
+    "W0": {
+      "charged_us": 2762307,
+      "kernels": 154640,
+      "credit_us": 0,
+      "gate_count": 1,
+      "gate_total_us": 3683,
+      "gate_max_us": 3683,
+      "refill_sequence": 2348280307911,
+      "refill_accepted": 1333,
+      "refill_rejected": 0,
+      "cap_hits": 0,
+      "granted_us": 1824405,
+      "trimmed_us": 17999
+    },
+    "W1": {
+      "charged_us": 2738712,
+      "kernels": 154640,
+      "credit_us": 0,
+      "gate_count": 2,
+      "gate_total_us": 2790,
+      "gate_max_us": 1399,
+      "refill_sequence": 2348280307911,
+      "refill_accepted": 1333,
+      "refill_rejected": 0,
+      "cap_hits": 0,
+      "granted_us": 1818205,
+      "trimmed_us": 25608
+    },
+    "W2": {
+      "charged_us": 2626778,
+      "kernels": 154640,
+      "credit_us": 0,
+      "gate_count": 2,
+      "gate_total_us": 1701,
+      "gate_max_us": 1541,
+      "refill_sequence": 2348280307911,
+      "refill_accepted": 1333,
+      "refill_rejected": 0,
+      "cap_hits": 0,
+      "granted_us": 1837383,
+      "trimmed_us": 23084
+    },
+    "W3": {
+      "charged_us": 16968219,
+      "kernels": 1235440,
+      "credit_us": 167614,
+      "gate_count": 1,
+      "gate_total_us": 65,
+      "gate_max_us": 65,
+      "refill_sequence": 2348280307911,
+      "refill_accepted": 1333,
+      "refill_rejected": 0,
+      "cap_hits": 0,
+      "granted_us": 13641324,
+      "trimmed_us": 0
+    },
+    "W4": {
+      "charged_us": 17168115,
+      "kernels": 1235440,
+      "credit_us": 0,
+      "gate_count": 2,
+      "gate_total_us": 651,
+      "gate_max_us": 343,
+      "refill_sequence": 2348280307911,
+      "refill_accepted": 1333,
+      "refill_rejected": 0,
+      "cap_hits": 0,
+      "granted_us": 13487964,
+      "trimmed_us": 165227
+    },
+    "W5": {
+      "charged_us": 16190338,
+      "kernels": 1235440,
+      "credit_us": 0,
+      "gate_count": 1,
+      "gate_total_us": 95,
+      "gate_max_us": 95,
+      "refill_sequence": 2348280307911,
+      "refill_accepted": 1333,
+      "refill_rejected": 0,
+      "cap_hits": 0,
+      "granted_us": 12782174,
+      "trimmed_us": 179856
+    },
+    "W6": {
+      "charged_us": 16493060,
+      "kernels": 1235440,
+      "credit_us": 0,
+      "gate_count": 1,
+      "gate_total_us": 108,
+      "gate_max_us": 108,
+      "refill_sequence": 2348280307911,
+      "refill_accepted": 1333,
+      "refill_rejected": 0,
+      "cap_hits": 0,
+      "granted_us": 12853677,
+      "trimmed_us": 167904
+    }
+  },
+  "feeder_ticks": 1333,
+  "end_epoch_ns": 1792639631734924288
+}

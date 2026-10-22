@@ -1,0 +1,1 @@
+Read-only projections of actual 2026-10-15 mig-e2e-20261015-01. Control/socket/device lists removed. Fixture tests change timestamps/counters explicitly; not a new hardware result.

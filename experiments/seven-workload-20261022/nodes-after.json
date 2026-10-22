@@ -1,0 +1,411 @@
+{
+    "apiVersion": "v1",
+    "items": [
+        {
+            "apiVersion": "v1",
+            "kind": "Node",
+            "metadata": {
+                "annotations": {
+                    "node.alpha.kubernetes.io/ttl": "0",
+                    "volumes.kubernetes.io/controller-managed-attach-detach": "true"
+                },
+                "creationTimestamp": "2026-10-14T08:10:55Z",
+                "labels": {
+                    "beta.kubernetes.io/arch": "amd64",
+                    "beta.kubernetes.io/os": "linux",
+                    "keti.re.kr/node-role": "edge",
+                    "ketris.re.kr/mig-runtime": "true",
+                    "kubernetes.io/arch": "amd64",
+                    "kubernetes.io/hostname": "devmaster",
+                    "kubernetes.io/os": "linux",
+                    "node-role.kubernetes.io/control-plane": "",
+                    "node.kubernetes.io/exclude-from-external-load-balancers": ""
+                },
+                "name": "devmaster",
+                "resourceVersion": "2188585",
+                "uid": "49e6c29f-55cb-40ae-92ee-c47cae156d66"
+            },
+            "spec": {
+                "podCIDR": "10.245.0.0/24",
+                "podCIDRs": [
+                    "10.245.0.0/24"
+                ]
+            },
+            "status": {
+                "addresses": [
+                    {
+                        "address": "10.0.1.211",
+                        "type": "InternalIP"
+                    },
+                    {
+                        "address": "devmaster",
+                        "type": "Hostname"
+                    }
+                ],
+                "allocatable": {
+                    "cpu": "8",
+                    "ephemeral-storage": "74846896005",
+                    "hugepages-1Gi": "0",
+                    "hugepages-2Mi": "0",
+                    "keti.re.kr/lsu": "240",
+                    "keti.re.kr/mig-2df9a7f6c8dae50c-share": "0",
+                    "keti.re.kr/mig-e2493d0ebc3c0f31-share": "0",
+                    "keti.re.kr/npu-pe": "8",
+                    "memory": "32762656Ki",
+                    "pods": "110"
+                },
+                "capacity": {
+                    "cpu": "8",
+                    "ephemeral-storage": "81214080Ki",
+                    "hugepages-1Gi": "0",
+                    "hugepages-2Mi": "0",
+                    "keti.re.kr/lsu": "240",
+                    "keti.re.kr/mig-2df9a7f6c8dae50c-share": "0",
+                    "keti.re.kr/mig-e2493d0ebc3c0f31-share": "0",
+                    "keti.re.kr/npu-pe": "8",
+                    "memory": "32865056Ki",
+                    "pods": "110"
+                },
+                "conditions": [
+                    {
+                        "lastHeartbeatTime": "2026-10-14T08:11:54Z",
+                        "lastTransitionTime": "2026-10-14T08:11:54Z",
+                        "message": "Cilium is running on this node",
+                        "reason": "CiliumIsUp",
+                        "status": "False",
+                        "type": "NetworkUnavailable"
+                    },
+                    {
+                        "lastHeartbeatTime": "2026-10-22T03:24:13Z",
+                        "lastTransitionTime": "2026-10-14T08:10:55Z",
+                        "message": "kubelet has sufficient memory available",
+                        "reason": "KubeletHasSufficientMemory",
+                        "status": "False",
+                        "type": "MemoryPressure"
+                    },
+                    {
+                        "lastHeartbeatTime": "2026-10-22T03:24:13Z",
+                        "lastTransitionTime": "2026-10-15T23:36:03Z",
+                        "message": "kubelet has no disk pressure",
+                        "reason": "KubeletHasNoDiskPressure",
+                        "status": "False",
+                        "type": "DiskPressure"
+                    },
+                    {
+                        "lastHeartbeatTime": "2026-10-22T03:24:13Z",
+                        "lastTransitionTime": "2026-10-14T08:10:55Z",
+                        "message": "kubelet has sufficient PID available",
+                        "reason": "KubeletHasSufficientPID",
+                        "status": "False",
+                        "type": "PIDPressure"
+                    },
+                    {
+                        "lastHeartbeatTime": "2026-10-22T03:24:13Z",
+                        "lastTransitionTime": "2026-10-14T08:11:52Z",
+                        "message": "kubelet is posting ready status",
+                        "reason": "KubeletReady",
+                        "status": "True",
+                        "type": "Ready"
+                    }
+                ],
+                "daemonEndpoints": {
+                    "kubeletEndpoint": {
+                        "Port": 10250
+                    }
+                },
+                "features": {
+                    "supplementalGroupsPolicy": true
+                },
+                "images": [
+                    {
+                        "names": [
+                            "docker.io/keti-exec/infer:0.2"
+                        ],
+                        "sizeBytes": 4666165405
+                    },
+                    {
+                        "names": [
+                            "ghcr.io/kubeflow/kfp-visualization-server@sha256:37049dc7ebc3c74efd09ecfab5f6466a341830106e6927ec8a832b41bf507347",
+                            "ghcr.io/kubeflow/kfp-visualization-server:2.17.2"
+                        ],
+                        "sizeBytes": 1085107862
+                    },
+                    {
+                        "names": [
+                            "docker.io/library/ketris-dashboard:20261014-vm-v4"
+                        ],
+                        "sizeBytes": 856791967
+                    },
+                    {
+                        "names": [
+                            "docker.io/library/ketris-device-plugin:mig-20261013-v9"
+                        ],
+                        "sizeBytes": 848988543
+                    },
+                    {
+                        "names": [
+                            "docker.io/library/ketris-runtime:20261014-vm-v1"
+                        ],
+                        "sizeBytes": 709528449
+                    },
+                    {
+                        "names": [
+                            "ghcr.io/kubeflow/kfp-cache-deployer@sha256:e8f34c3dcbc4c21f6905748b4419967cca903f4672acd5660fa643f1e88153b1",
+                            "ghcr.io/kubeflow/kfp-cache-deployer:2.17.2"
+                        ],
+                        "sizeBytes": 316846229
+                    },
+                    {
+                        "names": [
+                            "quay.io/cilium/cilium@sha256:0df5b2750b64c49843aba1d649e9eaf61467cb0645ad3171db6f6962c095ac92"
+                        ],
+                        "sizeBytes": 259623472
+                    },
+                    {
+                        "names": [
+                            "docker.io/library/mysql@sha256:24989179f58856db763f418010c1169fecc944e3ec1ea7e921572d83eb070f70",
+                            "docker.io/library/mysql:8.4"
+                        ],
+                        "sizeBytes": 238283573
+                    },
+                    {
+                        "names": [
+                            "ghcr.io/kubeflow/kfp-frontend@sha256:0da8b3f14a7bb2677834e8b68a68a2b2056bcc0c7a5c2a83c9722ea7fe2282a3",
+                            "ghcr.io/kubeflow/kfp-frontend:2.17.2"
+                        ],
+                        "sizeBytes": 201674629
+                    },
+                    {
+                        "names": [
+                            "ghcr.io/kubeflow/kfp-metadata-envoy@sha256:5a5f21dff51a33ea6f5e8683ed9ff4cec1090d6c6742fdc3eb0101771c39c951",
+                            "ghcr.io/kubeflow/kfp-metadata-envoy:2.17.2"
+                        ],
+                        "sizeBytes": 136088358
+                    },
+                    {
+                        "names": [
+                            "docker.io/keti-exec/router:0.2"
+                        ],
+                        "sizeBytes": 129052929
+                    },
+                    {
+                        "names": [
+                            "ghcr.io/chrislusf/seaweedfs@sha256:6620371e8af8282056685c652d4637265698c9e2c2d59f9594e6ac333ad6c634",
+                            "ghcr.io/chrislusf/seaweedfs:4.34"
+                        ],
+                        "sizeBytes": 104802306
+                    },
+                    {
+                        "names": [
+                            "ghcr.io/kubeflow/kfp-api-server@sha256:8e9f9e66d127fe27f61236bc35a66e8558c58e5f828ad50b15257220140bf023",
+                            "ghcr.io/kubeflow/kfp-api-server:2.17.2"
+                        ],
+                        "sizeBytes": 94364346
+                    },
+                    {
+                        "names": [
+                            "docker.io/library/ketris-institution-bridge:20261015-v5"
+                        ],
+                        "sizeBytes": 85700499
+                    },
+                    {
+                        "names": [
+                            "ghcr.io/kubeflow/kfp-metadata-writer@sha256:6e501e2e0b0be514ce5d8ce1c4becb12b252ef7eaab4ebb4ec5111a9d4d40ee6",
+                            "ghcr.io/kubeflow/kfp-metadata-writer:2.17.2"
+                        ],
+                        "sizeBytes": 76757260
+                    },
+                    {
+                        "names": [
+                            "quay.io/cilium/cilium-envoy@sha256:767101fb8a5e38f055778cb43b7aa8eed80450b37f8121effac3d9de9e06dc99"
+                        ],
+                        "sizeBytes": 73747846
+                    },
+                    {
+                        "names": [
+                            "gcr.io/tfx-oss-public/ml_metadata_store_server@sha256:51404ef4419c1426da80f3e14a83dcb55f65bb5a971371d36d14cec1e50af830",
+                            "gcr.io/tfx-oss-public/ml_metadata_store_server:1.14.0"
+                        ],
+                        "sizeBytes": 70679133
+                    },
+                    {
+                        "names": [
+                            "registry.k8s.io/kueue/kueue@sha256:6fe2cbe4c7799eed1a8d49898c38b8bd73f1572df1825d7cf266ec9e2af70bec",
+                            "registry.k8s.io/kueue/kueue:v0.19.0"
+                        ],
+                        "sizeBytes": 62911302
+                    },
+                    {
+                        "names": [
+                            "docker.io/keti-exec/scheduler:0.4"
+                        ],
+                        "sizeBytes": 58572242
+                    },
+                    {
+                        "names": [
+                            "docker.io/keti-exec/queue-api:0.6"
+                        ],
+                        "sizeBytes": 46463414
+                    },
+                    {
+                        "names": [
+                            "quay.io/argoproj/workflow-controller@sha256:4001b58f3c34bb65015c79919157e45f51f4d7450806c64987abdb7dc86f8453",
+                            "quay.io/argoproj/workflow-controller:v4.0.5"
+                        ],
+                        "sizeBytes": 45897999
+                    },
+                    {
+                        "names": [
+                            "ghcr.io/kubeflow/kfp-scheduled-workflow-controller@sha256:d46f96664c89acd6b8eb5c3b57f941f762254c18cd9544d7cfaca181b5624ecd",
+                            "ghcr.io/kubeflow/kfp-scheduled-workflow-controller:2.17.2"
+                        ],
+                        "sizeBytes": 38658298
+                    },
+                    {
+                        "names": [
+                            "ghcr.io/kubeflow/kfp-cache-server@sha256:3a1c57ad0dc91e5bab0223850da4b8ba683ed60e95c7efff69552f5babbb5e89",
+                            "ghcr.io/kubeflow/kfp-cache-server:2.17.2"
+                        ],
+                        "sizeBytes": 36364729
+                    },
+                    {
+                        "names": [
+                            "registry.k8s.io/jobset/jobset@sha256:e75536f1135b7bb2f19f8c3b620782fbdd9091d73398e3a272f9a5fed322980d",
+                            "registry.k8s.io/jobset/jobset:v0.12.0"
+                        ],
+                        "sizeBytes": 34221767
+                    },
+                    {
+                        "names": [
+                            "ghcr.io/kubeflow/kfp-persistence-agent@sha256:c05bc60bd96e54ceacb2d98c0b02949f6063a5937cb01d29403f43ff01de7123",
+                            "ghcr.io/kubeflow/kfp-persistence-agent:2.17.2"
+                        ],
+                        "sizeBytes": 33779674
+                    },
+                    {
+                        "names": [
+                            "quay.io/cilium/operator-generic@sha256:0db4ca4e06969d8904ee036617795d0e9c3228cf7b8d902ba74fc2bb98d2d665"
+                        ],
+                        "sizeBytes": 32889498
+                    },
+                    {
+                        "names": [
+                            "ghcr.io/kubeflow/kfp-viewer-crd-controller@sha256:9c97159869d7de18fb02ceb324ffb622784367205fbc95c9150317f237c31202",
+                            "ghcr.io/kubeflow/kfp-viewer-crd-controller:2.17.2"
+                        ],
+                        "sizeBytes": 29081475
+                    },
+                    {
+                        "names": [
+                            "registry.k8s.io/kube-apiserver@sha256:ff4a56901bb9a71c450e2adfb1a439d3543a76aa4877225039330479ac596146",
+                            "registry.k8s.io/kube-apiserver:v1.35.7"
+                        ],
+                        "sizeBytes": 27591225
+                    },
+                    {
+                        "names": [
+                            "registry.k8s.io/kube-proxy@sha256:9c095bdbaa0ccdfd6484e5bec68e57a1cb18908aee418603e51577286a37616e",
+                            "registry.k8s.io/kube-proxy:v1.35.7"
+                        ],
+                        "sizeBytes": 26850930
+                    },
+                    {
+                        "names": [
+                            "registry.k8s.io/etcd@sha256:60a30b5d81b2217555e2cfb9537f655b7ba97220b99c39ee2e162a7127225890",
+                            "registry.k8s.io/etcd:3.6.6-0"
+                        ],
+                        "sizeBytes": 23641797
+                    },
+                    {
+                        "names": [
+                            "ghcr.io/kubeflow/trainer/trainer-controller-manager@sha256:298696e912c26a0ae13dc1c0ef55ec0d4f6d5feeb9cf5e82fdc8500a65b2b5fc",
+                            "ghcr.io/kubeflow/trainer/trainer-controller-manager:v2.3.0"
+                        ],
+                        "sizeBytes": 23628928
+                    },
+                    {
+                        "names": [
+                            "registry.k8s.io/coredns/coredns@sha256:9b9128672209474da07c91439bf15ed704ae05ad918dd6454e5b6ae14e35fee6",
+                            "registry.k8s.io/coredns/coredns:v1.13.1"
+                        ],
+                        "sizeBytes": 23553139
+                    },
+                    {
+                        "names": [
+                            "registry.k8s.io/kube-controller-manager@sha256:e7b2efd17ceeabf5e2ee570ee2620cdae2ab6e01ca4b6909fb2381f0cdd36ce9",
+                            "registry.k8s.io/kube-controller-manager:v1.35.7"
+                        ],
+                        "sizeBytes": 23014327
+                    },
+                    {
+                        "names": [
+                            "registry.k8s.io/kube-scheduler@sha256:e3ad7e716accdcaed277e825df70b162478adc40cc0dd482046c9edb219ff3ec",
+                            "registry.k8s.io/kube-scheduler:v1.35.7"
+                        ],
+                        "sizeBytes": 17114866
+                    },
+                    {
+                        "names": [
+                            "docker.io/rancher/local-path-provisioner@sha256:e757967a5ec338f6a9b371c5a9688bedaa8c3578ea3dd4db329ea0084be0a86f",
+                            "docker.io/rancher/local-path-provisioner:v0.0.37"
+                        ],
+                        "sizeBytes": 15066012
+                    },
+                    {
+                        "names": [
+                            "docker.io/library/alpine@sha256:85fe1e81d6758c208f3e1eed4338a1997e19d4be002d4dd32d3100c9a8c010a0",
+                            "docker.io/library/alpine:3.23"
+                        ],
+                        "sizeBytes": 3859358
+                    },
+                    {
+                        "names": [
+                            "registry.k8s.io/pause@sha256:f548e0e8e3dc1896ca956272154dde3314e8cc4fde0a57577ee9fa1c63f5baf4",
+                            "registry.k8s.io/pause:3.10.2"
+                        ],
+                        "sizeBytes": 320805
+                    }
+                ],
+                "nodeInfo": {
+                    "architecture": "amd64",
+                    "bootID": "40dbaea9-7245-4d9b-8edf-f81c1efabe6f",
+                    "containerRuntimeVersion": "containerd://2.3.5",
+                    "kernelVersion": "6.8.0-147-generic",
+                    "kubeProxyVersion": "",
+                    "kubeletVersion": "v1.35.7",
+                    "machineID": "02672ea2b9f04215af2ea8575b3a5ec3",
+                    "operatingSystem": "linux",
+                    "osImage": "Ubuntu 24.04.5 LTS",
+                    "systemUUID": "02672ea2-b9f0-4215-af2e-a8575b3a5ec3"
+                },
+                "runtimeHandlers": [
+                    {
+                        "features": {
+                            "recursiveReadOnlyMounts": true,
+                            "userNamespaces": true
+                        },
+                        "name": ""
+                    },
+                    {
+                        "features": {
+                            "recursiveReadOnlyMounts": true,
+                            "userNamespaces": true
+                        },
+                        "name": "nvidia"
+                    },
+                    {
+                        "features": {
+                            "recursiveReadOnlyMounts": true,
+                            "userNamespaces": true
+                        },
+                        "name": "runc"
+                    }
+                ]
+            }
+        }
+    ],
+    "kind": "List",
+    "metadata": {
+        "resourceVersion": ""
+    }
+}

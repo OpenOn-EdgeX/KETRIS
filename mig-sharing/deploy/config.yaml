@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata: {name: ketris-mig-inventory, namespace: kube-system}
+data:
+  catalog.json: '{"nodes":{}}'
+---
+apiVersion: v1
+kind: ConfigMap
+metadata: {name: ketris-mig-config, namespace: kube-system}
+data:
+  # Explicit UUID list after the operator creates MIG + refreshes NVIDIA CDI.
+  allowlist: ""

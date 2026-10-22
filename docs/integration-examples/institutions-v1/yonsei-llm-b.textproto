@@ -1,0 +1,30 @@
+# DESIGN EXAMPLE: synthetic assumptions; no model loaded or inference measured.
+meta {
+  schema_version: "ketris.integration.example.v1"
+  request_id: "req-yonsei-llm-b"
+  trace_id: "trace-institution-example-01"
+  workload_id: "wl-llm-b"
+  provider: "yonsei-mock"
+  origin: SYNTHETIC
+  execution_mode: CONTRACT_ONLY
+  created_at { seconds: 1792022400 }
+  expires_at { seconds: 1792022460 }
+}
+profile_id: "profile-llm-b-v1"
+profile_version: 1
+model: "Qwen/Qwen2.5-0.5B-Instruct"
+model_revision: "fixture-v1"
+type: "inference"
+input_shape: 1
+input_shape: 128
+dtype: "fp16"
+input_dtype: "int64"
+batch_size: 1
+input_tokens: 128
+output_tokens: 32
+gpu_req { mem: 2048 mem_unit: MIB }
+normalized {
+  estimated_peak_memory_bytes: 2147483648
+  predicted_latency_ms: 40
+  predicted_requests_per_second: 25
+}

@@ -1,0 +1,129 @@
+{
+  "_comment": "Exp_55 Phase1 — 시간 경로 정확도(Fix2/3 기각 근거): 여러 비율 + 극단 10:1. 1s 창 정확도는 트레이스·타임라인으로 별도 산출.",
+  "defaults": {
+    "duration": 15,
+    "reps": 3
+  },
+  "runs": [
+    {
+      "tag": "r_2to1",
+      "policy": "strict",
+      "members": [
+        {
+          "name": "A",
+          "role": "synth",
+          "batch": 1,
+          "r": 0.667,
+          "cls": "C",
+          "env": {
+            "SYNTH_STREAMS": 1,
+            "SYNTH_THREADS": 1,
+            "SYNTH_SHARED": 1
+          }
+        },
+        {
+          "name": "B",
+          "role": "synth",
+          "batch": 1,
+          "r": 0.333,
+          "cls": "C",
+          "env": {
+            "SYNTH_STREAMS": 1,
+            "SYNTH_THREADS": 1,
+            "SYNTH_SHARED": 1
+          }
+        }
+      ]
+    },
+    {
+      "tag": "r_1to2",
+      "policy": "strict",
+      "members": [
+        {
+          "name": "A",
+          "role": "synth",
+          "batch": 1,
+          "r": 0.333,
+          "cls": "C",
+          "env": {
+            "SYNTH_STREAMS": 1,
+            "SYNTH_THREADS": 1,
+            "SYNTH_SHARED": 1
+          }
+        },
+        {
+          "name": "B",
+          "role": "synth",
+          "batch": 1,
+          "r": 0.667,
+          "cls": "C",
+          "env": {
+            "SYNTH_STREAMS": 1,
+            "SYNTH_THREADS": 1,
+            "SYNTH_SHARED": 1
+          }
+        }
+      ]
+    },
+    {
+      "tag": "r_3to1",
+      "policy": "strict",
+      "members": [
+        {
+          "name": "A",
+          "role": "synth",
+          "batch": 1,
+          "r": 0.75,
+          "cls": "C",
+          "env": {
+            "SYNTH_STREAMS": 1,
+            "SYNTH_THREADS": 1,
+            "SYNTH_SHARED": 1
+          }
+        },
+        {
+          "name": "B",
+          "role": "synth",
+          "batch": 1,
+          "r": 0.25,
+          "cls": "C",
+          "env": {
+            "SYNTH_STREAMS": 1,
+            "SYNTH_THREADS": 1,
+            "SYNTH_SHARED": 1
+          }
+        }
+      ]
+    },
+    {
+      "tag": "r_10to1",
+      "policy": "strict",
+      "members": [
+        {
+          "name": "A",
+          "role": "synth",
+          "batch": 1,
+          "r": 0.909,
+          "cls": "C",
+          "env": {
+            "SYNTH_STREAMS": 1,
+            "SYNTH_THREADS": 1,
+            "SYNTH_SHARED": 1
+          }
+        },
+        {
+          "name": "B",
+          "role": "synth",
+          "batch": 1,
+          "r": 0.091,
+          "cls": "C",
+          "env": {
+            "SYNTH_STREAMS": 1,
+            "SYNTH_THREADS": 1,
+            "SYNTH_SHARED": 1
+          }
+        }
+      ]
+    }
+  ]
+}

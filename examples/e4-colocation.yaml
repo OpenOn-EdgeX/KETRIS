@@ -1,0 +1,62 @@
+# E4 — 공동 배치: "줄여도 되는 작업"(compute)과 "지켜줄 작업"(memory)이 같이 돌면
+# PRISM 이 지켜줄 쪽(memory)의 시간 제한을 자동으로 풀어준다.
+# ★class 는 역할 선언이다 — 실제 연산 내용이 아니라 "응답 시간을 지켜줄 것인가"를 적는다.
+apiVersion: v1
+kind: Pod
+metadata:
+  name: e4-batch
+  namespace: prism-guide
+  annotations:
+    kraken.keti.re.kr/workload-class: "compute"   # 배치 작업 — 줄여도 되는 쪽
+spec:
+  restartPolicy: Never
+  containers:
+    - name: work
+      image: prism-infer:opt
+      imagePullPolicy: IfNotPresent
+      command: ["python", "-u", "-c"]
+      args:
+        - |
+          import torch, time
+          a = torch.randn(4096, 4096, device="cuda")
+          torch.cuda.synchronize()
+          t0 = time.time(); n = 0
+          while time.time() - t0 < 90:
+              (a @ a).sum().item(); n += 1
+          dt = time.time() - t0
+          print(f"iters={n} dur={dt:.1f}s rate={n/dt:.2f} it/s")
+      resources:
+        limits:
+          cpu: "4"
+          memory: 8Gi
+          keti.re.kr/lsu: "120"
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: e4-serving
+  namespace: prism-guide
+  annotations:
+    kraken.keti.re.kr/workload-class: "memory"    # 저지연 서빙 — 지켜줄 쪽
+spec:
+  restartPolicy: Never
+  containers:
+    - name: work
+      image: prism-infer:opt
+      imagePullPolicy: IfNotPresent
+      command: ["python", "-u", "-c"]
+      args:
+        - |
+          import torch, time
+          a = torch.randn(4096, 4096, device="cuda")
+          torch.cuda.synchronize()
+          t0 = time.time(); n = 0
+          while time.time() - t0 < 90:
+              (a @ a).sum().item(); n += 1
+          dt = time.time() - t0
+          print(f"iters={n} dur={dt:.1f}s rate={n/dt:.2f} it/s")
+      resources:
+        limits:
+          cpu: "4"
+          memory: 8Gi
+          keti.re.kr/lsu: "60"

@@ -1,0 +1,60 @@
+{
+  "status": "passed",
+  "commands": [
+    {
+      "name": "analysis",
+      "command": [
+        "python3",
+        "-B",
+        "analyze.py",
+        "<disposable-copy>",
+        "--no-plot"
+      ],
+      "exit_code": 0,
+      "log": "analysis-reanalysis.log"
+    },
+    {
+      "name": "runtime-audit",
+      "command": [
+        "python3",
+        "-B",
+        "audit_runtime.py",
+        "<disposable-copy>"
+      ],
+      "exit_code": 0,
+      "log": "runtime-audit-reanalysis.log"
+    },
+    {
+      "name": "interpretation",
+      "command": [
+        "python3",
+        "-B",
+        "interpret_results.py",
+        "<disposable-copy>"
+      ],
+      "exit_code": 0,
+      "log": "interpretation-reanalysis.log"
+    }
+  ],
+  "primary_analysis_valid": true,
+  "runtime_audit_valid": true,
+  "interpretation_complete": true,
+  "interpretation_status": "complete_audited_five_repeats_per_arm",
+  "run_count": 21,
+  "pilot_count": 6,
+  "holdout_count": 15,
+  "analysis_fields_identical_to_archived": [
+    "groups",
+    "comparisons",
+    "sample_order",
+    "pilot_run_count"
+  ],
+  "csv_files_byte_identical_to_archived": [
+    "results.csv",
+    "summary.csv"
+  ],
+  "notes": [
+    "Executed offline in a disposable copy inside verification/.reanalysis-copy; that copy was removed after validation.",
+    "Archived original files were not regenerated. Absolute path fields in regenerated JSON change when the bundle is relocated."
+  ]
+}

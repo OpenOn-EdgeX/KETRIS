@@ -1,0 +1,11 @@
+.git
+.venv
+**/node_modules
+**/__pycache__
+**/*.pyc
+experiments
+examples/synthetic-console
+docs
+**/test-results
+**/playwright-report
+**/*.oldenv

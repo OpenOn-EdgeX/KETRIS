@@ -1,0 +1,1 @@
+{"epoch_ns": 1792639749915720483, "processes": [{"pid": "13025", "cgroup": "0::/system.slice/nvidia-mps.service\n", "owned": false, "allowed_idle_system_mps": true, "smi": "13025, nvidia-cuda-mps-server, 52 MiB"}]}

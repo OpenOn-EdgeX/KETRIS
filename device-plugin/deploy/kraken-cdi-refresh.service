@@ -1,0 +1,12 @@
+[Unit]
+Description=KRAKEN: regenerate NVIDIA CDI spec to persistent /etc/cdi (Exp_87 — gpu-operator 비의존)
+After=containerd.service
+Wants=containerd.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/nvidia-ctk cdi generate --output=/etc/cdi/nvidia.yaml
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

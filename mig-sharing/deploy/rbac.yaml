@@ -1,0 +1,47 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata: {name: ketris-mig-runtime, namespace: kube-system}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata: {name: ketris-mig-runtime-reader}
+rules:
+  - apiGroups: [""]
+    resources: [pods, nodes]
+    verbs: [get, list, watch]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata: {name: ketris-mig-runtime-reader}
+roleRef: {apiGroup: rbac.authorization.k8s.io, kind: ClusterRole, name: ketris-mig-runtime-reader}
+subjects: [{kind: ServiceAccount, name: ketris-mig-runtime, namespace: kube-system}]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata: {name: ketris-mig-catalog-writer, namespace: kube-system}
+rules:
+  - apiGroups: [""]
+    resources: [configmaps]
+    resourceNames: [ketris-mig-inventory]
+    verbs: [get, update]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata: {name: ketris-mig-catalog-writer, namespace: kube-system}
+roleRef: {apiGroup: rbac.authorization.k8s.io, kind: Role, name: ketris-mig-catalog-writer}
+subjects: [{kind: ServiceAccount, name: ketris-mig-runtime, namespace: kube-system}]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata: {name: ketris-mig-admission-reader, namespace: kube-system}
+rules:
+  - apiGroups: [""]
+    resources: [configmaps]
+    resourceNames: [ketris-mig-inventory]
+    verbs: [get]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata: {name: ketris-mig-admission-reader, namespace: kube-system}
+roleRef: {apiGroup: rbac.authorization.k8s.io, kind: Role, name: ketris-mig-admission-reader}
+subjects: [{kind: ServiceAccount, name: ketris-webhook, namespace: kube-system}]

@@ -1,0 +1,43 @@
+# [Exp_123 3-B] NPU 모델 tp 카탈로그 — 입장(admission) 판정 파라미터.
+#   ★생성물이다. 정본은 lsu/npu_catalog.json 이고
+#     reports/Exp_123_npu_gate_unit/src/make_npu_catalog.py 가 만든다.
+#   ★키에 '/' 를 못 쓰므로 저장소 접두사(furiosa-ai/)를 뗀 짧은 이름을 쓴다.
+#   ★tp 를 확인하지 못한 모델은 **등재하지 않는다** — 없으면 판정 보류(통과)다.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kraken-npu-catalog
+  namespace: kube-system
+data:
+  DeepSeek-R1-Distill-Llama-70B: "32"
+  DeepSeek-R1-Distill-Llama-8B: "8"
+  DeepSeek-R1-Distill-Qwen-14B: "8"
+  DeepSeek-R1-Distill-Qwen-32B: "8"
+  DeepSeek-R1-Distill-Qwen-7B: "8"
+  EXAONE-3.5-32B-Instruct: "32"
+  EXAONE-3.5-7.8B-Instruct: "8"
+  Llama-3.1-8B-Instruct: "8"
+  Llama-3.1-8B-Instruct-FP8: "8"
+  Llama-3.3-70B-Instruct: "32"
+  Llama-3.3-70B-Instruct-INT8: "32"
+  QwQ-32B: "8"
+  Qwen2.5-0.5B-Instruct: "4"
+  Qwen2.5-14B-Instruct: "8"
+  Qwen2.5-32B-Instruct: "8"
+  Qwen2.5-7B-Instruct: "8"
+  Qwen2.5-Coder-14B-Instruct: "8"
+  Qwen2.5-Coder-32B-Instruct: "8"
+  Qwen2.5-Coder-7B-Instruct: "8"
+  Qwen3-30B-A3B-FP8: "16"
+  Qwen3-4B-FP8: "8"
+  Qwen3-Embedding-0.6B: "8"
+  Qwen3-Embedding-4B: "8"
+  Qwen3-Embedding-8B: "8"
+  Qwen3-Reranker-0.6B: "8"
+  Qwen3-Reranker-4B: "8"
+  Qwen3-Reranker-8B: "8"
+  Qwen3-VL-2B-Instruct: "8"
+  bge-m3: "8"
+  bge-reranker-v2-m3: "8"
+  e5-mistral-7b-instruct: "8"
+  harrier-oss-v1-0.6b: "8"

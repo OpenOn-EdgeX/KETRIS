@@ -1,0 +1,38 @@
+{
+  "children": {
+    "W0": {
+      "pid": 1362,
+      "returncode": 0
+    },
+    "W1": {
+      "pid": 1375,
+      "returncode": 0
+    },
+    "W2": {
+      "pid": 1388,
+      "returncode": 0
+    },
+    "W3": {
+      "pid": 1401,
+      "returncode": 0
+    },
+    "W4": {
+      "pid": 1414,
+      "returncode": 0
+    },
+    "W5": {
+      "pid": 1427,
+      "returncode": 0
+    },
+    "W6": {
+      "pid": 1440,
+      "returncode": 0
+    },
+    "nvml": {
+      "pid": 1451,
+      "returncode": 0
+    }
+  },
+  "no_live_workers": true,
+  "completed_epoch_ns": 1792639057703830873
+}

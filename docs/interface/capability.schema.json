@@ -1,0 +1,65 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "KRAKEN Hasper Capability (A-1)",
+  "description": "하스퍼 → KETI 물리 자원 명세. KETI 제안(확정 아님). 미실측 장비는 measured=false로 두면 KETI가 잠정 LSU로 등재한다.",
+  "type": "object",
+  "required": ["schema_version", "device", "compute", "memory", "status"],
+  "properties": {
+    "schema_version": { "type": "string" },
+    "device": {
+      "type": "object",
+      "required": ["uuid", "kind", "model", "remote"],
+      "properties": {
+        "uuid": { "type": "string" },
+        "kind": { "enum": ["gpu", "npu"] },
+        "model": { "type": "string" },
+        "vendor": { "type": "string" },
+        "remote": { "type": "boolean" }
+      }
+    },
+    "compute": {
+      "type": "object",
+      "required": ["units", "unit_kind", "concurrency"],
+      "properties": {
+        "units": { "type": "integer", "minimum": 1 },
+        "unit_kind": { "enum": ["sm", "pe"] },
+        "concurrency": {
+          "type": "object",
+          "required": ["mps", "mig"],
+          "properties": {
+            "mps": { "type": "boolean" },
+            "mig": { "type": "boolean" },
+            "partition_granularity_pct": { "type": "integer", "minimum": 1 }
+          }
+        }
+      }
+    },
+    "memory": {
+      "type": "object",
+      "required": ["capacity_mb"],
+      "properties": {
+        "capacity_mb": { "type": "integer", "minimum": 1 },
+        "bandwidth_gbps": { "type": "number" }
+      }
+    },
+    "npu": {
+      "type": "object",
+      "required": ["cores", "fusion"],
+      "properties": {
+        "cores": { "type": "integer", "minimum": 1 },
+        "mem_per_core_mb": { "type": "integer" },
+        "fusion": {
+          "type": "object",
+          "required": ["allowed_blocks", "alignment"],
+          "properties": {
+            "allowed_blocks": { "type": "array", "items": { "type": "integer" } },
+            "alignment": { "type": "string" }
+          }
+        }
+      }
+    },
+    "status": { "enum": ["allocatable", "reclaim_pending", "reclaimed"] },
+    "measured": { "type": "boolean" },
+    "extra": { "type": "object" }
+  }
+}

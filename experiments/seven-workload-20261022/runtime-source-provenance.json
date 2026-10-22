@@ -1,0 +1,41 @@
+{
+  "sha256": "65a69816dd4e1fb98140c414b508365ac8c1ef137484e2ccafb2f304b55f289d",
+  "source_origin": "/root/workspace/prism-server-task/.worktrees/ketris-mig-dashboard/runtime/libbless",
+  "changed_files": [
+    "libbless.cpp",
+    "time_refill.hpp"
+  ],
+  "unchanged_files": [
+    "context_manager.hpp",
+    "time_bootstrap.hpp",
+    "routing.hpp",
+    "qmd_layout.hpp"
+  ],
+  "build_command": "g++ -shared -fPIC -O2 -std=c++17 -DKETRIS_EXPERIMENT_MAX_CREDIT_CAP_US=4000000 -I /usr/local/cuda-12.9/include runtime/libbless.cpp -L /usr/local/cuda-12.9/lib64 -lcuda -lcudart -ldl -lpthread -o libbless.so",
+  "runtime_scope": "Isolated experiment binary only; no production copy or deploy",
+  "source_sha256": {
+    "libbless.cpp": "704a5dcb0685b6f280a3a4c0038f32e0aab5366dfed9fdc62dfdc5ebac11a075",
+    "context_manager.hpp": "73ad8a38fafd3747da1e5f2df2f59e60a694c769b663550634c68bd5f36861b9",
+    "time_bootstrap.hpp": "3a44c18270add05356958d670c40f846d834fac89e69b0edd4f6f46b38b6ecee",
+    "time_refill.hpp": "11a49478e6663d81a767107508712e7ece7e822b060d0a252d158744673ae54e",
+    "routing.hpp": "933f21fc7c8c1440b491085d8cfdd2f14fde7a64e2f2620a83579cbdc4fab6a7",
+    "qmd_layout.hpp": "17a62d5f347a6591988aa42a2e0b7934e7a0e497962517e4bd37611aaf6de3bf"
+  },
+  "executed_sources_match": true,
+  "runtime_binary_source": "runtime-used.so",
+  "remote_executed_sources": {
+    "worker.py": "1e5601632696d645b49397d3d95edd8b6f5bfee3b9928e6832b0966675bf581c",
+    "credit_policy.py": "37ff041e99d4a0e35edd50a10badaaee37452f3776f6a801f94a01cc68568edd",
+    "metrics_watch.py": "8352f63c8867782de97db285f1cc542a786fbcafb9a69f3d3726ece746e6aa42",
+    "finalize.py": "c586caca0de28c31e2ad5133a6be4e5e020e25519b948b238719e12704d68902",
+    "preflight.py": "d94211601706ed27284c566b3b929a48a77b0dfb1666290ab76b468ea22bca1e",
+    "duty_policy.py": "6a6efd3d8739a3ea4fc83e5ace77195164572b184d2647239e32c8858af42c32",
+    "collect.py": "7f7cdba1f895c8b94900cbf97d7743d208e926049b1446828a00b1beec2ff2ec",
+    "RESUME.json": "c3ab00a2958db158acd9a5644c32186a98ab27dff66eed8c61637b2161eb47ca",
+    "trial.py": "05e9a309e8b30b2bbe5d11a4db0cee064ce90710bd7d5eb35a37122e34782a47",
+    "study.py": "142db2e353284d8632e2f17b2984d1179ce31298734a70e5f199a2a06f95fcf0",
+    "test_duty.py": "3c279bf0cc6c992b9652308c2fad2419fa88d82ec8b98123d558306462ace913",
+    "analyze_results.py": "58c59ed81361b10a0328bb2afe0858832be1b07842d25fd95666c38b622f1cff",
+    "host_watch.py": "8a16965a1c6d1c8ba80fdb19fd581754290aa75de5067195dc22300f8c89b36f"
+  }
+}

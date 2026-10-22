@@ -1,0 +1,43 @@
+START pilot-space100
+DONE {"label": "pilot-space100", "seconds": 13.465543831, "requests_s": 4.158762594577009, "gate_us": 0}
+START pilot-space75
+DONE {"label": "pilot-space75", "seconds": 13.50918237, "requests_s": 4.145328596966746, "gate_us": 0}
+START pilot-space50
+DONE {"label": "pilot-space50", "seconds": 13.308965579, "requests_s": 4.207689896528208, "gate_us": 0}
+START pilot-phase100
+DONE {"label": "pilot-phase100", "seconds": 13.73295183, "requests_s": 4.077783181156036, "gate_us": 13276}
+START pilot-phase90
+DONE {"label": "pilot-phase90", "seconds": 13.719060905, "requests_s": 4.081912048337831, "gate_us": 29933}
+START pilot-phase75
+DONE {"label": "pilot-phase75", "seconds": 13.669961261, "requests_s": 4.096573423347319, "gate_us": 11271}
+FROZEN {"cap": 50, "policy": "phase75", "runs": 15}
+START holdout-r1-native
+DONE {"label": "holdout-r1-native", "seconds": 13.184710611, "requests_s": 4.247343885824784, "gate_us": 0}
+START holdout-r1-spatial
+DONE {"label": "holdout-r1-spatial", "seconds": 13.520291908, "requests_s": 4.141922406783586, "gate_us": 0}
+START holdout-r1-ketris
+DONE {"label": "holdout-r1-ketris", "seconds": 13.399077562, "requests_s": 4.179392181355595, "gate_us": 13711}
+START holdout-r2-spatial
+DONE {"label": "holdout-r2-spatial", "seconds": 13.554733237, "requests_s": 4.131398163346975, "gate_us": 0}
+START holdout-r2-ketris
+DONE {"label": "holdout-r2-ketris", "seconds": 13.640415102, "requests_s": 4.105446907681651, "gate_us": 13193}
+START holdout-r2-native
+DONE {"label": "holdout-r2-native", "seconds": 13.373524972, "requests_s": 4.187377682192733, "gate_us": 0}
+START holdout-r3-ketris
+DONE {"label": "holdout-r3-ketris", "seconds": 13.615717978, "requests_s": 4.1128936491254935, "gate_us": 19511}
+START holdout-r3-native
+DONE {"label": "holdout-r3-native", "seconds": 12.913953062, "requests_s": 4.336394884753221, "gate_us": 0}
+START holdout-r3-spatial
+DONE {"label": "holdout-r3-spatial", "seconds": 13.534738689, "requests_s": 4.137501379728337, "gate_us": 0}
+START holdout-r4-ketris
+DONE {"label": "holdout-r4-ketris", "seconds": 13.555531468, "requests_s": 4.13115488184266, "gate_us": 31462}
+START holdout-r4-spatial
+DONE {"label": "holdout-r4-spatial", "seconds": 13.183960053, "requests_s": 4.247585685551075, "gate_us": 0}
+START holdout-r4-native
+DONE {"label": "holdout-r4-native", "seconds": 13.298439663, "requests_s": 4.211020346680803, "gate_us": 0}
+START holdout-r5-native
+DONE {"label": "holdout-r5-native", "seconds": 13.623320984, "requests_s": 4.110598294334368, "gate_us": 0}
+START holdout-r5-ketris
+DONE {"label": "holdout-r5-ketris", "seconds": 13.671603835, "requests_s": 4.096081240785895, "gate_us": 9093}
+START holdout-r5-spatial
+DONE {"label": "holdout-r5-spatial", "seconds": 13.32148431, "requests_s": 4.203735762235041, "gate_us": 0}

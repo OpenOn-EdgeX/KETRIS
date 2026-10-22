@@ -1,0 +1,14 @@
+**/.git
+.publish
+backup
+reports
+integration_demo
+benchmark
+**/__pycache__
+**/*.pyc
+**/.venv
+**/venv
+device-plugin/kraken-device-plugin
+*.tar
+# [Exp_126 1-A] 230 환경 빌드본 — 232 에서 실행 불가하고 정본(.so)과 혼동된다
+profiler/collector/kernel_tracer.so.oldenv

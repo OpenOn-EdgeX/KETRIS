@@ -1,0 +1,15 @@
+KETRIS GPU evaluation | 합성 예시 — 실측 결과 아님
+[WORK]   Qwen2.5-0.5B | 7 workers
+[RUNS]   entries=5
+[METHOD] Arithmetic mean of five relative-utilization indices
+[METRIC] Relative GPU activity index | NVIDIA MPS reference=100
+[TARGET] Year 2 reference target: 60.0%
+
+--- NVIDIA MPS vs KETRIS ---
+[COUNT] entries=5
+
+--- Arithmetic summary ---
+[MEAN] Relative GPU activity index=67.1%
+[RANGE] min=65.8% | max=68.2%
+[CHECK] Arithmetic consistency verified.
+[NOTE] These are relative indices, not absolute GPU-busy percentages.

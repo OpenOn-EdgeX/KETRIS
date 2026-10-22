@@ -1,0 +1,33 @@
+# DESIGN EXAMPLE: PLAN_ONLY. No real GPU/MIG identity, no execution.
+meta {
+  schema_version: "ketris.integration.example.v1"
+  request_id: "req-skku-plan-a"
+  trace_id: "trace-institution-example-01"
+  workload_id: "wl-llm-a"
+  provider: "skku-mock"
+  origin: SYNTHETIC
+  execution_mode: CONTRACT_ONLY
+  created_at { seconds: 1792022400 }
+  expires_at { seconds: 1792022460 }
+}
+plan_id: "plan-llm-a"
+revision: 1
+profile_id: "profile-llm-a-v1"
+profile_version: 1
+assignment {
+  assignment_id: "assignment-llm-a-v1"
+  fixture_target { fixture_ref: "fixture-mig-1" }
+  sharing_policy {
+    space_percent: 50
+    time_weight: 3
+    policy_source: "synthetic-test-policy"
+  }
+}
+external_snapshot {
+  provider: "external-monitor-fixture"
+  snapshot_id: "fixture-snapshot-01"
+  generation: "fixture-generation-01"
+  origin: SYNTHETIC
+  observed_at { seconds: 1792022400 }
+  expires_at { seconds: 1792022460 }
+}

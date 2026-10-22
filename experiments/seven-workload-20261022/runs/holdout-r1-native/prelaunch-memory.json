@@ -1,0 +1,44 @@
+[
+  {
+    "epoch_ns": 1792638641564432675,
+    "host_available": 25786007552,
+    "gpu_used_mib": 118.0,
+    "gpu_total_mib": 97887.0
+  },
+  {
+    "epoch_ns": 1792638645878329737,
+    "host_available": 24485437440,
+    "gpu_used_mib": 1987.0,
+    "gpu_total_mib": 97887.0
+  },
+  {
+    "epoch_ns": 1792638650193719352,
+    "host_available": 23121985536,
+    "gpu_used_mib": 3855.0,
+    "gpu_total_mib": 97887.0
+  },
+  {
+    "epoch_ns": 1792638654457706182,
+    "host_available": 21781721088,
+    "gpu_used_mib": 5724.0,
+    "gpu_total_mib": 97887.0
+  },
+  {
+    "epoch_ns": 1792638661585176349,
+    "host_available": 20449341440,
+    "gpu_used_mib": 7413.0,
+    "gpu_total_mib": 97887.0
+  },
+  {
+    "epoch_ns": 1792638668486556300,
+    "host_available": 19052580864,
+    "gpu_used_mib": 9101.0,
+    "gpu_total_mib": 97887.0
+  },
+  {
+    "epoch_ns": 1792638675338034938,
+    "host_available": 17667153920,
+    "gpu_used_mib": 10790.0,
+    "gpu_total_mib": 97887.0
+  }
+]

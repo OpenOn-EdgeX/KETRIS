@@ -1,0 +1,7 @@
+{
+  "complete": true,
+  "status": "complete_audited_five_repeats_per_arm",
+  "valid_holdouts": 15,
+  "invalid_runs": [],
+  "output": "/root/workspace/KETRIS/experiments/seven-workload-20261022/verification/.reanalysis-copy/interpretation.json"
+}

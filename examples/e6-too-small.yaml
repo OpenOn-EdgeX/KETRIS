@@ -1,0 +1,25 @@
+# E6 — 실패 예제: LSU 를 모델 메모리보다 작게 요청하면 어떻게 되나.
+# 2 LSU = 메모리 할당량 815MB. 2GB 를 할당하려 하면 그 시점에 거부된다(아래 산식 참조).
+# 최소 LSU = ceil(워크로드 최대 VRAM(MB) ÷ 407.86)
+apiVersion: v1
+kind: Pod
+metadata:
+  name: e6-too-small
+  namespace: prism-guide
+spec:
+  restartPolicy: Never
+  containers:
+    - name: work
+      image: prism-infer:opt
+      imagePullPolicy: IfNotPresent
+      command: ["python", "-u", "-c"]
+      args:
+        - |
+          import torch
+          x = torch.empty(int(2.1e9) // 4, device="cuda")   # ~2GB 할당 시도
+          print("할당 성공(이 줄이 나오면 쿼터 미집행)")
+      resources:
+        limits:
+          cpu: "2"
+          memory: 4Gi
+          keti.re.kr/lsu: "2"

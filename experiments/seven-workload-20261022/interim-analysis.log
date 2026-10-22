@@ -1,0 +1,199 @@
+{
+  "valid": false,
+  "errors": [],
+  "groups": {
+    "native": {
+      "run_count": 1,
+      "valid_count": 1,
+      "expected_repeats": 5,
+      "repeat_ids": [
+        1
+      ],
+      "complete": false,
+      "errors": [
+        "Expected 5 holdouts, found 1"
+      ],
+      "statistics_scope": "Valid holdouts only; incomplete groups cannot establish comparison",
+      "makespan_s": {
+        "n": 1,
+        "mean": 13.184710611,
+        "std": 0.0,
+        "min": 13.184710611,
+        "max": 13.184710611
+      },
+      "requests_per_s": {
+        "n": 1,
+        "mean": 4.247343885824784,
+        "std": 0.0,
+        "min": 4.247343885824784,
+        "max": 4.247343885824784
+      },
+      "output_tokens_per_s": {
+        "n": 1,
+        "mean": 339.7875108659827,
+        "std": 0.0,
+        "min": 339.7875108659827,
+        "max": 339.7875108659827
+      },
+      "workloadsets_per_s": {
+        "n": 1,
+        "mean": 0.07584542653258543,
+        "std": 0.0,
+        "min": 0.07584542653258543,
+        "max": 0.07584542653258543
+      },
+      "device_busy_utilization_pct": {
+        "n": 1,
+        "mean": 81.05372588965218,
+        "std": 0.0,
+        "min": 81.05372588965218,
+        "max": 81.05372588965218
+      },
+      "device_busy_coverage_pct": {
+        "n": 1,
+        "mean": 100.0,
+        "std": 0.0,
+        "min": 100.0,
+        "max": 100.0
+      }
+    },
+    "spatial": {
+      "run_count": 2,
+      "valid_count": 1,
+      "expected_repeats": 5,
+      "repeat_ids": [
+        1,
+        2
+      ],
+      "complete": false,
+      "errors": [
+        "Expected 5 holdouts, found 2",
+        "1 invalid run(s), retained in runs and CSV"
+      ],
+      "statistics_scope": "Valid holdouts only; incomplete groups cannot establish comparison",
+      "makespan_s": {
+        "n": 1,
+        "mean": 13.520291908,
+        "std": 0.0,
+        "min": 13.520291908,
+        "max": 13.520291908
+      },
+      "requests_per_s": {
+        "n": 1,
+        "mean": 4.141922406783586,
+        "std": 0.0,
+        "min": 4.141922406783586,
+        "max": 4.141922406783586
+      },
+      "output_tokens_per_s": {
+        "n": 1,
+        "mean": 331.35379254268685,
+        "std": 0.0,
+        "min": 331.35379254268685,
+        "max": 331.35379254268685
+      },
+      "workloadsets_per_s": {
+        "n": 1,
+        "mean": 0.07396290012113546,
+        "std": 0.0,
+        "min": 0.07396290012113546,
+        "max": 0.07396290012113546
+      },
+      "device_busy_utilization_pct": {
+        "n": 1,
+        "mean": 80.69502855441718,
+        "std": 0.0,
+        "min": 80.69502855441718,
+        "max": 80.69502855441718
+      },
+      "device_busy_coverage_pct": {
+        "n": 1,
+        "mean": 100.0,
+        "std": 0.0,
+        "min": 100.0,
+        "max": 100.0
+      }
+    },
+    "ketris": {
+      "run_count": 1,
+      "valid_count": 1,
+      "expected_repeats": 5,
+      "repeat_ids": [
+        1
+      ],
+      "complete": false,
+      "errors": [
+        "Expected 5 holdouts, found 1"
+      ],
+      "statistics_scope": "Valid holdouts only; incomplete groups cannot establish comparison",
+      "makespan_s": {
+        "n": 1,
+        "mean": 13.399077562,
+        "std": 0.0,
+        "min": 13.399077562,
+        "max": 13.399077562
+      },
+      "requests_per_s": {
+        "n": 1,
+        "mean": 4.179392181355595,
+        "std": 0.0,
+        "min": 4.179392181355595,
+        "max": 4.179392181355595
+      },
+      "output_tokens_per_s": {
+        "n": 1,
+        "mean": 334.35137450844763,
+        "std": 0.0,
+        "min": 334.35137450844763,
+        "max": 334.35137450844763
+      },
+      "workloadsets_per_s": {
+        "n": 1,
+        "mean": 0.07463200323849278,
+        "std": 0.0,
+        "min": 0.07463200323849278,
+        "max": 0.07463200323849278
+      },
+      "device_busy_utilization_pct": {
+        "n": 1,
+        "mean": 83.33805202704885,
+        "std": 0.0,
+        "min": 83.33805202704885,
+        "max": 83.33805202704885
+      },
+      "device_busy_coverage_pct": {
+        "n": 1,
+        "mean": 100.0,
+        "std": 0.0,
+        "min": 100.0,
+        "max": 100.0
+      }
+    }
+  },
+  "comparisons": {
+    "native_vs_ketris": {
+      "valid": false,
+      "baseline": "native",
+      "errors": [],
+      "baseline_mean_makespan_s": 13.184710611,
+      "ketris_mean_makespan_s": 13.399077562,
+      "index": null,
+      "time_reduction_pct": null,
+      "speedup": null,
+      "index_formula": "100 * mean(baseline actual makespan) / mean(KETRIS actual makespan)",
+      "time_reduction_formula": "100 * (1 - mean(KETRIS actual makespan) / mean(baseline actual makespan))"
+    },
+    "spatial_vs_ketris": {
+      "valid": false,
+      "baseline": "spatial",
+      "errors": [],
+      "baseline_mean_makespan_s": 13.520291908,
+      "ketris_mean_makespan_s": 13.399077562,
+      "index": null,
+      "time_reduction_pct": null,
+      "speedup": null,
+      "index_formula": "100 * mean(baseline actual makespan) / mean(KETRIS actual makespan)",
+      "time_reduction_formula": "100 * (1 - mean(KETRIS actual makespan) / mean(baseline actual makespan))"
+    }
+  }
+}

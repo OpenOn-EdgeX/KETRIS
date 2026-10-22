@@ -1,0 +1,207 @@
+total=3661941 kernels=247088 credit=0
+refill_last_sequence=0 accepted=0 rejected=0 active_cap_hits=0 granted_us=0 trimmed_us=0
+gate_count=0 gate_total_us=0 gate_max_us=0
+total=3661941 kernels=247088 credit=10000
+refill_last_sequence=1831973379929 accepted=1 rejected=0 active_cap_hits=0 granted_us=10000 trimmed_us=0
+gate_count=0 gate_total_us=0 gate_max_us=0
+total=3855994 kernels=258387 credit=22556
+refill_last_sequence=1832182565655 accepted=21 rejected=0 active_cap_hits=0 granted_us=216609 trimmed_us=0
+gate_count=1 gate_total_us=3874 gate_max_us=3874
+total=4056943 kernels=272710 credit=24241
+refill_last_sequence=1832385209407 accepted=40 rejected=0 active_cap_hits=0 granted_us=419243 trimmed_us=0
+gate_count=1 gate_total_us=3874 gate_max_us=3874
+total=4269263 kernels=287764 credit=20633
+refill_last_sequence=1832593930440 accepted=60 rejected=0 active_cap_hits=0 granted_us=627955 trimmed_us=0
+gate_count=1 gate_total_us=3874 gate_max_us=3874
+total=4465039 kernels=302808 credit=29819
+refill_last_sequence=1832798902625 accepted=80 rejected=0 active_cap_hits=0 granted_us=832917 trimmed_us=0
+gate_count=1 gate_total_us=3874 gate_max_us=3874
+total=4672415 kernels=317702 credit=26704
+refill_last_sequence=1833003174129 accepted=100 rejected=0 active_cap_hits=0 granted_us=1037178 trimmed_us=0
+gate_count=1 gate_total_us=3874 gate_max_us=3874
+total=4863787 kernels=332032 credit=40462
+refill_last_sequence=1833208313643 accepted=120 rejected=0 active_cap_hits=0 granted_us=1242308 trimmed_us=0
+gate_count=1 gate_total_us=3874 gate_max_us=3874
+total=5067806 kernels=347100 credit=43315
+refill_last_sequence=1833415196093 accepted=140 rejected=0 active_cap_hits=0 granted_us=1449180 trimmed_us=0
+gate_count=1 gate_total_us=3874 gate_max_us=3874
+total=5275649 kernels=361662 credit=40452
+refill_last_sequence=1833620187929 accepted=160 rejected=0 active_cap_hits=0 granted_us=1654160 trimmed_us=0
+gate_count=1 gate_total_us=3874 gate_max_us=3874
+total=5475648 kernels=375844 credit=40125
+refill_last_sequence=1833824968372 accepted=180 rejected=0 active_cap_hits=0 granted_us=1853832 trimmed_us=0
+gate_count=1 gate_total_us=3874 gate_max_us=3874
+total=5675501 kernels=391427 credit=44270
+refill_last_sequence=1834028974309 accepted=200 rejected=0 active_cap_hits=0 granted_us=2057830 trimmed_us=0
+gate_count=1 gate_total_us=3874 gate_max_us=3874
+total=5882163 kernels=407423 credit=41732
+refill_last_sequence=1834233109135 accepted=220 rejected=0 active_cap_hits=0 granted_us=2261954 trimmed_us=0
+gate_count=1 gate_total_us=3874 gate_max_us=3874
+total=6083236 kernels=424023 credit=46080
+refill_last_sequence=1834438539511 accepted=240 rejected=0 active_cap_hits=0 granted_us=2467375 trimmed_us=0
+gate_count=1 gate_total_us=3874 gate_max_us=3874
+total=6287392 kernels=440232 credit=46637
+refill_last_sequence=1834643260688 accepted=260 rejected=0 active_cap_hits=0 granted_us=2672088 trimmed_us=0
+gate_count=1 gate_total_us=3874 gate_max_us=3874
+total=6485875 kernels=456009 credit=52748
+refill_last_sequence=1834847863391 accepted=280 rejected=0 active_cap_hits=0 granted_us=2876682 trimmed_us=0
+gate_count=1 gate_total_us=3874 gate_max_us=3874
+total=6692519 kernels=472021 credit=50577
+refill_last_sequence=1835052344994 accepted=300 rejected=0 active_cap_hits=0 granted_us=3081155 trimmed_us=0
+gate_count=1 gate_total_us=3874 gate_max_us=3874
+total=6888314 kernels=487921 credit=59161
+refill_last_sequence=1835256732956 accepted=320 rejected=0 active_cap_hits=0 granted_us=3285534 trimmed_us=0
+gate_count=1 gate_total_us=3874 gate_max_us=3874
+total=7091182 kernels=502896 credit=55603
+refill_last_sequence=1835461169076 accepted=340 rejected=0 active_cap_hits=0 granted_us=3484844 trimmed_us=0
+gate_count=1 gate_total_us=3874 gate_max_us=3874
+total=7297026 kernels=518353 credit=57532
+refill_last_sequence=1835668953693 accepted=360 rejected=0 active_cap_hits=0 granted_us=3692617 trimmed_us=0
+gate_count=1 gate_total_us=3874 gate_max_us=3874
+total=7490679 kernels=534456 credit=68418
+refill_last_sequence=1835873502643 accepted=380 rejected=0 active_cap_hits=0 granted_us=3897156 trimmed_us=0
+gate_count=1 gate_total_us=3874 gate_max_us=3874
+total=7700449 kernels=550170 credit=62962
+refill_last_sequence=1836077829144 accepted=400 rejected=0 active_cap_hits=0 granted_us=4101470 trimmed_us=0
+gate_count=1 gate_total_us=3874 gate_max_us=3874
+total=7900217 kernels=566750 credit=67555
+refill_last_sequence=1836282199058 accepted=420 rejected=0 active_cap_hits=0 granted_us=4305831 trimmed_us=0
+gate_count=1 gate_total_us=3874 gate_max_us=3874
+total=8105389 kernels=583036 credit=68807
+refill_last_sequence=1836488631691 accepted=440 rejected=0 active_cap_hits=0 granted_us=4512255 trimmed_us=0
+gate_count=1 gate_total_us=3874 gate_max_us=3874
+total=8308348 kernels=598504 credit=71632
+refill_last_sequence=1836694426916 accepted=460 rejected=0 active_cap_hits=0 granted_us=4718039 trimmed_us=0
+gate_count=1 gate_total_us=3874 gate_max_us=3874
+total=8507712 kernels=614173 credit=76941
+refill_last_sequence=1836899108078 accepted=480 rejected=0 active_cap_hits=0 granted_us=4922712 trimmed_us=0
+gate_count=1 gate_total_us=3874 gate_max_us=3874
+total=8701531 kernels=628791 credit=82632
+refill_last_sequence=1837103774107 accepted=500 rejected=0 active_cap_hits=0 granted_us=5122222 trimmed_us=0
+gate_count=1 gate_total_us=3874 gate_max_us=3874
+total=8898510 kernels=643622 credit=90321
+refill_last_sequence=1837308452582 accepted=520 rejected=0 active_cap_hits=0 granted_us=5326890 trimmed_us=0
+gate_count=1 gate_total_us=3874 gate_max_us=3874
+total=9108992 kernels=658484 credit=84759
+refill_last_sequence=1837513382772 accepted=540 rejected=0 active_cap_hits=0 granted_us=5531810 trimmed_us=0
+gate_count=1 gate_total_us=3874 gate_max_us=3874
+total=9311882 kernels=673932 credit=86719
+refill_last_sequence=1837718244206 accepted=560 rejected=0 active_cap_hits=0 granted_us=5736660 trimmed_us=0
+gate_count=1 gate_total_us=3874 gate_max_us=3874
+total=9514585 kernels=689371 credit=89306
+refill_last_sequence=1837923543042 accepted=580 rejected=0 active_cap_hits=0 granted_us=5941950 trimmed_us=0
+gate_count=1 gate_total_us=3874 gate_max_us=3874
+total=9717782 kernels=704690 credit=90620
+refill_last_sequence=1838128063743 accepted=600 rejected=0 active_cap_hits=0 granted_us=6146461 trimmed_us=0
+gate_count=1 gate_total_us=3874 gate_max_us=3874
+total=9921232 kernels=720037 credit=91781
+refill_last_sequence=1838332685526 accepted=620 rejected=0 active_cap_hits=0 granted_us=6351072 trimmed_us=0
+gate_count=1 gate_total_us=3874 gate_max_us=3874
+total=10117670 kernels=735910 credit=100002
+refill_last_sequence=1838537352997 accepted=640 rejected=0 active_cap_hits=0 granted_us=6555731 trimmed_us=0
+gate_count=1 gate_total_us=3874 gate_max_us=3874
+total=10324072 kernels=751251 credit=99829
+refill_last_sequence=1838748703730 accepted=660 rejected=0 active_cap_hits=0 granted_us=6761960 trimmed_us=0
+gate_count=1 gate_total_us=3874 gate_max_us=3874
+total=10524660 kernels=766833 credit=103804
+refill_last_sequence=1838953274312 accepted=680 rejected=0 active_cap_hits=0 granted_us=6966523 trimmed_us=0
+gate_count=1 gate_total_us=3874 gate_max_us=3874
+total=10727879 kernels=782168 credit=104821
+refill_last_sequence=1839157521436 accepted=700 rejected=0 active_cap_hits=0 granted_us=7170759 trimmed_us=0
+gate_count=1 gate_total_us=3874 gate_max_us=3874
+total=10928445 kernels=797715 credit=108842
+refill_last_sequence=1839362115661 accepted=720 rejected=0 active_cap_hits=0 granted_us=7375346 trimmed_us=0
+gate_count=1 gate_total_us=3874 gate_max_us=3874
+total=11125766 kernels=813606 credit=115758
+refill_last_sequence=1839566362825 accepted=740 rejected=0 active_cap_hits=0 granted_us=7579583 trimmed_us=0
+gate_count=1 gate_total_us=3874 gate_max_us=3874
+total=11336046 kernels=829283 credit=109921
+refill_last_sequence=1839770815656 accepted=760 rejected=0 active_cap_hits=0 granted_us=7784026 trimmed_us=0
+gate_count=1 gate_total_us=3874 gate_max_us=3874
+total=11538849 kernels=845642 credit=112006
+refill_last_sequence=1839975715272 accepted=780 rejected=0 active_cap_hits=0 granted_us=7988914 trimmed_us=0
+gate_count=1 gate_total_us=3874 gate_max_us=3874
+total=11740238 kernels=862113 credit=114950
+refill_last_sequence=1840180058480 accepted=800 rejected=0 active_cap_hits=0 granted_us=8193247 trimmed_us=0
+gate_count=1 gate_total_us=3874 gate_max_us=3874
+total=11929740 kernels=877246 credit=125180
+refill_last_sequence=1840384912110 accepted=820 rejected=0 active_cap_hits=0 granted_us=8392979 trimmed_us=0
+gate_count=1 gate_total_us=3874 gate_max_us=3874
+total=12137178 kernels=892275 credit=122971
+refill_last_sequence=1840590152125 accepted=840 rejected=0 active_cap_hits=0 granted_us=8598208 trimmed_us=0
+gate_count=1 gate_total_us=3874 gate_max_us=3874
+total=12343163 kernels=907410 credit=121587
+refill_last_sequence=1840794760304 accepted=860 rejected=0 active_cap_hits=0 granted_us=8802809 trimmed_us=0
+gate_count=1 gate_total_us=3874 gate_max_us=3874
+total=12542686 kernels=923138 credit=127596
+refill_last_sequence=1841000299966 accepted=880 rejected=0 active_cap_hits=0 granted_us=9008341 trimmed_us=0
+gate_count=1 gate_total_us=3874 gate_max_us=3874
+total=12746503 kernels=938451 credit=128350
+refill_last_sequence=1841204882001 accepted=900 rejected=0 active_cap_hits=0 granted_us=9212912 trimmed_us=0
+gate_count=1 gate_total_us=3874 gate_max_us=3874
+total=12940802 kernels=954577 credit=138590
+refill_last_sequence=1841409430355 accepted=920 rejected=0 active_cap_hits=0 granted_us=9417451 trimmed_us=0
+gate_count=1 gate_total_us=3874 gate_max_us=3874
+total=13141952 kernels=969996 credit=142114
+refill_last_sequence=1841614114575 accepted=940 rejected=0 active_cap_hits=0 granted_us=9622125 trimmed_us=0
+gate_count=1 gate_total_us=3874 gate_max_us=3874
+total=13355145 kernels=985816 credit=136595
+refill_last_sequence=1841821798811 accepted=960 rejected=0 active_cap_hits=0 granted_us=9829799 trimmed_us=0
+gate_count=1 gate_total_us=3874 gate_max_us=3874
+total=13551780 kernels=1001194 credit=139920
+refill_last_sequence=1842026889961 accepted=980 rejected=0 active_cap_hits=0 granted_us=10029759 trimmed_us=0
+gate_count=1 gate_total_us=3874 gate_max_us=3874
+total=13757081 kernels=1017349 credit=138863
+refill_last_sequence=1842231146086 accepted=1000 rejected=0 active_cap_hits=0 granted_us=10234003 trimmed_us=0
+gate_count=1 gate_total_us=3874 gate_max_us=3874
+total=13951604 kernels=1033418 credit=148588
+refill_last_sequence=1842435404696 accepted=1020 rejected=0 active_cap_hits=0 granted_us=10438251 trimmed_us=0
+gate_count=1 gate_total_us=3874 gate_max_us=3874
+total=14156143 kernels=1049525 credit=148275
+refill_last_sequence=1842639639209 accepted=1040 rejected=0 active_cap_hits=0 granted_us=10642477 trimmed_us=0
+gate_count=1 gate_total_us=3874 gate_max_us=3874
+total=14355520 kernels=1065204 credit=153128
+refill_last_sequence=1842843876921 accepted=1060 rejected=0 active_cap_hits=0 granted_us=10846707 trimmed_us=0
+gate_count=1 gate_total_us=3874 gate_max_us=3874
+total=14563620 kernels=1081115 credit=149574
+refill_last_sequence=1843048434193 accepted=1080 rejected=0 active_cap_hits=0 granted_us=11051253 trimmed_us=0
+gate_count=1 gate_total_us=3874 gate_max_us=3874
+total=14756485 kernels=1096279 credit=161096
+refill_last_sequence=1843252831941 accepted=1100 rejected=0 active_cap_hits=0 granted_us=11255640 trimmed_us=0
+gate_count=1 gate_total_us=3874 gate_max_us=3874
+total=14962865 kernels=1111418 credit=159551
+refill_last_sequence=1843457677666 accepted=1120 rejected=0 active_cap_hits=0 granted_us=11460475 trimmed_us=0
+gate_count=1 gate_total_us=3874 gate_max_us=3874
+total=15162310 kernels=1126632 credit=159616
+refill_last_sequence=1843662335884 accepted=1140 rejected=0 active_cap_hits=0 granted_us=11659985 trimmed_us=0
+gate_count=1 gate_total_us=3874 gate_max_us=3874
+total=15360268 kernels=1142423 credit=165844
+refill_last_sequence=1843866528650 accepted=1160 rejected=0 active_cap_hits=0 granted_us=11864171 trimmed_us=0
+gate_count=1 gate_total_us=3874 gate_max_us=3874
+total=15562962 kernels=1157802 credit=167646
+refill_last_sequence=1844071033611 accepted=1180 rejected=0 active_cap_hits=0 granted_us=12068667 trimmed_us=0
+gate_count=1 gate_total_us=3874 gate_max_us=3874
+total=15759883 kernels=1173680 credit=175126
+refill_last_sequence=1844275444013 accepted=1200 rejected=0 active_cap_hits=0 granted_us=12273068 trimmed_us=0
+gate_count=1 gate_total_us=3874 gate_max_us=3874
+total=15967957 kernels=1190497 credit=171157
+refill_last_sequence=1844479559845 accepted=1220 rejected=0 active_cap_hits=0 granted_us=12477173 trimmed_us=0
+gate_count=1 gate_total_us=3874 gate_max_us=3874
+total=16175022 kernels=1206518 credit=168719
+refill_last_sequence=1844684198250 accepted=1240 rejected=0 active_cap_hits=0 granted_us=12681800 trimmed_us=0
+gate_count=1 gate_total_us=3874 gate_max_us=3874
+total=16376040 kernels=1222969 credit=171928
+refill_last_sequence=1844888435017 accepted=1260 rejected=0 active_cap_hits=0 granted_us=12886027 trimmed_us=0
+gate_count=1 gate_total_us=3874 gate_max_us=3874
+total=16534389 kernels=1235440 credit=0
+refill_last_sequence=1845092975771 accepted=1280 rejected=0 active_cap_hits=0 granted_us=13039489 trimmed_us=167041
+gate_count=1 gate_total_us=3874 gate_max_us=3874
+total=16534389 kernels=1235440 credit=0
+refill_last_sequence=1845296973727 accepted=1300 rejected=0 active_cap_hits=0 granted_us=13039489 trimmed_us=167041
+gate_count=1 gate_total_us=3874 gate_max_us=3874
+total=16534389 kernels=1235440 credit=0
+refill_last_sequence=1845501336094 accepted=1320 rejected=0 active_cap_hits=0 granted_us=13039489 trimmed_us=167041
+gate_count=1 gate_total_us=3874 gate_max_us=3874
+total=16534389 kernels=1235440 credit=0
+refill_last_sequence=1845583289849 accepted=1328 rejected=0 active_cap_hits=0 granted_us=13039489 trimmed_us=167041
+gate_count=1 gate_total_us=3874 gate_max_us=3874

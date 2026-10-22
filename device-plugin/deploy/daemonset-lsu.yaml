@@ -1,0 +1,357 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# KRAKEN Device Plugin — LSU+NPU DaemonSet (Exp_42 — 232 실환경 반영판)
+#
+# Exp_30 초안 → 실환경 갱신 내역:
+#   - nodeSelector: accelerator=nvidia-gpu(가공값) 제거 → kubernetes.io/hostname 로
+#     232 한정. 이유: nvidia.com/gpu.present=true 는 230(control-plane, HAMi 관할)
+#     에도 붙어 있어 DS 가 확산됨 — 공유 클러스터 제약(HAMi 공존) 위반.
+#     gpu.management=keti 라벨은 실존하지 않음 (Exp_42 Phase 0 확인)
+#   - tolerations: blanket NoSchedule 유지 (현재 232 taint 0개 — KubeEdge 전환 때
+#     소거됨. broken/dedicated 개별 항목 불필요)
+#   - controller 를 같은 파드의 사이드카로 (구조 판단: SHM(/dev/shm)·socks 를
+#     hostPath 로 공유하고 127.0.0.1:8090 로컬 통신 — 별도 DS 로 쪼갤 이유 없음.
+#     현행 호스트 배치(별도 프로세스)와 동등, 생명주기만 파드로 묶임)
+#   - SHM v2: 두 컨테이너 모두 host /dev/shm 공유. controller 엔트리포인트가
+#     구 v1(PRSM) SHM 감지 시 명시 제거 후 재생성 (Exp_41 설계)
+#   - libbless/gating_lib: 이미지에 포함(232 현지 재빌드본), plugin 엔트리포인트가
+#     hostPath /var/lib/kraken/lib/ 으로 복사 — Allocate 의 hostPath 주입 대상
+#   - kubeconfig: 미지정 → InClusterConfig (ServiceAccount RBAC).
+#     NODE_NAME env 로 자기 노드 한정 (표준 kubelet 전환 후 필수 — Exp_33)
+#   - profiler(7070) 는 이 DS 에 없음 — resource-pool-manager 와 포트 충돌 없음.
+#     controller 는 8090 (hostNetwork — 호스트 점유 확인 완료)
+#   - image: 로컬 import (ctr -n k8s.io images import) + IfNotPresent
+#     (Docker Hub push 는 내부 바이너리 공개 리스크로 배제 — Exp_42 Phase 0 결정)
+# ─────────────────────────────────────────────────────────────────────────────
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: ketris-device-plugin-lsu
+  namespace: kube-system
+  labels:
+    app: ketris-device-plugin-lsu
+spec:
+  selector:
+    matchLabels:
+      app: ketris-device-plugin-lsu
+  updateStrategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: ketris-device-plugin-lsu
+    spec:
+      serviceAccountName: ketris-device-plugin-lsu
+      hostNetwork: true
+      priorityClassName: system-node-critical
+      tolerations:
+        - operator: Exists
+          effect: NoSchedule
+      nodeSelector:
+        kubernetes.io/hostname: gpu-npu-server-02
+      # [Exp_122 4부] furiosa-smi ps 는 **호스트 PID 네임스페이스가 있어야** 점유를 본다.
+      #   실측: hostPID 없이 컨테이너에서 실행하면 호스트가 4PE 를 점유 중인데도
+      #   빈 표를 돌려준다(오탐 아님 — 드라이버가 보이는 프로세스만 보고한다).
+      #   이것 없이는 4부의 외부 점유 반영이 성립하지 않는다.
+      hostPID: true
+
+      containers:
+        # ── ① device plugin (LSU + NPU + libbless 주입) ─────────────────────
+        - name: plugin
+          image: ketris-device-plugin:exp158
+          imagePullPolicy: IfNotPresent
+          args:
+            - --lsu
+            # Exp_70: Warboy(--npu) 광고 제거(RNGD 교체 방침) → RNGD PE 광고로 대체.
+            # keti.re.kr/npu-pe = 8, 정렬 블록 {1,2,4,8} 은 Allocate 가 강제.
+            - --rngd
+            - --controller-url=http://127.0.0.1:8090
+            - --catalog=/etc/kraken/catalog.json
+            - --bless-so=/var/lib/kraken/lib/libbless.so
+            - --bless-sock-dir=/var/lib/kraken/socks
+            # Exp_71 Part B: MPS 위임 모드 — 제거하면 Part B 롤백 (ROLLBACK.md)
+            - --mps-pipe-dir=/tmp/nvidia-mps
+            # [Exp_140 1-B] tracer 경로 — 라이브 DS 와 정합(Exp_139에서 레포 yaml에
+            #   없던 것을 승계). 경로 지정 = 준비물일 뿐이고, 주입 여부는 아래
+            #   KRAKEN_TRACER 가 정한다(기본 꺼짐, Exp_140 1-C).
+            - --tracer-so=/var/lib/kraken/lib/kernel_tracer.so
+            - --cupti-dir=/usr/local/cuda-12.9/extras/CUPTI/lib64
+            # [Exp_144 4부] 빠른 해지 — **기본 켜짐**. 경로는 entrypoint place()
+            #   가 반드시 놓는 자리. 끄기는 아래 KRAKEN_FAST_TEARDOWN=0.
+            - --fast-teardown-dir=/var/lib/kraken/py
+          env:
+            # [Exp_144 4부] 빠른 해지 스위치 — 코드 기본(켜짐)과 일치시킨 "1".
+            #   해지 22.95% 단축(n=100·지터, 목표 10%)·파일 유실 해소(레지스트리
+            #   flush 0.1ms). 파드 단위 opt-out 불가 — Allocate 는 파드 정체를
+            #   모른다(tracer와 같은 한계). 노드 단위로 끄려면 이 값을 "0".
+            - name: KRAKEN_FAST_TEARDOWN
+              value: "1"
+            # [Exp_140 1-C] CUPTI tracer 주입 스위치 — 기본 꺼짐. 코드 기본값과
+            #   일치("0"). 켜면 이 노드의 **모든** GPU Allocate 에 주입된다
+            #   (파드 단위 불가 — Allocate 는 파드 정체를 모른다).
+            - name: KRAKEN_TRACER
+              value: "0"
+            # [Exp_134] 종료 감지 스위치 — controller 와 **같은 값**을 쓴다.
+            #   plugin 은 이 값으로 (ㄱ) Allocate 시 Booster 자동 등록,
+            #   (ㄴ) 이벤트 생산자(term_online) 기동을 결정한다. 기본 꺼짐.
+            - name: KRAKEN_BOOSTER
+              value: "0"
+            # [Exp_138 2-E] Deep Scanner 관측 연결 — 기본 꺼짐(opt-in).
+            #   꺼지면 obs_class 를 읽지 않아 기존 동작과 한 비트도 다르지 않다.
+            - name: KRAKEN_SCANNER_LINK
+              value: "0"
+            - name: NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+          securityContext:
+            privileged: true
+          volumeMounts:
+            - name: device-plugin
+              mountPath: /var/lib/kubelet/device-plugins
+            - name: host-dev
+              mountPath: /dev
+            - name: kraken-state
+              mountPath: /var/lib/kraken
+            - name: nvidia-smi
+              mountPath: /usr/bin/nvidia-smi
+              readOnly: true
+            - name: libnvidia-ml
+              mountPath: /usr/lib/x86_64-linux-gnu/libnvidia-ml.so.1
+              readOnly: true
+            # [Exp_122 4부] 가용 PE 동적 노출 — 점유 확인은 furiosa-smi ps 로만 한다.
+            #   nvidia-smi 와 같은 방식(호스트 바이너리 + 전용 .so 주입).
+            #   ★없으면 플러그인이 조용히 '유휴' 로 넘어가지 않고 경고한다(T-5).
+            - name: furiosa-smi
+              mountPath: /usr/bin/furiosa-smi
+              readOnly: true
+            - name: libfuriosa-smi
+              mountPath: /usr/lib/x86_64-linux-gnu/libfuriosa_smi.so
+              readOnly: true
+            - name: lsu-catalog
+              mountPath: /etc/kraken
+              readOnly: true
+            # [Exp_131] CUPTI 주입 대상 검증용 — 플러그인이 기동 시
+            #   libcupti.so.12 존재를 확인한다(--tracer-so/--cupti-dir 지정 시).
+            #   마운트만으로는 주입이 켜지지 않는다(기본 꺼짐).
+            - name: cupti-lib
+              mountPath: /usr/local/cuda-12.9/extras/CUPTI/lib64
+              readOnly: true
+
+        # ── ② controller (SHM v2, 사이드카) ─────────────────────────────────
+        - name: controller
+          image: ketris-device-plugin:exp158
+          imagePullPolicy: IfNotPresent
+          command: ["/opt/kraken/entrypoint-controller.sh"]
+          env:
+            - name: KRAKEN_GROUP
+              value: default
+            # 컨테이너에 nvidia-smi 없음 → 물리 스펙 명시 (232 Pro6000 실측:
+            # SM=188, mem=97887MB — Exp_42 Phase 0 /status 스냅샷 값)
+            - name: KRAKEN_CONTROLLER_ARGS
+              value: "--no-mps --sm 188 --mem 97887"
+            # ★[Exp_137] 제어 계층 스위치를 **매니페스트에 박는다.**
+            #   지금까지 라이브에 kubectl patch 로만 얹혀 있었다. apply 가 지우지는
+            #   않지만(strategic merge), **클러스터를 재구축하면 사라진다** — 재현
+            #   가능한 정본이 실제 상태와 달랐다.
+            - name: KRAKEN_REDIST
+              value: "0"          # 유휴 몫 재분배 (Exp_121) — 기본 꺼짐
+            # [Exp_158] 시간축 WC 시제 — 기본 꺼짐(코드 기본과 일치). 켜면 feeder 가
+            #   armed 테넌트에 peer_idle 신호를 push 하고, BLESS_TIME_WC=1 파드가
+            #   편승 통과(분리 회계). 시제 단계 — 라이브 상시 아님.
+            - name: KRAKEN_TIME_WC
+              value: "0"
+            - name: KRAKEN_BOOSTER
+              value: "0"          # 종료 감지 (Exp_134) — 기본 꺼짐. plugin 과 같은 값
+            # [Exp_137 4-B] 제어 적용 여부 탐지 — **기본 켜짐으로 바꿨다.**
+            #   로그만 내고 배치를 막지 않으며, webhook 이 못 미치는 경로
+            #   (valueFrom, webhook 장애, 네임스페이스 누락)를 보는 유일한 수단이다.
+            # [Exp_138 2-B 5] ControlModeSwitched 이벤트의 involvedObject 이름.
+            - name: KRAKEN_NODE_NAME
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: spec.nodeName
+            - name: KRAKEN_CTLCHECK
+              value: "1"
+          volumeMounts:
+            - name: host-shm
+              mountPath: /dev/shm
+            - name: kraken-state
+              mountPath: /var/lib/kraken
+            # [Exp_107 T-1] controller 도 catalog 를 읽어야 /capacity 가 factor 를 반영한다.
+            #   미마운트 시 _capacity_response() 가 178/1.0 으로 조용히 폴백했다(Exp_106 N-2).
+            #   ★plugin 과 **같은 ConfigMap(ketris-lsu-catalog)·같은 경로(/etc/kraken)** 를 본다.
+            - name: lsu-catalog
+              mountPath: /etc/kraken
+              readOnly: true
+
+        # ── ③ feedback (④ 간섭 제어 상주 — Exp_151 4-A) ────────────────────
+        #   기본 = 관측 전용(KRAKEN_FEEDBACK=0): 판정·/healthz(:18081)·유지율
+        #   보고만 하고 actuate 하지 않는다. 6부 판정 — G1(Exp_89 재현)이 현
+        #   배율 1.35(Σ최대 1.348)에서 성립하지 않아 개입 활성의 근거가 없다.
+        #   개입은 KRAKEN_FEEDBACK=1 로 opt-in(k=1.7, Exp_89 유래).
+        #   죽거나 재기동해도 안전: 몫 적용은 임대(Exp_141)라 3초 내 계약 복귀,
+        #   재기동은 기준선을 새로 잡는다(G4 실측 2.57s·BASE_LOCK 신규).
+        - name: feedback
+          image: ketris-device-plugin:exp158
+          imagePullPolicy: IfNotPresent
+          command: ["/opt/kraken/entrypoint-feedback.sh"]
+          env:
+            - name: KRAKEN_FEEDBACK
+              value: "0"
+          volumeMounts:
+            - name: kraken-state
+              mountPath: /var/lib/kraken
+            - name: kraken-sync
+              mountPath: /root/kraken-sync
+
+        # ── ④' advertiser (원격 풀 광고·리스·회수 — Exp_153 2부 상주) ──────
+        #   CR 대기 루프: RemotePool CR 이 없으면 기다리고(부하: API 직호출로
+        #   kubectl 26% → 측정치 report), 생기면 광고·리스·회수를 돈다.
+        #   "CR 만 올리면 붙는다" — 수동 기동(Exp_152 S1) 제거.
+        #   KRAKEN_ADVERTISER=0 이면 대기만 하고 아무 것도 안 한다(스위치).
+        - name: advertiser
+          image: ketris-device-plugin:exp158
+          imagePullPolicy: IfNotPresent
+          command: ["/opt/kraken/entrypoint-advertiser.sh"]
+          env:
+            - name: KRAKEN_ADVERTISER
+              value: "1"
+            - name: LOG
+              value: /var/lib/kraken/lease.log
+          volumeMounts:
+            - name: kraken-state
+              mountPath: /var/lib/kraken
+
+      volumes:
+        - name: device-plugin
+          hostPath:
+            path: /var/lib/kubelet/device-plugins
+        - name: host-dev
+          hostPath:
+            path: /dev
+        - name: host-shm
+          hostPath:
+            path: /dev/shm
+        # libbless.so / gating_lib.so / socks — Allocate hostPath 주입의 실체 경로
+        - name: kraken-state
+          hostPath:
+            path: /var/lib/kraken
+            type: DirectoryOrCreate
+        # [Exp_151] ④ 상주의 obs 신호 디렉터리(하네스 워커가 쓴다)
+        - name: kraken-sync
+          hostPath:
+            path: /root/kraken-sync
+            type: DirectoryOrCreate
+        - name: nvidia-smi
+          hostPath:
+            path: /usr/bin/nvidia-smi
+            type: File
+        - name: libnvidia-ml
+          hostPath:
+            path: /usr/lib/x86_64-linux-gnu/libnvidia-ml.so.1
+            type: File
+        - name: furiosa-smi
+          hostPath:
+            path: /usr/bin/furiosa-smi
+            type: File
+        - name: libfuriosa-smi
+          hostPath:
+            path: /usr/lib/x86_64-linux-gnu/libfuriosa_smi.so
+            type: File
+        - name: cupti-lib
+          hostPath:
+            path: /usr/local/cuda-12.9/extras/CUPTI/lib64
+            type: Directory
+        - name: lsu-catalog
+          configMap:
+            name: ketris-lsu-catalog
+
+---
+# LSU 카탈로그 ConfigMap — 정본은 repo `lsu/catalog.json` (benchmark.py 가 갱신).
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ketris-lsu-catalog
+  namespace: kube-system
+data:
+  catalog.json: |
+    {
+      "_comment": "LSU(Logical Slice Unit) 카탈로그 — device 모델명 → LSU 환산값. device-plugin/controller가 K8s 노출 기준으로 소비. lsu/benchmark.py 실측으로 갱신.",
+      "reference_workload": "resnet50_inference_fp16",
+      "unit_img_per_s": 42.16,
+      "unit_source": "calibrated: NVIDIA RTX A6000 = 65 LSU @ 2740.7 img/s (2026-06-18 실측)",
+      "status": "provisional — 기관 기술회의 확정 전",
+      "devices": {
+        "NVIDIA RTX A6000": { "lsu": 65, "throughput_img_s": 2740.7, "measured": true },
+        "NVIDIA RTX PRO 6000 Blackwell Server Edition": { "lsu": 178, "throughput_img_s": 7513.5, "measured": true, "note": "2026-07-16 실측 @232(gpu-npu-server-02), 3회(7422/7534/7514 img/s, 편차~1.5%), 대표값=500iter run" },
+        "NVIDIA A100": { "lsu": 100, "throughput_img_s": null, "measured": false, "note": "PROJECT_CONTEXT 잠정 예시값, 미실측" },
+        "Furiosa Warboy": { "lsu": 18, "throughput_img_s": null, "measured": false, "note": "NPU, 미실측" }
+      },
+      "default_lsu": 50,
+      "overcommit_factor": 1.35
+    }
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: ketris-device-plugin-lsu
+  namespace: kube-system
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: ketris-device-plugin-lsu
+rules:
+  # (pods 규칙은 아래 Exp_153 블록에 delete 포함으로 통합)
+  # [Exp_126 1-B] libbless 는 통계를 feed.log 와 stderr 두 곳에 낸다. stderr 에만
+  #   있는 값(mem/ctx/queue/syscall/sm)은 컨테이너 안이라 지금까지 못 읽었다(Exp_125).
+  #   컨테이너 런타임이 stderr 을 잡으므로 **K8s 로그 API로 읽으면 libbless 를
+  #   고치지 않고 확보된다.** get 만 준다 — 로그는 읽기 전용이고 list/watch 는 불요.
+  - apiGroups: [""]
+    resources: ["pods/log"]
+    verbs: ["get"]
+  - apiGroups: [""]
+    resources: ["nodes"]
+    verbs: ["get", "list", "patch"]
+  # [Exp_140 3부] K8s Event 발행 — ControlModeSwitched(Exp_138 신설)와
+  #   SliceCreated/SliceDestroyed(Exp_140)가 mode_event.py 로 API 직접 POST 한다.
+  #   ★Exp_140 부수 발견: 이 권한이 지금까지 없어서 기존 ControlModeSwitched
+  #     발행도 라이브에서는 403 이었다(경로만 있고 권한이 없었다).
+  #   create 만 — 중복은 결정적 이름(kraken-slice-*-<podUID>)의 409 로 걸러진다.
+  - apiGroups: [""]
+    resources: ["events"]
+    verbs: ["create"]
+  # [Exp_140 2부] /metrics 의 원격 풀 계열(kraken_remote_*) — controller 가
+  #   RemotePool CR 을 SA 토큰으로 읽는다(스텁은 호스트 kubectl 이었음). 읽기 전용.
+  # [Exp_153 2부] advertiser 사이드카 — status 갱신까지 필요해 patch 추가.
+  - apiGroups: ["keti.re.kr"]
+    resources: ["remotepools"]
+    verbs: ["get", "list", "patch"]
+  - apiGroups: ["keti.re.kr"]
+    resources: ["remotepools/status"]
+    verbs: ["patch"]
+  # [Exp_153 2부] advertiser 의 remote-lsu 광고(노드 status 확장 자원)와
+  #   회수 유예 초과 시 lease 파드 강제 드레인.
+  - apiGroups: [""]
+    resources: ["nodes/status"]
+    verbs: ["patch"]
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["get", "list", "watch", "delete"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: ketris-device-plugin-lsu
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: ketris-device-plugin-lsu
+subjects:
+  - kind: ServiceAccount
+    name: ketris-device-plugin-lsu
+    namespace: kube-system

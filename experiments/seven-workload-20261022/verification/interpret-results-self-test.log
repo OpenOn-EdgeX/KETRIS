@@ -1,0 +1,9 @@
+test_busy_uses_duration_weights_and_reports_missing_coverage (__main__.self_test.<locals>.InterpretationTests.test_busy_uses_duration_weights_and_reports_missing_coverage) ... ok
+test_five_paired_differences_and_incomplete_suppression (__main__.self_test.<locals>.InterpretationTests.test_five_paired_differences_and_incomplete_suppression) ... ok
+test_terminal_counter_mismatch_is_rejected (__main__.self_test.<locals>.InterpretationTests.test_terminal_counter_mismatch_is_rejected) ... ok
+test_warmup_exclusion_delta_and_uncertain_gate_times (__main__.self_test.<locals>.InterpretationTests.test_warmup_exclusion_delta_and_uncertain_gate_times) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.001s
+
+OK

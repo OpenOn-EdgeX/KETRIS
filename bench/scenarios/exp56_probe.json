@@ -1,0 +1,252 @@
+{
+  "_comment": "Exp_56 Phase1 프로브 — fill/density 확보용 단독 실행(무-MPS)",
+  "defaults": {
+    "duration": 12,
+    "reps": 1
+  },
+  "runs": [
+    {
+      "tag": "p_resnet18",
+      "policy": "none",
+      "members": [
+        {
+          "name": "A",
+          "role": "tvmodel",
+          "batch": 32,
+          "r": 1.0,
+          "cls": "C",
+          "env": {
+            "TV_MODEL": "resnet18"
+          }
+        }
+      ]
+    },
+    {
+      "tag": "p_resnet34",
+      "policy": "none",
+      "members": [
+        {
+          "name": "A",
+          "role": "tvmodel",
+          "batch": 32,
+          "r": 1.0,
+          "cls": "C",
+          "env": {
+            "TV_MODEL": "resnet34"
+          }
+        }
+      ]
+    },
+    {
+      "tag": "p_wide_resnet50_2",
+      "policy": "none",
+      "members": [
+        {
+          "name": "A",
+          "role": "tvmodel",
+          "batch": 32,
+          "r": 1.0,
+          "cls": "C",
+          "env": {
+            "TV_MODEL": "wide_resnet50_2"
+          }
+        }
+      ]
+    },
+    {
+      "tag": "p_densenet121",
+      "policy": "none",
+      "members": [
+        {
+          "name": "A",
+          "role": "tvmodel",
+          "batch": 32,
+          "r": 1.0,
+          "cls": "C",
+          "env": {
+            "TV_MODEL": "densenet121"
+          }
+        }
+      ]
+    },
+    {
+      "tag": "p_inception_v3",
+      "policy": "none",
+      "members": [
+        {
+          "name": "A",
+          "role": "tvmodel",
+          "batch": 32,
+          "r": 1.0,
+          "cls": "C",
+          "env": {
+            "TV_MODEL": "inception_v3"
+          }
+        }
+      ]
+    },
+    {
+      "tag": "p_efficientnet_b0",
+      "policy": "none",
+      "members": [
+        {
+          "name": "A",
+          "role": "tvmodel",
+          "batch": 32,
+          "r": 1.0,
+          "cls": "C",
+          "env": {
+            "TV_MODEL": "efficientnet_b0"
+          }
+        }
+      ]
+    },
+    {
+      "tag": "p_efficientnet_b3",
+      "policy": "none",
+      "members": [
+        {
+          "name": "A",
+          "role": "tvmodel",
+          "batch": 32,
+          "r": 1.0,
+          "cls": "C",
+          "env": {
+            "TV_MODEL": "efficientnet_b3"
+          }
+        }
+      ]
+    },
+    {
+      "tag": "p_shufflenet_v2_x1_0",
+      "policy": "none",
+      "members": [
+        {
+          "name": "A",
+          "role": "tvmodel",
+          "batch": 32,
+          "r": 1.0,
+          "cls": "C",
+          "env": {
+            "TV_MODEL": "shufflenet_v2_x1_0"
+          }
+        }
+      ]
+    },
+    {
+      "tag": "p_squeezenet1_1",
+      "policy": "none",
+      "members": [
+        {
+          "name": "A",
+          "role": "tvmodel",
+          "batch": 32,
+          "r": 1.0,
+          "cls": "C",
+          "env": {
+            "TV_MODEL": "squeezenet1_1"
+          }
+        }
+      ]
+    },
+    {
+      "tag": "p_mnasnet1_0",
+      "policy": "none",
+      "members": [
+        {
+          "name": "A",
+          "role": "tvmodel",
+          "batch": 32,
+          "r": 1.0,
+          "cls": "C",
+          "env": {
+            "TV_MODEL": "mnasnet1_0"
+          }
+        }
+      ]
+    },
+    {
+      "tag": "p_convnext_tiny",
+      "policy": "none",
+      "members": [
+        {
+          "name": "A",
+          "role": "tvmodel",
+          "batch": 32,
+          "r": 1.0,
+          "cls": "C",
+          "env": {
+            "TV_MODEL": "convnext_tiny"
+          }
+        }
+      ]
+    },
+    {
+      "tag": "p_regnet_y_400mf",
+      "policy": "none",
+      "members": [
+        {
+          "name": "A",
+          "role": "tvmodel",
+          "batch": 32,
+          "r": 1.0,
+          "cls": "C",
+          "env": {
+            "TV_MODEL": "regnet_y_400mf"
+          }
+        }
+      ]
+    },
+    {
+      "tag": "p_vit_base_patch16_224",
+      "policy": "none",
+      "members": [
+        {
+          "name": "A",
+          "role": "hfmodel",
+          "batch": 32,
+          "r": 1.0,
+          "cls": "C",
+          "env": {
+            "HF_MODEL": "google/vit-base-patch16-224",
+            "HF_KIND": "vision"
+          }
+        }
+      ]
+    },
+    {
+      "tag": "p_distilbert_base_uncased",
+      "policy": "none",
+      "members": [
+        {
+          "name": "A",
+          "role": "hfmodel",
+          "batch": 32,
+          "r": 1.0,
+          "cls": "C",
+          "env": {
+            "HF_MODEL": "distilbert-base-uncased",
+            "HF_KIND": "text"
+          }
+        }
+      ]
+    },
+    {
+      "tag": "p_roberta_base",
+      "policy": "none",
+      "members": [
+        {
+          "name": "A",
+          "role": "hfmodel",
+          "batch": 32,
+          "r": 1.0,
+          "cls": "C",
+          "env": {
+            "HF_MODEL": "roberta-base",
+            "HF_KIND": "text"
+          }
+        }
+      ]
+    }
+  ]
+}

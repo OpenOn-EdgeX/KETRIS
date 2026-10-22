@@ -1,0 +1,32 @@
+# E2 — annotation 으로 역할(workload-class)과 우선순위(priority)를 선언한다.
+# ★priority 는 workload-class(또는 pipeline-stage)와 함께 달아야 적용된다 — 단독으로는 무효.
+apiVersion: v1
+kind: Pod
+metadata:
+  name: e2-annotations
+  namespace: prism-guide
+  annotations:
+    kraken.keti.re.kr/workload-class: "compute"   # compute=줄여도 되는 작업 | memory=응답시간 지켜줄 작업
+    kraken.keti.re.kr/priority: "high"            # high | med | low
+spec:
+  restartPolicy: Never
+  containers:
+    - name: work
+      image: prism-infer:opt
+      imagePullPolicy: IfNotPresent
+      command: ["python", "-u", "-c"]
+      args:
+        - |
+          import torch, time
+          a = torch.randn(4096, 4096, device="cuda")
+          torch.cuda.synchronize()
+          t0 = time.time(); n = 0
+          while time.time() - t0 < 60:
+              (a @ a).sum().item(); n += 1
+          dt = time.time() - t0
+          print(f"iters={n} dur={dt:.1f}s rate={n/dt:.2f} it/s")
+      resources:
+        limits:
+          cpu: "4"
+          memory: 8Gi
+          keti.re.kr/lsu: "60"

@@ -1,0 +1,138 @@
+{
+ "schema_version": "1.0",
+ "note": "RNGD 공식 아티팩트의 tensor_parallel_size. Exp_123 1부 전수 조사. tp 를 확인하지 못한 모델은 등재하지 않는다 — 없으면 판정 보류(경고)다.",
+ "generated_from": [
+  "fxb show 매니페스트",
+  "artifact.json"
+ ],
+ "models": {
+  "furiosa-ai/DeepSeek-R1-Distill-Llama-70B": {
+   "tp": 32,
+   "src": "artifact.json"
+  },
+  "furiosa-ai/DeepSeek-R1-Distill-Llama-8B": {
+   "tp": 8,
+   "src": "artifact.json"
+  },
+  "furiosa-ai/DeepSeek-R1-Distill-Qwen-14B": {
+   "tp": 8,
+   "src": "artifact.json"
+  },
+  "furiosa-ai/DeepSeek-R1-Distill-Qwen-32B": {
+   "tp": 8,
+   "src": "artifact.json"
+  },
+  "furiosa-ai/DeepSeek-R1-Distill-Qwen-7B": {
+   "tp": 8,
+   "src": "artifact.json"
+  },
+  "furiosa-ai/EXAONE-3.5-32B-Instruct": {
+   "tp": 32,
+   "src": "artifact.json"
+  },
+  "furiosa-ai/EXAONE-3.5-7.8B-Instruct": {
+   "tp": 8,
+   "src": "artifact.json"
+  },
+  "furiosa-ai/Llama-3.1-8B-Instruct": {
+   "tp": 8,
+   "src": "artifact.json"
+  },
+  "furiosa-ai/Llama-3.1-8B-Instruct-FP8": {
+   "tp": 8,
+   "src": "artifact.json"
+  },
+  "furiosa-ai/Llama-3.3-70B-Instruct": {
+   "tp": 32,
+   "src": "artifact.json"
+  },
+  "furiosa-ai/Llama-3.3-70B-Instruct-INT8": {
+   "tp": 32,
+   "src": "artifact.json"
+  },
+  "furiosa-ai/QwQ-32B": {
+   "tp": 8,
+   "src": "artifact.json"
+  },
+  "furiosa-ai/Qwen2.5-0.5B-Instruct": {
+   "tp": 4,
+   "src": "artifact.json"
+  },
+  "furiosa-ai/Qwen2.5-14B-Instruct": {
+   "tp": 8,
+   "src": "artifact.json"
+  },
+  "furiosa-ai/Qwen2.5-32B-Instruct": {
+   "tp": 8,
+   "src": "artifact.json"
+  },
+  "furiosa-ai/Qwen2.5-7B-Instruct": {
+   "tp": 8,
+   "src": "artifact.json"
+  },
+  "furiosa-ai/Qwen2.5-Coder-14B-Instruct": {
+   "tp": 8,
+   "src": "artifact.json"
+  },
+  "furiosa-ai/Qwen2.5-Coder-32B-Instruct": {
+   "tp": 8,
+   "src": "artifact.json"
+  },
+  "furiosa-ai/Qwen2.5-Coder-7B-Instruct": {
+   "tp": 8,
+   "src": "artifact.json"
+  },
+  "furiosa-ai/Qwen3-30B-A3B-FP8": {
+   "tp": 16,
+   "src": "Exp_122 확인분"
+  },
+  "furiosa-ai/Qwen3-4B-FP8": {
+   "tp": 8,
+   "src": "Exp_122 확인분"
+  },
+  "furiosa-ai/Qwen3-Embedding-0.6B": {
+   "tp": 8,
+   "src": "Exp_122 확인분"
+  },
+  "furiosa-ai/Qwen3-Embedding-4B": {
+   "tp": 8,
+   "src": "Exp_122 확인분"
+  },
+  "furiosa-ai/Qwen3-Embedding-8B": {
+   "tp": 8,
+   "src": "fxb show"
+  },
+  "furiosa-ai/Qwen3-Reranker-0.6B": {
+   "tp": 8,
+   "src": "Exp_122 확인분"
+  },
+  "furiosa-ai/Qwen3-Reranker-4B": {
+   "tp": 8,
+   "src": "Exp_122 확인분"
+  },
+  "furiosa-ai/Qwen3-Reranker-8B": {
+   "tp": 8,
+   "src": "fxb show"
+  },
+  "furiosa-ai/Qwen3-VL-2B-Instruct": {
+   "tp": 8,
+   "src": "Exp_122 확인분"
+  },
+  "furiosa-ai/bge-m3": {
+   "tp": 8,
+   "src": "Exp_122 확인분"
+  },
+  "furiosa-ai/bge-reranker-v2-m3": {
+   "tp": 8,
+   "src": "fxb show"
+  },
+  "furiosa-ai/e5-mistral-7b-instruct": {
+   "tp": 8,
+   "src": "fxb show"
+  },
+  "furiosa-ai/harrier-oss-v1-0.6b": {
+   "tp": 8,
+   "src": "Exp_122 확인분"
+  }
+ }
+}

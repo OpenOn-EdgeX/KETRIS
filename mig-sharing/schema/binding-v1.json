@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KETRIS allocation binding v1",
+  "type": "object",
+  "required": ["schema_version", "allocation_id", "node", "gpu_uuid", "mig_uuid", "generation", "resource_name", "device_ids", "space_percent", "control_dir", "phase"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "allocation_id": {"type": "string", "minLength": 1},
+    "node": {"type": "string", "minLength": 1},
+    "gpu_uuid": {"type": "string", "pattern": "^GPU-"},
+    "mig_uuid": {"type": "string", "pattern": "^MIG-"},
+    "generation": {"type": "string", "minLength": 1},
+    "resource_name": {"type": "string", "pattern": "^keti\\.re\\.kr/mig-[0-9a-f]{16}-share$"},
+    "device_ids": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}},
+    "space_percent": {"type": "integer", "minimum": 1, "maximum": 100},
+    "control_dir": {"type": "string"},
+    "time_weight": {"type": ["integer", "null"], "minimum": 1, "maximum": 1000},
+    "pod_uid": {"type": ["string", "null"]},
+    "container": {"type": ["string", "null"]},
+    "container_id": {"type": ["string", "null"]},
+    "phase": {"enum": ["allocated", "bound", "armed", "completed", "failed"]},
+    "updated_at": {"type": "string"}
+  },
+  "additionalProperties": false
+}

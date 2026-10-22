@@ -1,0 +1,235 @@
+{
+  "_comment": "Exp_52 축약판 (232 Pro6000) — 230 대조 필수 포인트: 150% 피크, 동종-M 무반응(100/150), 198% 후퇴(relaxed)",
+  "defaults": {
+    "duration": 15,
+    "reps": 3
+  },
+  "runs": [
+    {
+      "tag": "solo_prefill",
+      "policy": "none",
+      "members": [
+        {
+          "name": "A",
+          "role": "prefill",
+          "batch": 1,
+          "r": 1.0,
+          "cls": "C"
+        }
+      ]
+    },
+    {
+      "tag": "solo_decode",
+      "policy": "none",
+      "members": [
+        {
+          "name": "A",
+          "role": "decode",
+          "batch": 1,
+          "r": 1.0,
+          "cls": "M"
+        }
+      ]
+    },
+    {
+      "tag": "solo_bert",
+      "policy": "none",
+      "members": [
+        {
+          "name": "A",
+          "role": "bert_infer",
+          "batch": 32,
+          "r": 1.0,
+          "cls": "C"
+        }
+      ]
+    },
+    {
+      "tag": "het_100_strict",
+      "policy": "strict",
+      "members": [
+        {
+          "name": "A",
+          "role": "prefill",
+          "batch": 1,
+          "r": 0.5,
+          "cls": "C"
+        },
+        {
+          "name": "B",
+          "role": "decode",
+          "batch": 1,
+          "r": 0.5,
+          "cls": "M"
+        }
+      ]
+    },
+    {
+      "tag": "het_150_strict",
+      "policy": "strict",
+      "members": [
+        {
+          "name": "A",
+          "role": "prefill",
+          "batch": 1,
+          "r": 0.75,
+          "cls": "C"
+        },
+        {
+          "name": "B",
+          "role": "decode",
+          "batch": 1,
+          "r": 0.75,
+          "cls": "M"
+        }
+      ]
+    },
+    {
+      "tag": "het_100_relaxed",
+      "policy": "relaxed_hetero",
+      "members": [
+        {
+          "name": "A",
+          "role": "prefill",
+          "batch": 1,
+          "r": 0.5,
+          "cls": "C"
+        },
+        {
+          "name": "B",
+          "role": "decode",
+          "batch": 1,
+          "r": 0.5,
+          "cls": "M"
+        }
+      ]
+    },
+    {
+      "tag": "het_150_relaxed",
+      "policy": "relaxed_hetero",
+      "members": [
+        {
+          "name": "A",
+          "role": "prefill",
+          "batch": 1,
+          "r": 0.75,
+          "cls": "C"
+        },
+        {
+          "name": "B",
+          "role": "decode",
+          "batch": 1,
+          "r": 0.75,
+          "cls": "M"
+        }
+      ]
+    },
+    {
+      "tag": "het_198_relaxed",
+      "policy": "relaxed_hetero",
+      "members": [
+        {
+          "name": "A",
+          "role": "prefill",
+          "batch": 1,
+          "r": 0.99,
+          "cls": "C"
+        },
+        {
+          "name": "B",
+          "role": "decode",
+          "batch": 1,
+          "r": 0.99,
+          "cls": "M"
+        }
+      ]
+    },
+    {
+      "tag": "homc_150_strict",
+      "policy": "strict",
+      "members": [
+        {
+          "name": "A",
+          "role": "bert_infer",
+          "batch": 32,
+          "r": 0.75,
+          "cls": "C"
+        },
+        {
+          "name": "B",
+          "role": "bert_infer",
+          "batch": 32,
+          "r": 0.75,
+          "cls": "C"
+        }
+      ]
+    },
+    {
+      "tag": "homm_100_strict",
+      "policy": "strict",
+      "members": [
+        {
+          "name": "A",
+          "role": "decode",
+          "batch": 1,
+          "r": 0.5,
+          "cls": "M"
+        },
+        {
+          "name": "B",
+          "role": "decode",
+          "batch": 1,
+          "r": 0.5,
+          "cls": "M"
+        }
+      ]
+    },
+    {
+      "tag": "homm_150_strict",
+      "policy": "strict",
+      "members": [
+        {
+          "name": "A",
+          "role": "decode",
+          "batch": 1,
+          "r": 0.75,
+          "cls": "M"
+        },
+        {
+          "name": "B",
+          "role": "decode",
+          "batch": 1,
+          "r": 0.75,
+          "cls": "M"
+        }
+      ]
+    },
+    {
+      "tag": "tri_150_strict",
+      "policy": "strict",
+      "members": [
+        {
+          "name": "A",
+          "role": "prefill",
+          "batch": 1,
+          "r": 0.5,
+          "cls": "C"
+        },
+        {
+          "name": "B",
+          "role": "decode",
+          "batch": 1,
+          "r": 0.5,
+          "cls": "M"
+        },
+        {
+          "name": "C",
+          "role": "bert_infer",
+          "batch": 32,
+          "r": 0.5,
+          "cls": "C"
+        }
+      ]
+    }
+  ]
+}

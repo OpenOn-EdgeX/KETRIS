@@ -1,0 +1,14 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata: {name: ketris-dashboard-listeners, namespace: ketris}
+spec:
+  podSelector: {matchLabels: {app: ketris-dashboard}}
+  policyTypes: [Ingress]
+  ingress:
+    - ports: [{protocol: TCP, port: 8080}]
+    - ports: [{protocol: TCP, port: 8081}]
+      from:
+        - namespaceSelector: {matchLabels: {kubernetes.io/metadata.name: ketris}}
+          podSelector: {matchLabels: {app: ketris-observer}}
+        # hostNetwork observer is node traffic; token remains mandatory.
+        - ipBlock: {cidr: 10.0.4.232/32}

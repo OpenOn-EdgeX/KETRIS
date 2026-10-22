@@ -1,0 +1,82 @@
+{
+  "started_epoch_ns": 1792638046558642979,
+  "deadline_utc": "2026-10-22T03:55:00Z",
+  "execution_deadline_epoch": 1792640700,
+  "goal": "Fixed seven full-LLM workloads: minimize total makespan versus measured native NVIDIA MPS. No other concurrency counts.",
+  "workers": [
+    {
+      "id": "W0",
+      "input_tokens": 1024,
+      "output_tokens": 16,
+      "requests": 8
+    },
+    {
+      "id": "W1",
+      "input_tokens": 1024,
+      "output_tokens": 16,
+      "requests": 8
+    },
+    {
+      "id": "W2",
+      "input_tokens": 1024,
+      "output_tokens": 16,
+      "requests": 8
+    },
+    {
+      "id": "W3",
+      "input_tokens": 128,
+      "output_tokens": 128,
+      "requests": 8
+    },
+    {
+      "id": "W4",
+      "input_tokens": 128,
+      "output_tokens": 128,
+      "requests": 8
+    },
+    {
+      "id": "W5",
+      "input_tokens": 128,
+      "output_tokens": 128,
+      "requests": 8
+    },
+    {
+      "id": "W6",
+      "input_tokens": 128,
+      "output_tokens": 128,
+      "requests": 8
+    }
+  ],
+  "model": "Qwen2.5-0.5B-Instruct BF16 eager batch1",
+  "gpu_uuid": "GPU-4a42bf67-df51-7582-9e81-b9dddd4bcea2",
+  "arms": [
+    "native",
+    "spatial",
+    "ketris"
+  ],
+  "repeats": 5,
+  "pilot_uniform_caps": [
+    100,
+    75,
+    50
+  ],
+  "pilot_credit": [
+    "phase100",
+    "phase90",
+    "phase75"
+  ],
+  "credit_bank_us": 500000,
+  "selection": "Minimum pilot makespan; static caps larger wins tie; phase100 is diagnostic only; choose phase90 or phase75 by minimum makespan,90 wins tie. Freeze beforeholdouts.",
+  "policy": "Per-client walltime credits: decode/idle100%; prefill90/75% only while any worker decodes. Debt retained, WC off. Credits are not exclusive GPU time; phase sampling is not kernel preemption.",
+  "mps_priority": "0 for allworkers",
+  "window": "Commonrelease after identical loading/warmup, to latest final token completion amongall7; include drain.",
+  "metrics": [
+    "total makespan",
+    "56 completed requests/s",
+    "4480 generated tokens/s",
+    "GPU busy secondary",
+    "finalcreditdebt",
+    "all outputtoken hashes"
+  ],
+  "scope": "Isolated experimentnamespace only. Keep operating queues/tenants/controllers/driver/MIG unchanged. No git upload."
+}

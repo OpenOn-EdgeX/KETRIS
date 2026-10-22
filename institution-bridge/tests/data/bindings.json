@@ -1,0 +1,42 @@
+{
+  "A": {
+    "allocation_id": "a-74812f9215a9939c00365bd0",
+    "node": "devmaster",
+    "gpu_uuid": "GPU-4a42bf67-df51-7582-9e81-b9dddd4bcea2",
+    "mig_uuid": "MIG-bb051536-d0bd-581a-940d-3ec3054836c8",
+    "generation": "9e2f430514dcfa9549acb06e",
+    "resource_name": "keti.re.kr/mig-e2493d0ebc3c0f31-share",
+    "space_percent": 50,
+    "pod_uid": "1bcb1daf-7b1a-43e5-9dc7-eb0a5530e273",
+    "container": "workload",
+    "time_weight": 3,
+    "phase": "bound",
+    "container_id": "containerd://403473a62a7118de54ea0229599468a7c532e35a9a04a83494b5c377924e9bd9",
+    "updated_at": "2026-10-15T05:41:49.673683+00:00",
+    "schema_version": 1,
+    "runtime_generation": "80691143506651-1",
+    "reported_sm_count": 22,
+    "actual_cuda_uuid": "MIG-bb051536-d0bd-581a-940d-3ec3054836c8",
+    "runtime_observed_at_us": 1792042908701060
+  },
+  "B": {
+    "allocation_id": "a-1b73edb7101975dad9345d50",
+    "node": "devmaster",
+    "gpu_uuid": "GPU-4a42bf67-df51-7582-9e81-b9dddd4bcea2",
+    "mig_uuid": "MIG-bb051536-d0bd-581a-940d-3ec3054836c8",
+    "generation": "9e2f430514dcfa9549acb06e",
+    "resource_name": "keti.re.kr/mig-e2493d0ebc3c0f31-share",
+    "space_percent": 50,
+    "pod_uid": "a054bb04-5614-4c9a-a786-fabfffce91d3",
+    "container": "workload",
+    "time_weight": 1,
+    "phase": "bound",
+    "container_id": "containerd://03c92707d28235e6224166f2d1dbe58ff45d8b591c175482b271d524ab373fa7",
+    "updated_at": "2026-10-15T05:41:49.677320+00:00",
+    "schema_version": 1,
+    "runtime_generation": "80691144860716-1",
+    "reported_sm_count": 22,
+    "actual_cuda_uuid": "MIG-bb051536-d0bd-581a-940d-3ec3054836c8",
+    "runtime_observed_at_us": 1792042908702415
+  }
+}

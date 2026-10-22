@@ -1,0 +1,20 @@
+{
+  "status": "passed",
+  "manifest_sha256": "39453f052934a2bcf779113d6df929d10a5cad630364d399e54006c3c1e92bbf",
+  "manifest_bytes_identical": true,
+  "checks": [
+    {
+      "location": "original-source",
+      "exit_code": 0,
+      "verified_entries": 922
+    },
+    {
+      "location": "copied-archive",
+      "exit_code": 0,
+      "verified_entries": 922
+    }
+  ],
+  "runtime_source_files_verified_against_historical_provenance": 6,
+  "archived_runtime_binary_matches_historical_provenance": true,
+  "source_archive_files_preserved": 923
+}

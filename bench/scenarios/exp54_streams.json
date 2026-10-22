@@ -1,0 +1,189 @@
+{
+  "_comment": "Exp_54 멀티스트림/스레드 게이트 실측 — A=변형(2/3몫), B=기준 단일/단일(1/3몫), strict 2:1. 목표 charged A=0.667",
+  "defaults": {
+    "duration": 15,
+    "reps": 3
+  },
+  "runs": [
+    {
+      "tag": "mt_a_s1t1",
+      "policy": "strict",
+      "members": [
+        {
+          "name": "A",
+          "role": "synth",
+          "batch": 1,
+          "r": 0.667,
+          "cls": "C",
+          "env": {
+            "SYNTH_STREAMS": 1,
+            "SYNTH_THREADS": 1,
+            "SYNTH_SHARED": 1
+          }
+        },
+        {
+          "name": "B",
+          "role": "synth",
+          "batch": 1,
+          "r": 0.333,
+          "cls": "C",
+          "env": {
+            "SYNTH_STREAMS": 1,
+            "SYNTH_THREADS": 1,
+            "SYNTH_SHARED": 1
+          }
+        }
+      ]
+    },
+    {
+      "tag": "mt_b_s2",
+      "policy": "strict",
+      "members": [
+        {
+          "name": "A",
+          "role": "synth",
+          "batch": 1,
+          "r": 0.667,
+          "cls": "C",
+          "env": {
+            "SYNTH_STREAMS": 2,
+            "SYNTH_THREADS": 1,
+            "SYNTH_SHARED": 0
+          }
+        },
+        {
+          "name": "B",
+          "role": "synth",
+          "batch": 1,
+          "r": 0.333,
+          "cls": "C",
+          "env": {
+            "SYNTH_STREAMS": 1,
+            "SYNTH_THREADS": 1,
+            "SYNTH_SHARED": 1
+          }
+        }
+      ]
+    },
+    {
+      "tag": "mt_b_s4",
+      "policy": "strict",
+      "members": [
+        {
+          "name": "A",
+          "role": "synth",
+          "batch": 1,
+          "r": 0.667,
+          "cls": "C",
+          "env": {
+            "SYNTH_STREAMS": 4,
+            "SYNTH_THREADS": 1,
+            "SYNTH_SHARED": 0
+          }
+        },
+        {
+          "name": "B",
+          "role": "synth",
+          "batch": 1,
+          "r": 0.333,
+          "cls": "C",
+          "env": {
+            "SYNTH_STREAMS": 1,
+            "SYNTH_THREADS": 1,
+            "SYNTH_SHARED": 1
+          }
+        }
+      ]
+    },
+    {
+      "tag": "mt_c_t2",
+      "policy": "strict",
+      "members": [
+        {
+          "name": "A",
+          "role": "synth",
+          "batch": 1,
+          "r": 0.667,
+          "cls": "C",
+          "env": {
+            "SYNTH_STREAMS": 1,
+            "SYNTH_THREADS": 2,
+            "SYNTH_SHARED": 0
+          }
+        },
+        {
+          "name": "B",
+          "role": "synth",
+          "batch": 1,
+          "r": 0.333,
+          "cls": "C",
+          "env": {
+            "SYNTH_STREAMS": 1,
+            "SYNTH_THREADS": 1,
+            "SYNTH_SHARED": 1
+          }
+        }
+      ]
+    },
+    {
+      "tag": "mt_c_t4",
+      "policy": "strict",
+      "members": [
+        {
+          "name": "A",
+          "role": "synth",
+          "batch": 1,
+          "r": 0.667,
+          "cls": "C",
+          "env": {
+            "SYNTH_STREAMS": 1,
+            "SYNTH_THREADS": 4,
+            "SYNTH_SHARED": 0
+          }
+        },
+        {
+          "name": "B",
+          "role": "synth",
+          "batch": 1,
+          "r": 0.333,
+          "cls": "C",
+          "env": {
+            "SYNTH_STREAMS": 1,
+            "SYNTH_THREADS": 1,
+            "SYNTH_SHARED": 1
+          }
+        }
+      ]
+    },
+    {
+      "tag": "mt_d_t2sh",
+      "policy": "strict",
+      "members": [
+        {
+          "name": "A",
+          "role": "synth",
+          "batch": 1,
+          "r": 0.667,
+          "cls": "C",
+          "env": {
+            "SYNTH_STREAMS": 1,
+            "SYNTH_THREADS": 2,
+            "SYNTH_SHARED": 1
+          }
+        },
+        {
+          "name": "B",
+          "role": "synth",
+          "batch": 1,
+          "r": 0.333,
+          "cls": "C",
+          "env": {
+            "SYNTH_STREAMS": 1,
+            "SYNTH_THREADS": 1,
+            "SYNTH_SHARED": 1
+          }
+        }
+      ]
+    }
+  ]
+}

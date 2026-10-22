@@ -1,0 +1,57 @@
+{
+  "python": "3.13.9 | packaged by Anaconda, Inc. | (main, Oct 21 2025, 19:16:10) [GCC 11.2.0]",
+  "tests": [
+    {
+      "name": "analyze-self-test",
+      "command": [
+        "python3",
+        "-B",
+        "analyze.py",
+        "--self-test"
+      ],
+      "exit_code": 0,
+      "test_count": 16,
+      "log": "analyze-self-test.log"
+    },
+    {
+      "name": "audit-runtime-self-test",
+      "command": [
+        "python3",
+        "-B",
+        "audit_runtime.py",
+        "--self-test"
+      ],
+      "exit_code": 0,
+      "test_count": 14,
+      "log": "audit-runtime-self-test.log"
+    },
+    {
+      "name": "interpret-results-self-test",
+      "command": [
+        "python3",
+        "-B",
+        "interpret_results.py",
+        "--self-test"
+      ],
+      "exit_code": 0,
+      "test_count": 4,
+      "log": "interpret-results-self-test.log"
+    },
+    {
+      "name": "policy-tests",
+      "command": [
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "-v",
+        "test_policy"
+      ],
+      "exit_code": 0,
+      "test_count": 5,
+      "log": "policy-tests.log"
+    }
+  ],
+  "total": 39,
+  "status": "passed"
+}

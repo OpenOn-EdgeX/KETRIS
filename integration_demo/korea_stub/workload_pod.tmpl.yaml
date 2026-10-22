@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "@@NAME@@"
+  namespace: "@@NS@@"
+  annotations:
+    # A-3 규약: 고려대가 다는 워크로드 메타데이터(스펙면 인터페이스)
+    kraken.keti.re.kr/workload-class: "@@CLASS@@"
+    kraken.keti.re.kr/pipeline-stage: "@@STAGE@@"
+    kraken.keti.re.kr/priority: "med"
+spec:
+  restartPolicy: Never
+  containers:
+    - name: t
+      image: kraken-infer:opt
+      imagePullPolicy: IfNotPresent
+      env:
+        # 프로덕션은 KETI mutating webhook이 annotation→env 변환. 스텁은 직접 세팅.
+        - {name: KRAKEN_WORKLOAD_CLASS, value: "@@CLASS@@"}
+        - {name: WORKER_ROLE, value: "bert_infer"}
+        - {name: WORKER_NAME, value: "@@NAME@@"}
+        - {name: SYNC_DIR, value: /sync}
+        - {name: DURATION_S, value: "20"}
+        - {name: BATCH, value: "@@BATCH@@"}
+        - {name: REPEATS, value: "1"}
+        - {name: HF_HUB_OFFLINE, value: "1"}
+        - {name: HF_HOME, value: /hf}
+      command: ["bash","-c","python /bench/worker.py & wp=$!; for i in $(seq 1 240); do [ -f /sync/ready_@@NAME@@ ] && break; sleep 1; done; touch /sync/go; wait $wp; cat /sync/result_@@NAME@@.json"]
+      volumeMounts:
+        - {name: bench, mountPath: /bench, readOnly: true}
+        - {name: hf, mountPath: /hf, readOnly: true}
+        - {name: sync, mountPath: /sync}
+      resources: {limits: {cpu: "6", memory: 20Gi, keti.re.kr/lsu: "@@LSU@@"}}
+  volumes:
+    - {name: bench, hostPath: {path: /root/workspace/pooling/prism/bench, type: Directory}}
+    - {name: hf, hostPath: {path: /root/.cache/huggingface, type: Directory}}
+    - {name: sync, hostPath: {path: /root/kraken-demo-sync, type: DirectoryOrCreate}}

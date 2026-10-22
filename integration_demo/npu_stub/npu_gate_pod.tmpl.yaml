@@ -1,0 +1,47 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "@@NAME@@"
+  namespace: "@@NS@@"
+  annotations:
+    kraken.keti.re.kr/workload-class: "memory"
+spec:
+  restartPolicy: Never
+  hostNetwork: true          # 게이트 HTTP를 호스트에서 직접 접근(데모 클라이언트)
+  containers:
+    - name: t
+      image: kraken-npu:qwen
+      imagePullPolicy: IfNotPresent
+      env:
+        - {name: NPU_MODEL, value: "furiosa-ai/Qwen2.5-0.5B-Instruct"}
+        - {name: GATE_PORT, value: "@@PORT@@"}
+        - {name: RATIOS, value: "@@RATIOS@@"}
+        - {name: GATE_BUDGET_US, value: "@@BUDGET@@"}
+        - {name: MAX_TOKENS, value: "@@MAXTOK@@"}
+        - {name: GATE_CREDIT_CAP_US, value: "@@CAP@@"}
+        - {name: GATE_WORKERS, value: "@@WORKERS@@"}
+        - {name: WORK_CONSERVING, value: "@@WC@@"}
+        - {name: WC_AUTO, value: "@@AUTO@@"}
+        - {name: PYTHONPATH, value: /venv/site-packages}
+        - {name: PATH, value: "/venv/bin:/usr/local/bin:/usr/bin:/bin"}
+        - {name: HF_HOME, value: /hf}
+        - {name: HF_HUB_OFFLINE, value: "1"}
+        - {name: FURIOSA_CACHE_DIR, value: /furiosa-cache}
+      command: ["bash","-c","python /work/npu_gate_serve.py"]
+      resources:
+        limits:
+          keti.re.kr/npu-pe: "@@PE@@"
+      volumeMounts:
+        - {name: venv, mountPath: /venv/site-packages, readOnly: true}
+        - {name: venvbin, mountPath: /venv/bin, readOnly: true}
+        - {name: hf, mountPath: /hf, readOnly: true}
+        - {name: fcache, mountPath: /furiosa-cache}
+        - {name: work, mountPath: /work, readOnly: true}
+        - {name: gate, mountPath: /gate, readOnly: true}
+  volumes:
+    - {name: venv, hostPath: {path: /root/npu_test/rngd-verify/.venv/lib/python3.10/site-packages, type: Directory}}
+    - {name: venvbin, hostPath: {path: /root/npu_test/rngd-verify/.venv/bin, type: Directory}}
+    - {name: hf, hostPath: {path: /root/.cache/huggingface, type: Directory}}
+    - {name: fcache, hostPath: {path: /root/.cache/furiosa, type: DirectoryOrCreate}}
+    - {name: work, hostPath: {path: /root/workspace/pooling/prism/integration_demo/npu_stub, type: Directory}}
+    - {name: gate, hostPath: {path: /root/workspace/pooling/prism/runtime/npu_proxy, type: Directory}}

@@ -1,0 +1,8 @@
+# Proposed response example, not an actual RPC response.
+request_id: "req-yonsei-slide-a"
+workload_id: "wl-slide-a"
+profile_id: "profile-slide-a-v1"
+profile_version: 1
+state: RECEIVED
+requirements_normalized: false
+reason: "Original units unknown; stored only; not eligible for demand conversion."

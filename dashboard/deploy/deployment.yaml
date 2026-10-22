@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: {name: ketris-dashboard, namespace: ketris}
+spec:
+  replicas: 1
+  strategy: {type: Recreate}
+  selector: {matchLabels: {app: ketris-dashboard}}
+  template:
+    metadata: {labels: {app: ketris-dashboard}}
+    spec:
+      serviceAccountName: ketris-dashboard
+      automountServiceAccountToken: false
+      nodeSelector: {kubernetes.io/hostname: gpu-npu-server-02}
+      tolerations: [{key: node-role.kubernetes.io/control-plane, operator: Exists, effect: NoSchedule}]
+      containers:
+        - name: dashboard
+          image: ketris-dashboard:20261014-gpu-state-v3
+          imagePullPolicy: IfNotPresent
+          command: [ketris-dashboard]
+          ports: [{name: public, containerPort: 8080}, {name: ingest, containerPort: 8081}]
+          readinessProbe: {httpGet: {path: /api/v1/health, port: public}, initialDelaySeconds: 3, periodSeconds: 5}
+          livenessProbe: {httpGet: {path: /api/v1/health, port: public}, initialDelaySeconds: 10, periodSeconds: 10}
+          resources:
+            requests: {cpu: 100m, memory: 128Mi}
+            limits: {cpu: 1, memory: 512Mi}
+          securityContext: {allowPrivilegeEscalation: false, capabilities: {drop: [ALL]}}
+          volumeMounts:
+            - {name: data, mountPath: /data}
+            - {name: auth, mountPath: /var/run/ketris-auth, readOnly: true}
+      volumes:
+        - name: data
+          persistentVolumeClaim: {claimName: ketris-dashboard-data}
+        - name: auth
+          secret: {secretName: ketris-observer-ingest, defaultMode: 256}

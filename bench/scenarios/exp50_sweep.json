@@ -1,0 +1,80 @@
+{
+  "_comment": "Exp_50 초과 배정 스윕 — 배정률(Σr)×조합×정책. r=테넌트 LSU 몫(공간 pct=r×100, strict 시간=r/Σr 정규화). 200%는 r=0.99×2(=198%, BLESS_LIMIT_PCT 상한 99 — full=99 관행). 3-tenant 는 0.33/0.40/0.50/0.66.",
+  "defaults": {"duration": 15, "reps": 3},
+  "runs": [
+    {"tag": "solo_prefill", "policy": "none", "members": [{"name": "A", "role": "prefill", "batch": 1, "r": 1.0, "cls": "C"}]},
+    {"tag": "solo_decode", "policy": "none", "members": [{"name": "A", "role": "decode", "batch": 1, "r": 1.0, "cls": "M"}]},
+    {"tag": "solo_bert", "policy": "none", "members": [{"name": "A", "role": "bert_infer", "batch": 32, "r": 1.0, "cls": "C"}]},
+
+    {"tag": "het_100_none", "policy": "none", "members": [
+      {"name": "A", "role": "prefill", "batch": 1, "r": 0.5, "cls": "C"},
+      {"name": "B", "role": "decode", "batch": 1, "r": 0.5, "cls": "M"}]},
+    {"tag": "het_100_strict", "policy": "strict", "members": [
+      {"name": "A", "role": "prefill", "batch": 1, "r": 0.5, "cls": "C"},
+      {"name": "B", "role": "decode", "batch": 1, "r": 0.5, "cls": "M"}]},
+    {"tag": "het_120_strict", "policy": "strict", "members": [
+      {"name": "A", "role": "prefill", "batch": 1, "r": 0.6, "cls": "C"},
+      {"name": "B", "role": "decode", "batch": 1, "r": 0.6, "cls": "M"}]},
+    {"tag": "het_150_strict", "policy": "strict", "members": [
+      {"name": "A", "role": "prefill", "batch": 1, "r": 0.75, "cls": "C"},
+      {"name": "B", "role": "decode", "batch": 1, "r": 0.75, "cls": "M"}]},
+    {"tag": "het_198_strict", "policy": "strict", "members": [
+      {"name": "A", "role": "prefill", "batch": 1, "r": 0.99, "cls": "C"},
+      {"name": "B", "role": "decode", "batch": 1, "r": 0.99, "cls": "M"}]},
+    {"tag": "het_100_relaxed", "policy": "relaxed_hetero", "members": [
+      {"name": "A", "role": "prefill", "batch": 1, "r": 0.5, "cls": "C"},
+      {"name": "B", "role": "decode", "batch": 1, "r": 0.5, "cls": "M"}]},
+    {"tag": "het_120_relaxed", "policy": "relaxed_hetero", "members": [
+      {"name": "A", "role": "prefill", "batch": 1, "r": 0.6, "cls": "C"},
+      {"name": "B", "role": "decode", "batch": 1, "r": 0.6, "cls": "M"}]},
+    {"tag": "het_150_relaxed", "policy": "relaxed_hetero", "members": [
+      {"name": "A", "role": "prefill", "batch": 1, "r": 0.75, "cls": "C"},
+      {"name": "B", "role": "decode", "batch": 1, "r": 0.75, "cls": "M"}]},
+    {"tag": "het_198_relaxed", "policy": "relaxed_hetero", "members": [
+      {"name": "A", "role": "prefill", "batch": 1, "r": 0.99, "cls": "C"},
+      {"name": "B", "role": "decode", "batch": 1, "r": 0.99, "cls": "M"}]},
+
+    {"tag": "homc_100_strict", "policy": "strict", "members": [
+      {"name": "A", "role": "bert_infer", "batch": 32, "r": 0.5, "cls": "C"},
+      {"name": "B", "role": "bert_infer", "batch": 32, "r": 0.5, "cls": "C"}]},
+    {"tag": "homc_120_strict", "policy": "strict", "members": [
+      {"name": "A", "role": "bert_infer", "batch": 32, "r": 0.6, "cls": "C"},
+      {"name": "B", "role": "bert_infer", "batch": 32, "r": 0.6, "cls": "C"}]},
+    {"tag": "homc_150_strict", "policy": "strict", "members": [
+      {"name": "A", "role": "bert_infer", "batch": 32, "r": 0.75, "cls": "C"},
+      {"name": "B", "role": "bert_infer", "batch": 32, "r": 0.75, "cls": "C"}]},
+    {"tag": "homc_198_strict", "policy": "strict", "members": [
+      {"name": "A", "role": "bert_infer", "batch": 32, "r": 0.99, "cls": "C"},
+      {"name": "B", "role": "bert_infer", "batch": 32, "r": 0.99, "cls": "C"}]},
+
+    {"tag": "homm_100_strict", "policy": "strict", "members": [
+      {"name": "A", "role": "decode", "batch": 1, "r": 0.5, "cls": "M"},
+      {"name": "B", "role": "decode", "batch": 1, "r": 0.5, "cls": "M"}]},
+    {"tag": "homm_120_strict", "policy": "strict", "members": [
+      {"name": "A", "role": "decode", "batch": 1, "r": 0.6, "cls": "M"},
+      {"name": "B", "role": "decode", "batch": 1, "r": 0.6, "cls": "M"}]},
+    {"tag": "homm_150_strict", "policy": "strict", "members": [
+      {"name": "A", "role": "decode", "batch": 1, "r": 0.75, "cls": "M"},
+      {"name": "B", "role": "decode", "batch": 1, "r": 0.75, "cls": "M"}]},
+    {"tag": "homm_198_strict", "policy": "strict", "members": [
+      {"name": "A", "role": "decode", "batch": 1, "r": 0.99, "cls": "M"},
+      {"name": "B", "role": "decode", "batch": 1, "r": 0.99, "cls": "M"}]},
+
+    {"tag": "tri_099_strict", "policy": "strict", "members": [
+      {"name": "A", "role": "prefill", "batch": 1, "r": 0.33, "cls": "C"},
+      {"name": "B", "role": "decode", "batch": 1, "r": 0.33, "cls": "M"},
+      {"name": "C", "role": "bert_infer", "batch": 32, "r": 0.33, "cls": "C"}]},
+    {"tag": "tri_120_strict", "policy": "strict", "members": [
+      {"name": "A", "role": "prefill", "batch": 1, "r": 0.4, "cls": "C"},
+      {"name": "B", "role": "decode", "batch": 1, "r": 0.4, "cls": "M"},
+      {"name": "C", "role": "bert_infer", "batch": 32, "r": 0.4, "cls": "C"}]},
+    {"tag": "tri_150_strict", "policy": "strict", "members": [
+      {"name": "A", "role": "prefill", "batch": 1, "r": 0.5, "cls": "C"},
+      {"name": "B", "role": "decode", "batch": 1, "r": 0.5, "cls": "M"},
+      {"name": "C", "role": "bert_infer", "batch": 32, "r": 0.5, "cls": "C"}]},
+    {"tag": "tri_198_strict", "policy": "strict", "members": [
+      {"name": "A", "role": "prefill", "batch": 1, "r": 0.66, "cls": "C"},
+      {"name": "B", "role": "decode", "batch": 1, "r": 0.66, "cls": "M"},
+      {"name": "C", "role": "bert_infer", "batch": 32, "r": 0.66, "cls": "C"}]}
+  ]
+}

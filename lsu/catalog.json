@@ -1,0 +1,71 @@
+{
+ "_comment": "LSU(Logical Slice Unit) 카탈로그 — device 모델명 → LSU 환산값. device-plugin/controller가 K8s 노출 기준으로 소비.",
+ "_baseline_change": "Exp_111(2026-09-01)에서 기준 워크로드를 ResNet50 추론 → Qwen2.5-0.5B-Instruct prefill 로 교체했다. 사유: 현 SDK 에서 RNGD 가 CNN 을 컴파일하지 못해(지원 연산 97개에 batch_norm/layer_norm/직접 matmul 없음) ResNet 축으로는 GPU 와 NPU 를 같은 자로 잴 수 없다. 이전 카탈로그는 reports/Exp_111_lsu_qwen_baseline/raw/catalog_before_exp111.json 에 보존.",
+ "reference_workload": "qwen2.5-0.5b-instruct_prefill",
+ "reference_condition": {
+  "model": "Qwen2.5-0.5B-Instruct (GPU: HF fp16 / RNGD: 공식 아티팩트 furiosa-ai/Qwen2.5-0.5B-Instruct, tp=4)",
+  "operation": "prefill only — 생성 토큰 ≤1. decode 는 메모리 대역폭 집약이라 연산 용량을 대표하지 못한다",
+  "seq_len": 1024,
+  "seq_len_policy": "고정. 길이로 정규화하지 않는다 — attention 이 O(L^2) 라 정규화하면 서로 다른 길이에서 잰 값이 섞여 회계가 깨진다",
+  "batch_policy": "요청은 batch=1·seq=1024 로 고정하고, 장치가 포화할 만큼 **동시에** 처리한 총 prefill tokens/s 를 잰다. 포화 수단은 장치별로 다르다(GPU=배치, NPU=동시 요청) — 재는 양은 같다",
+  "measured_at": "2026-09-01, 232(gpu-npu-server-02)",
+  "note": "232 는 엣지 과제와 공유하는 장비다. GPU 값은 외부 작업이 없는 유휴 구간(nvidia-smi util 0%, mem 60MiB)에서 측정했다. 경합 구간 측정치는 기준선으로 쓸 수 없다 — 같은 날 경합 하 ResNet50 이 2093.6 img/s(청정 7513.5 의 27.9%)였다"
+ },
+ "unit_tok_per_s": 1211.1,
+ "unit_source": "calibrated: NVIDIA RTX PRO 6000 Blackwell = 178 LSU @ 215580 prefill tok/s (2026-09-01 실측 n=5, 편차 0.23%). ★기존 노출값 178 을 유지하도록 단위를 역산했다 — 노출값 변경은 별도 판단(Exp_111 2-D)",
+ "status": "provisional — 기관 기술회의 확정 전",
+ "devices": {
+  "NVIDIA RTX PRO 6000 Blackwell Server Edition": {
+   "lsu": 178,
+   "throughput_tok_s": 215580,
+   "measured": true,
+   "flags": [
+    "fp16"
+   ],
+   "condition": "batch=16 × seq=1024 (=16384 tok/call), 포화점. n=5 중앙값, 편차 0.23%",
+   "note": "2026-09-01 실측 @232 유휴 구간. 배치 32 에서는 190187 로 하락 — 16 이 포화점. SM 비율 대비는 오목(아래 sm_scaling)"
+  },
+  "Furiosa RNGD": {
+   "lsu": 53,
+   "unit": "per_4PE_block",
+   "throughput_tok_s": 64780,
+   "measured": true,
+   "flags": [
+    "artifact_tp4"
+   ],
+   "device_total_lsu": 104,
+   "device_total_throughput_tok_s": 125948,
+   "condition": "4PE 블록 단독 포화 = conc 16, n=3 중앙값 64780, 편차 0.34%. 장치 전체 = 4PE 블록 2개 동시(각 conc 8) 합계 125948, n=2",
+   "note": "★최소 단위가 4PE 다 — 공식 아티팩트가 tp=4 라 1PE/2PE 는 'Not enough devices. Required PEs: 4' 로 거절된다(실측). ★8PE 를 단일 엔진으로 쓰면 93695(안정)~103559(불안정, 3회 중 1회 NPU 메모리 OOM) 로 **4PE 블록 2개(125948)보다 낮다** — 분할이 통합보다 유리하다. 순차 1요청으로는 8PE 가 4PE 와 같은 값(여분 PE 유휴)이라 동시성 없이는 용량을 못 잰다",
+   "bandwidth_lsu": null
+  }
+ },
+ "_removed_devices": {
+  "NVIDIA RTX A6000": "구 기준(ResNet50) 65 LSU @ 2740.7 img/s. 230 장비로 현재 접근 불가 — 새 기준 미측정. 값은 raw/catalog_before_exp111.json 에 보존",
+  "Furiosa Warboy": "★제외(Exp_111). CNN 전용 장치이고 SDK 계열이 달라 Qwen 을 구동할 수 없다. 새 기준으로 잴 방법이 없으므로 카탈로그에서 뺀다. 구 기준 값(PE당 17 LSU @ 699.2 img/s int8)은 raw/catalog_before_exp111.json 에 보존"
+ },
+ "sm_scaling": {
+  "_comment": "성능 환산 프로파일 — 용량 선언은 단일 기준이지만 SM 비율 대비 반응은 작업 종류마다 다르다. 몫 계산이 아니라 성능 예측에 쓴다",
+  "prefill": {
+   "25": 0.321,
+   "50": 0.605,
+   "75": 0.842,
+   "100": 1.0,
+   "source": "Exp_111 1-A, QMD TPC 마스킹(24/47/71/94 of 94) 실측. MPS pct 캡 경로도 0.299/0.631/0.835 로 거의 동일 — 오목함은 분할 수단의 성질이 아니라 워크로드 성질이다",
+   "note": "선형이 아니다(오목). 계획서의 'prefill 은 선형' 서술은 정정 대상"
+  },
+  "decode": {
+   "25": 0.675,
+   "source": "Exp_106 계열 — prefill 보다 훨씬 오목하다"
+  }
+ },
+ "default_lsu": 50,
+ "overcommit_factor": 1.35,
+ "_overcommit_note": "Exp_73: 광고 LSU=물리 LSU×factor. 컴퓨트 pct÷물리, 메모리 quota÷광고. 1.0=오버커밋 없음.",
+ "_pending_devices": {
+  "NVIDIA A100": {
+   "reason": "장비 미보유 — 새 기준(Qwen prefill)으로 측정 불가. 구 카탈로그의 100 은 ResNet 기준의 미실측 예시값이라 승계하지 않는다.",
+   "action": "측정 예정. ★devices 밖에 둔다 — devices 안에 lsu=null 로 두면 조회가 lsu=0 으로 성공해 '광고 0' 이 조용히 나간다(Exp_111 실측 확인). 밖에 두면 default_lsu 폴백이 되고 조회 사유에 'no catalog entry' 가 남는다(Exp_107 T-5 규칙)."
+  }
+ }
+}

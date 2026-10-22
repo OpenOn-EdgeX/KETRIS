@@ -1,0 +1,178 @@
+{
+  "_comment": "Exp_56 Phase2 — 빈 구간 착지 케이스 페어 OC (bert 파트너 고정, MPS 50/50, Exp_49 동일 조건)",
+  "defaults": {
+    "duration": 15,
+    "reps": 3
+  },
+  "runs": [
+    {
+      "tag": "solo_bert",
+      "policy": "none",
+      "members": [
+        {
+          "name": "A",
+          "role": "bert_infer",
+          "batch": 32,
+          "r": 1.0,
+          "cls": "C"
+        }
+      ]
+    },
+    {
+      "tag": "solo_wide_resnet50_2",
+      "policy": "none",
+      "members": [
+        {
+          "name": "A",
+          "role": "tvmodel",
+          "batch": 32,
+          "r": 1.0,
+          "cls": "C",
+          "env": {
+            "TV_MODEL": "wide_resnet50_2"
+          }
+        }
+      ]
+    },
+    {
+      "tag": "pair_wide_resnet50_2",
+      "policy": "none",
+      "members": [
+        {
+          "name": "A",
+          "role": "bert_infer",
+          "batch": 32,
+          "r": 0.5,
+          "cls": "C"
+        },
+        {
+          "name": "B",
+          "role": "tvmodel",
+          "batch": 32,
+          "r": 0.5,
+          "cls": "M",
+          "env": {
+            "TV_MODEL": "wide_resnet50_2"
+          }
+        }
+      ]
+    },
+    {
+      "tag": "solo_convnext_tiny",
+      "policy": "none",
+      "members": [
+        {
+          "name": "A",
+          "role": "tvmodel",
+          "batch": 32,
+          "r": 1.0,
+          "cls": "C",
+          "env": {
+            "TV_MODEL": "convnext_tiny"
+          }
+        }
+      ]
+    },
+    {
+      "tag": "pair_convnext_tiny",
+      "policy": "none",
+      "members": [
+        {
+          "name": "A",
+          "role": "bert_infer",
+          "batch": 32,
+          "r": 0.5,
+          "cls": "C"
+        },
+        {
+          "name": "B",
+          "role": "tvmodel",
+          "batch": 32,
+          "r": 0.5,
+          "cls": "M",
+          "env": {
+            "TV_MODEL": "convnext_tiny"
+          }
+        }
+      ]
+    },
+    {
+      "tag": "solo_regnet_y_400mf",
+      "policy": "none",
+      "members": [
+        {
+          "name": "A",
+          "role": "tvmodel",
+          "batch": 32,
+          "r": 1.0,
+          "cls": "C",
+          "env": {
+            "TV_MODEL": "regnet_y_400mf"
+          }
+        }
+      ]
+    },
+    {
+      "tag": "pair_regnet_y_400mf",
+      "policy": "none",
+      "members": [
+        {
+          "name": "A",
+          "role": "bert_infer",
+          "batch": 32,
+          "r": 0.5,
+          "cls": "C"
+        },
+        {
+          "name": "B",
+          "role": "tvmodel",
+          "batch": 32,
+          "r": 0.5,
+          "cls": "M",
+          "env": {
+            "TV_MODEL": "regnet_y_400mf"
+          }
+        }
+      ]
+    },
+    {
+      "tag": "solo_densenet121",
+      "policy": "none",
+      "members": [
+        {
+          "name": "A",
+          "role": "tvmodel",
+          "batch": 32,
+          "r": 1.0,
+          "cls": "C",
+          "env": {
+            "TV_MODEL": "densenet121"
+          }
+        }
+      ]
+    },
+    {
+      "tag": "pair_densenet121",
+      "policy": "none",
+      "members": [
+        {
+          "name": "A",
+          "role": "bert_infer",
+          "batch": 32,
+          "r": 0.5,
+          "cls": "C"
+        },
+        {
+          "name": "B",
+          "role": "tvmodel",
+          "batch": 32,
+          "r": 0.5,
+          "cls": "M",
+          "env": {
+            "TV_MODEL": "densenet121"
+          }
+        }
+      ]
+    }
+  ]
+}

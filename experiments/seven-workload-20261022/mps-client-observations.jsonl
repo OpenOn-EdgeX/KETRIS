@@ -1,0 +1,2 @@
+{"epoch_ns": 1792638946302661395, "active": [{"run": "holdout-r2-ketris", "ready": 4, "done": 0}], "servers": "111\n", "clients": {"111": {"rc": 0, "out": "1219\n1267\n1251\n1235\n", "err": ""}}}
+{"epoch_ns": 1792639255079723191, "label": "holdout-r3-spatial", "ready": 7, "results": 0, "heartbeat_age_s": 0.6907241344451904, "servers": {"stdout": "111\n", "stderr": "", "returncode": 0}, "clients": {"111": {"stdout": "1705\n1783\n1770\n1757\n1744\n1731\n1718\n", "stderr": "", "returncode": 0}}}

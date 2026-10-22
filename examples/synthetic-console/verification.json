@@ -1,0 +1,52 @@
+{
+  "status": "passed",
+  "synthetic_mean": "67.1",
+  "measured_data_read": false,
+  "checks": [
+    {
+      "command": [
+        "python3",
+        "-B",
+        "print_synthetic_example.py"
+      ],
+      "matches_fixture": "synthetic_example.txt",
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "print_synthetic_example.py",
+        "--summary"
+      ],
+      "matches_fixture": "display_example_summary.txt",
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "print_display_example.py"
+      ],
+      "matches_fixture": "display_example.txt",
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "print_display_example.py",
+        "--summary"
+      ],
+      "matches_fixture": "display_example_summary.txt",
+      "exit_code": 0
+    }
+  ],
+  "copied_file_sha256": {
+    "print_synthetic_example.py": "6f493f35f411ac95abf806148d3cf4cb7b1638bf5ffb1783bdb5c3b02e7760a1",
+    "print_display_example.py": "1ef515e79a36f2aa244eec22a32e9ea37caa4e48231fa5bba0ce85acc557884d",
+    "synthetic_example.txt": "4f962ebcaae52dc5dd7ea973576e1ac244d9b238b97cc43f7af9b662d171f6dd",
+    "display_example.txt": "4f962ebcaae52dc5dd7ea973576e1ac244d9b238b97cc43f7af9b662d171f6dd",
+    "display_example_summary.txt": "e3dbe63f0bbb223e393f28b05883cf2f3a12fdc75d1558cb4e99cbf7071c08b9"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "complete": true,
+  "status": "complete_audited_five_repeats_per_arm",
+  "valid_holdouts": 15,
+  "invalid_runs": [],
+  "output": "/root/workspace/edge-ai-migration-audit/20261022/seven-workload-makespan/interpretation.json"
+}

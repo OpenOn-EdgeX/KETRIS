@@ -1,0 +1,88 @@
+# KRAKEN kueue 전량 공유 구성 (Exp_70 설계 · Exp_87 재구축 자산)
+#   cohort keti-c1: edge-cq/pool-cq 반분 nominal + 무제한 borrow + reclaimWithinCohort Any.
+#   ResourceFlavor·Namespace·LocalQueue 포함(원샷 적용). 선행: kueue v0.19.0 설치.
+# ── ResourceFlavor (노드 타겟) ──
+apiVersion: kueue.x-k8s.io/v1beta2
+kind: ResourceFlavor
+metadata: {name: pro6000-232}
+spec: {nodeLabels: {keti.re.kr/node-role: edge}}
+---
+apiVersion: kueue.x-k8s.io/v1beta2
+kind: ResourceFlavor
+metadata: {name: rngd-232}
+spec: {nodeLabels: {keti.re.kr/node-role: edge}}
+---
+apiVersion: kueue.x-k8s.io/v1beta2
+kind: ResourceFlavor
+metadata: {name: rtx5090-233}
+spec:
+  nodeLabels: {keti.re.kr/node-role: pooling}
+  tolerations:
+    - {effect: NoSchedule, key: keti.re.kr/pooling, operator: Equal, value: "true"}
+---
+# ── ClusterQueue (Exp_70 kueue-full-share.yaml 그대로) ──
+apiVersion: kueue.x-k8s.io/v1beta2
+kind: ClusterQueue
+metadata: {name: edge-cq}
+spec:
+  cohortName: keti-c1
+  namespaceSelector: {}
+  preemption: {borrowWithinCohort: {policy: Never}, reclaimWithinCohort: Any, withinClusterQueue: LowerPriority}
+  queueingStrategy: BestEffortFIFO
+  resourceGroups:
+    - coveredResources: ["cpu", "memory", "keti.re.kr/lsu"]
+      flavors:
+        - name: pro6000-232
+          resources:
+            - {name: cpu, nominalQuota: 20}
+            - {name: memory, nominalQuota: 24Gi}
+            - {name: "keti.re.kr/lsu", nominalQuota: 89}
+    - coveredResources: ["keti.re.kr/npu-pe"]
+      flavors:
+        - {name: rngd-232, resources: [{name: "keti.re.kr/npu-pe", nominalQuota: 4}]}
+---
+apiVersion: kueue.x-k8s.io/v1beta2
+kind: ClusterQueue
+metadata: {name: pool-cq}
+spec:
+  cohortName: keti-c1
+  namespaceSelector: {}
+  preemption: {borrowWithinCohort: {policy: Never}, reclaimWithinCohort: Any, withinClusterQueue: LowerPriority}
+  queueingStrategy: BestEffortFIFO
+  resourceGroups:
+    - coveredResources: ["cpu", "memory", "nvidia.com/gpu", "keti.re.kr/lsu"]
+      flavors:
+        - name: rtx5090-233
+          resources:
+            - {name: cpu, nominalQuota: 16}
+            - {name: memory, nominalQuota: 96Gi}
+            - {name: "nvidia.com/gpu", nominalQuota: 1}
+            - {name: "keti.re.kr/lsu", nominalQuota: 0}
+        - name: pro6000-232
+          resources:
+            - {name: cpu, nominalQuota: 20}
+            - {name: memory, nominalQuota: 24Gi}
+            - {name: "nvidia.com/gpu", nominalQuota: 0}
+            - {name: "keti.re.kr/lsu", nominalQuota: 89}
+    - coveredResources: ["keti.re.kr/npu-pe"]
+      flavors:
+        - {name: rngd-232, resources: [{name: "keti.re.kr/npu-pe", nominalQuota: 4}]}
+---
+# ── Namespace + LocalQueue ──
+apiVersion: v1
+kind: Namespace
+metadata: {name: edge-dev}
+---
+apiVersion: v1
+kind: Namespace
+metadata: {name: pooling-dev}
+---
+apiVersion: kueue.x-k8s.io/v1beta2
+kind: LocalQueue
+metadata: {name: edge-lq, namespace: edge-dev}
+spec: {clusterQueue: edge-cq}
+---
+apiVersion: kueue.x-k8s.io/v1beta2
+kind: LocalQueue
+metadata: {name: pool-lq, namespace: pooling-dev}
+spec: {clusterQueue: pool-cq}

@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: Pod
+metadata: {name: "@@POD@@", namespace: default}
+spec:
+  restartPolicy: Never
+  containers:
+    - name: t
+      image: prism-infer:opt
+      imagePullPolicy: IfNotPresent
+      env:
+        - {name: KRAKEN_WORKLOAD_CLASS, value: "@@CLASS@@"}
+        - {name: WORKER_ROLE, value: "@@ROLE@@"}
+        - {name: WORKER_NAME, value: "@@WN@@"}
+        - {name: SYNC_DIR, value: /sync}
+        - {name: DURATION_S, value: "@@DUR@@"}
+        - {name: BATCH, value: "@@B@@"}
+        - {name: REPEATS, value: "@@REPEATS@@"}
+        - {name: KRAKEN_OBS, value: "@@OBS@@"}
+        # [Exp_114 2-D] 추가 env 주입 슬롯. 기본은 빈 줄이라 기존 동작 불변.
+        #   공간 모드(QMD)·pct 를 워커 파드에 넣기 위해 필요하다.
+@@EXTRA_ENV@@
+        - {name: HF_HUB_OFFLINE, value: "1"}
+        - {name: HF_HOME, value: /hf}
+      command: ["bash","-c","python /bench/worker.py; cat /sync/result_@@WN@@.json"]
+      volumeMounts:
+        - {name: bench, mountPath: /bench, readOnly: true}
+        - {name: hf, mountPath: /hf, readOnly: true}
+        - {name: sync, mountPath: /sync}
+      resources: {limits: {cpu: "6", memory: 20Gi, keti.re.kr/lsu: "@@LSU@@"}}
+  volumes:
+    - {name: bench, hostPath: {path: /root/workspace/pooling/prism/bench, type: Directory}}
+    - {name: hf, hostPath: {path: /root/.cache/huggingface, type: Directory}}
+    - {name: sync, hostPath: {path: /root/kraken-sync, type: DirectoryOrCreate}}
+# [Exp_107 T-4] 재사용 하네스 정본. 개명(PRISM_→KRAKEN_) 반영본이며
+#   reports/Exp_89_closed_loop/manifests/pair89.tmpl 은 그때의 기록으로 보존한다.
+#   ★구분 기준: 다른 Exp 가 참조하면 재사용 하네스(여기), 아니면 그 Exp 전용 기록물(reports/).

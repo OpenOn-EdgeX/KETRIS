@@ -1,0 +1,47 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: kraken-workload-a
+  namespace: default
+  labels:
+    app: kraken-workload
+    tenant: gpu0-slice0
+spec:
+  restartPolicy: Never
+  nodeName: edge-gpu-232      # 실제 GPU 노드 이름으로 변경
+
+  containers:
+    - name: inference
+      image: ketidevit2/kraken-gpt2-exp:v5
+      imagePullPolicy: IfNotPresent
+      command: ["python3", "/scripts/workload.py"]
+
+      resources:
+        limits:
+          # Device Plugin이 이 요청을 받아 Allocate() 호출
+          keti.re.kr/gpu-slice: "1"
+
+      env:
+        # LD_PRELOAD로 gating_lib.so 주입 — KRAKEN_TENANT/GROUP은 Device Plugin이 주입
+        - name: LD_PRELOAD
+          value: /var/kraken/gating_lib.so
+        - name: PYTHONUNBUFFERED
+          value: "1"
+
+      volumeMounts:
+        - name: scripts
+          mountPath: /scripts
+        - name: kraken-lib
+          mountPath: /var/kraken
+          readOnly: true
+        # /dev/shm/kraken_default 마운트는 Device Plugin Allocate()가 자동 주입
+
+  volumes:
+    - name: scripts
+      configMap:
+        name: kraken-workload-script
+    - name: kraken-lib
+      hostPath:
+        # 노드에 gating_lib.so가 빌드된 경로
+        path: /root/workspace/kernel_scheduling/kraken/runtime
+        type: Directory

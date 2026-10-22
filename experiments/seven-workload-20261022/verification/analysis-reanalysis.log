@@ -1,0 +1,203 @@
+{
+  "valid": true,
+  "errors": [],
+  "groups": {
+    "native": {
+      "run_count": 5,
+      "valid_count": 5,
+      "expected_repeats": 5,
+      "repeat_ids": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "complete": true,
+      "errors": [],
+      "statistics_scope": "Valid holdouts only; incomplete groups cannot establish comparison",
+      "makespan_s": {
+        "n": 5,
+        "mean": 13.2787898584,
+        "std": 0.2598169287573424,
+        "min": 12.913953062,
+        "max": 13.623320984
+      },
+      "requests_per_s": {
+        "n": 5,
+        "mean": 4.218547018757182,
+        "std": 0.08276243790460659,
+        "min": 4.110598294334368,
+        "max": 4.336394884753221
+      },
+      "output_tokens_per_s": {
+        "n": 5,
+        "mean": 337.48376150057453,
+        "std": 6.620995032368535,
+        "min": 328.8478635467494,
+        "max": 346.9115907802577
+      },
+      "workloadsets_per_s": {
+        "n": 5,
+        "mean": 0.07533119676352111,
+        "std": 0.001477900676867977,
+        "min": 0.07340354097025657,
+        "max": 0.07743562294202182
+      },
+      "device_busy_utilization_pct": {
+        "n": 5,
+        "mean": 80.17321549108999,
+        "std": 1.2670564903837447,
+        "min": 78.72622649779798,
+        "max": 81.85677173350452
+      },
+      "device_busy_coverage_pct": {
+        "n": 5,
+        "mean": 100.0,
+        "std": 0.0,
+        "min": 100.0,
+        "max": 100.0
+      }
+    },
+    "spatial": {
+      "run_count": 5,
+      "valid_count": 5,
+      "expected_repeats": 5,
+      "repeat_ids": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "complete": true,
+      "errors": [],
+      "statistics_scope": "Valid holdouts only; incomplete groups cannot establish comparison",
+      "makespan_s": {
+        "n": 5,
+        "mean": 13.423041639400001,
+        "std": 0.1633634128415526,
+        "min": 13.183960053,
+        "max": 13.554733237
+      },
+      "requests_per_s": {
+        "n": 5,
+        "mean": 4.172428679529003,
+        "std": 0.0511438197344303,
+        "min": 4.131398163346975,
+        "max": 4.247585685551075
+      },
+      "output_tokens_per_s": {
+        "n": 5,
+        "mean": 333.7942943623202,
+        "std": 4.0915055787544246,
+        "min": 330.511853067758,
+        "max": 339.80685484408605
+      },
+      "workloadsets_per_s": {
+        "n": 5,
+        "mean": 0.07450765499158934,
+        "std": 0.0009132824952576893,
+        "min": 0.07377496720262455,
+        "max": 0.07584974438484064
+      },
+      "device_busy_utilization_pct": {
+        "n": 5,
+        "mean": 81.26572385544567,
+        "std": 0.9625999329733366,
+        "min": 80.12049109573533,
+        "max": 82.49250020832756
+      },
+      "device_busy_coverage_pct": {
+        "n": 5,
+        "mean": 100.0,
+        "std": 0.0,
+        "min": 100.0,
+        "max": 100.0
+      }
+    },
+    "ketris": {
+      "run_count": 5,
+      "valid_count": 5,
+      "expected_repeats": 5,
+      "repeat_ids": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "complete": true,
+      "errors": [],
+      "statistics_scope": "Valid holdouts only; incomplete groups cannot establish comparison",
+      "makespan_s": {
+        "n": 5,
+        "mean": 13.576469189,
+        "std": 0.10791932818927338,
+        "min": 13.399077562,
+        "max": 13.671603835
+      },
+      "requests_per_s": {
+        "n": 5,
+        "mean": 4.124993772158259,
+        "std": 0.03302110519946649,
+        "min": 4.096081240785895,
+        "max": 4.179392181355595
+      },
+      "output_tokens_per_s": {
+        "n": 5,
+        "mean": 329.9995017726607,
+        "std": 2.6416884159573266,
+        "min": 327.68649926287156,
+        "max": 334.35137450844763
+      },
+      "workloadsets_per_s": {
+        "n": 5,
+        "mean": 0.07366060307425462,
+        "std": 0.0005896625928476206,
+        "min": 0.07314430787117669,
+        "max": 0.07463200323849278
+      },
+      "device_busy_utilization_pct": {
+        "n": 5,
+        "mean": 83.31991719943909,
+        "std": 0.3254339460782268,
+        "min": 82.76980495644963,
+        "max": 83.57889271118022
+      },
+      "device_busy_coverage_pct": {
+        "n": 5,
+        "mean": 100.0,
+        "std": 0.0,
+        "min": 100.0,
+        "max": 100.0
+      }
+    }
+  },
+  "comparisons": {
+    "native_vs_ketris": {
+      "valid": true,
+      "baseline": "native",
+      "errors": [],
+      "baseline_mean_makespan_s": 13.2787898584,
+      "ketris_mean_makespan_s": 13.576469189,
+      "index": 97.8073877202094,
+      "time_reduction_pct": -2.2417655055493757,
+      "speedup": 0.978073877202094,
+      "index_formula": "100 * mean(baseline actual makespan) / mean(KETRIS actual makespan)",
+      "time_reduction_formula": "100 * (1 - mean(KETRIS actual makespan) / mean(baseline actual makespan))"
+    },
+    "spatial_vs_ketris": {
+      "valid": true,
+      "baseline": "spatial",
+      "errors": [],
+      "baseline_mean_makespan_s": 13.423041639400001,
+      "ketris_mean_makespan_s": 13.576469189,
+      "index": 98.86990094799971,
+      "time_reduction_pct": -1.1430162680092781,
+      "speedup": 0.9886990094799971,
+      "index_formula": "100 * mean(baseline actual makespan) / mean(KETRIS actual makespan)",
+      "time_reduction_formula": "100 * (1 - mean(KETRIS actual makespan) / mean(baseline actual makespan))"
+    }
+  }
+}
